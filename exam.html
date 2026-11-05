@@ -78,6 +78,7 @@
       transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
   </style>
+  <script src="questions-data.js"></script>
 </head>
 <body class="washi-pattern text-sumi font-sans min-h-screen flex flex-col selection:bg-sakura-200 selection:text-sakura-900 relative">
 
@@ -277,81 +278,147 @@
         </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         
         <!-- Đề 1: 13 Thì Cơ Bản -->
         <div class="bg-white rounded-3xl p-6 border-2 border-sakura-200 hover:border-sakura-400 chill-card-shadow transition flex flex-col justify-between space-y-4 group">
           <div class="space-y-3">
-            <div class="w-12 h-12 rounded-2xl bg-sakura-100 text-sakura-600 flex items-center justify-center text-2xl font-bold border border-sakura-200">
-              🌱
+            <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl font-bold border border-emerald-200">
+              ⏱️
             </div>
             <div>
-              <span class="text-[11px] font-mono font-bold text-sakura-600 uppercase tracking-wider">Đề 1 · 20 Câu Điền Từ</span>
+              <span class="text-[11px] font-mono font-bold text-emerald-600 uppercase tracking-wider">Đề 1 · 20 Câu · Thang 10đ</span>
               <h3 class="text-lg font-serif font-bold text-sumi mt-0.5">Kiểm Tra 13 Thì Cơ Bản</h3>
-            </div>
-            <p class="text-xs text-sumi/70 leading-relaxed">
-              20 câu điền từ bao quát Hiện tại đơn/tiếp diễn/hoàn thành, Quá khứ, Tương lai, và Hoàn thành tiếp diễn.
-            </p>
-            <div class="flex items-center gap-2 text-[11px] font-bold text-sakura-700 bg-sakura-50 p-2.5 rounded-xl border border-sakura-100">
-              <span>📚 20 câu x 0.5đ</span> • <span>🎯 Thang điểm 10.0</span>
+              <p class="text-xs text-sumi/60 mt-1">Hiện tại, quá khứ, tương lai, hoàn thành & tiếp diễn.</p>
             </div>
           </div>
-          <button onclick="startExam('tenses')" class="w-full py-3 rounded-xl bg-sakura-600 hover:bg-sakura-700 text-white font-bold text-xs shadow-md transition active:scale-95 flex items-center justify-center gap-1.5">
-            <span>Bắt đầu làm đề 1</span> ➔
+          <button onclick="startExam('tenses')" class="w-full py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs tracking-wider uppercase transition shadow-sm hover:shadow active:scale-95">
+            Bắt Đầu Làm Bài ➔
           </button>
         </div>
 
         <!-- Đề 2: Tương Lai Mở Rộng -->
-        <div class="bg-white rounded-3xl p-6 border-2 border-sakura-200 hover:border-sakura-400 chill-card-shadow transition flex flex-col justify-between space-y-4 group">
+        <div class="bg-white rounded-3xl p-6 border-2 border-sky-200 hover:border-sky-400 chill-card-shadow transition flex flex-col justify-between space-y-4 group">
           <div class="space-y-3">
-            <div class="w-12 h-12 rounded-2xl bg-sakura-100 text-sakura-600 flex items-center justify-center text-2xl font-bold border border-sakura-200">
-              🌸
+            <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-2xl font-bold border border-sky-200">
+              🚀
             </div>
             <div>
-              <span class="text-[11px] font-mono font-bold text-sakura-600 uppercase tracking-wider">Đề 2 · 20 Câu Điền Từ</span>
+              <span class="text-[11px] font-mono font-bold text-sky-600 uppercase tracking-wider">Đề 2 · 20 Câu · Thang 10đ</span>
               <h3 class="text-lg font-serif font-bold text-sumi mt-0.5">Cấu Trúc Tương Lai Mở Rộng</h3>
-            </div>
-            <p class="text-xs text-sumi/70 leading-relaxed">
-              20 câu chuyên sâu phân biệt: <em>Be about to, Be due to, Be to, Be likely to, Was/Were going to, Would, On the verge of...</em>
-            </p>
-            <div class="flex items-center gap-2 text-[11px] font-bold text-sakura-700 bg-sakura-50 p-2.5 rounded-xl border border-sakura-100">
-              <span>📚 20 câu x 0.5đ</span> • <span>🎯 Thang điểm 10.0</span>
+              <p class="text-xs text-sumi/60 mt-1">Will vs Be Going To vs Present Continuous.</p>
             </div>
           </div>
-          <button onclick="startExam('future')" class="w-full py-3 rounded-xl bg-sakura-600 hover:bg-sakura-700 text-white font-bold text-xs shadow-md transition active:scale-95 flex items-center justify-center gap-1.5">
-            <span>Bắt đầu làm đề 2</span> ➔
+          <button onclick="startExam('future')" class="w-full py-3 rounded-2xl bg-sky-500 hover:bg-sky-600 text-white font-bold text-xs tracking-wider uppercase transition shadow-sm hover:shadow active:scale-95">
+            Bắt Đầu Làm Bài ➔
           </button>
         </div>
 
-        <!-- Đề 3: Đề Tổng Ôn 40 Câu -->
-        <div class="bg-gradient-to-b from-white to-sakura-50 rounded-3xl p-6 border-2 border-sakura-400 chill-card-shadow transition flex flex-col justify-between space-y-4 relative group shadow-sakura-200/50">
-          <div class="absolute -top-3 right-6 bg-sakura-500 text-white text-[10px] font-bold uppercase px-3 py-0.5 rounded-full shadow-xs">
-            Đề Tổng Ôn
-          </div>
+        <!-- Đề 3: Danh Động Từ & To-V -->
+        <div class="bg-white rounded-3xl p-6 border-2 border-pink-200 hover:border-pink-400 chill-card-shadow transition flex flex-col justify-between space-y-4 group">
           <div class="space-y-3">
-            <div class="w-12 h-12 rounded-2xl bg-sakura-500 text-white flex items-center justify-center text-2xl font-bold shadow-md">
+            <div class="w-12 h-12 rounded-2xl bg-pink-50 text-pink-600 flex items-center justify-center text-2xl font-bold border border-pink-200">
+              🌸
+            </div>
+            <div>
+              <span class="text-[11px] font-mono font-bold text-pink-600 uppercase tracking-wider">Đề 3 · 20 Câu · Thang 10đ</span>
+              <h3 class="text-lg font-serif font-bold text-sumi mt-0.5">Danh Động Từ & To-V</h3>
+              <p class="text-xs text-sumi/60 mt-1">Gerunds & Infinitives, động từ đổi nghĩa và bị động.</p>
+            </div>
+          </div>
+          <button onclick="startExam('gerund_infinitive')" class="w-full py-3 rounded-2xl bg-pink-500 hover:bg-pink-600 text-white font-bold text-xs tracking-wider uppercase transition shadow-sm hover:shadow active:scale-95">
+            Bắt Đầu Làm Bài ➔
+          </button>
+        </div>
+
+        <!-- Đề 4: Hòa Hợp Chủ - Vị -->
+        <div class="bg-white rounded-3xl p-6 border-2 border-indigo-200 hover:border-indigo-400 chill-card-shadow transition flex flex-col justify-between space-y-4 group">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl font-bold border border-indigo-200">
+              🤝
+            </div>
+            <div>
+              <span class="text-[11px] font-mono font-bold text-indigo-600 uppercase tracking-wider">Đề 4 · 20 Câu · Thang 10đ</span>
+              <h3 class="text-lg font-serif font-bold text-sumi mt-0.5">Hòa Hợp Chủ Ngữ - Vị Ngữ</h3>
+              <p class="text-xs text-sumi/60 mt-1">15 Quy tắc vàng S-V agreement, Either/Neither, As well as.</p>
+            </div>
+          </div>
+          <button onclick="startExam('subject_verb_agreement')" class="w-full py-3 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-xs tracking-wider uppercase transition shadow-sm hover:shadow active:scale-95">
+            Bắt Đầu Làm Bài ➔
+          </button>
+        </div>
+
+        <!-- Đề 5: Lượng Từ & Mạo Từ -->
+        <div class="bg-white rounded-3xl p-6 border-2 border-amber-200 hover:border-amber-400 chill-card-shadow transition flex flex-col justify-between space-y-4 group">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl font-bold border border-amber-200">
+              ⚖️
+            </div>
+            <div>
+              <span class="text-[11px] font-mono font-bold text-amber-600 uppercase tracking-wider">Đề 5 · 20 Câu · Thang 10đ</span>
+              <h3 class="text-lg font-serif font-bold text-sumi mt-0.5">Lượng Từ & Mạo Từ</h3>
+              <p class="text-xs text-sumi/60 mt-1">Much/many, few/little, mạo từ a/an/the và đại từ sở hữu.</p>
+            </div>
+          </div>
+          <button onclick="startExam('quantifiers_determiners')" class="w-full py-3 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs tracking-wider uppercase transition shadow-sm hover:shadow active:scale-95">
+            Bắt Đầu Làm Bài ➔
+          </button>
+        </div>
+
+        <!-- Đề 6: Biến Đổi Câu Đồng Nghĩa -->
+        <div class="bg-white rounded-3xl p-6 border-2 border-purple-200 hover:border-purple-400 chill-card-shadow transition flex flex-col justify-between space-y-4 group">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-2xl font-bold border border-purple-200">
+              🔄
+            </div>
+            <div>
+              <span class="text-[11px] font-mono font-bold text-purple-600 uppercase tracking-wider">Đề 6 · 20 Câu · Thang 10đ</span>
+              <h3 class="text-lg font-serif font-bold text-sumi mt-0.5">Biến Đổi Câu Đồng Nghĩa</h3>
+              <p class="text-xs text-sumi/60 mt-1">Sentence transformation viết lại câu giữ nguyên nghĩa.</p>
+            </div>
+          </div>
+          <button onclick="startExam('transformation')" class="w-full py-3 rounded-2xl bg-purple-500 hover:bg-purple-600 text-white font-bold text-xs tracking-wider uppercase transition shadow-sm hover:shadow active:scale-95">
+            Bắt Đầu Làm Bài ➔
+          </button>
+        </div>
+
+        <!-- Đề 7: Tìm Lỗi Sai Ngữ Pháp -->
+        <div class="bg-white rounded-3xl p-6 border-2 border-rose-200 hover:border-rose-400 chill-card-shadow transition flex flex-col justify-between space-y-4 group">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-2xl font-bold border border-rose-200">
+              🔍
+            </div>
+            <div>
+              <span class="text-[11px] font-mono font-bold text-rose-600 uppercase tracking-wider">Đề 7 · 20 Câu · Thang 10đ</span>
+              <h3 class="text-lg font-serif font-bold text-sumi mt-0.5">Tìm Lỗi Sai Ngữ Pháp</h3>
+              <p class="text-xs text-sumi/60 mt-1">Error identification nhận diện lỗi sai thì thời & dạng từ.</p>
+            </div>
+          </div>
+          <button onclick="startExam('error_spotting')" class="w-full py-3 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white font-bold text-xs tracking-wider uppercase transition shadow-sm hover:shadow active:scale-95">
+            Bắt Đầu Làm Bài ➔
+          </button>
+        </div>
+
+        <!-- Đề 8: Đề Thi Tổng Ôn 40 Câu -->
+        <div class="bg-gradient-to-br from-sakura-50 via-white to-amber-50 rounded-3xl p-6 border-2 border-amber-300 hover:border-amber-400 chill-card-shadow transition flex flex-col justify-between space-y-4 group md:col-span-2">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-amber-400 text-white flex items-center justify-center text-2xl font-bold shadow-sm">
               🏆
             </div>
             <div>
-              <span class="text-[11px] font-mono font-bold text-sakura-700 uppercase tracking-wider">Đề 3 · 40 Câu Toàn Diện</span>
-              <h3 class="text-lg font-serif font-bold text-sumi mt-0.5">Đề Thi Tổng Ôn Các Dạng</h3>
-            </div>
-            <p class="text-xs text-sumi/70 leading-relaxed">
-              40 câu trắc nghiệm điền từ trộn đều tất cả các dạng từ file tài liệu của Trâm. Làm xong là vững vàng 100%!
-            </p>
-            <div class="flex items-center gap-2 text-[11px] font-bold text-sakura-800 bg-white p-2.5 rounded-xl border border-sakura-200">
-              <span>📚 40 câu x 0.25đ</span> • <span>🎯 Thang điểm 10.0</span>
+              <span class="text-[11px] font-mono font-bold text-amber-700 uppercase tracking-wider">Đề Đặc Biệt · 40 Câu · Thang 10đ</span>
+              <h3 class="text-xl font-serif font-bold text-sumi mt-0.5">Đề Thi Tổng Ôn Các Dạng NNA</h3>
+              <p class="text-xs text-sumi/70 mt-1">Tổng hợp 40 câu trắc nghiệm phủ khắp các chuyên đề ngữ pháp thi đại học & định kỳ.</p>
             </div>
           </div>
-          <button onclick="startExam('all')" class="w-full py-3 rounded-xl bg-gradient-to-r from-sakura-500 to-sakura-600 hover:brightness-105 text-white font-bold text-xs shadow-md transition active:scale-95 flex items-center justify-center gap-1.5">
-            <span>Làm đề tổng ôn 40 câu</span> ➔
+          <button onclick="startExam('mega_mock_40')" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-sakura-500 hover:from-amber-600 hover:to-sakura-600 text-white font-bold text-sm tracking-wider uppercase transition shadow-md hover:shadow-lg active:scale-95">
+            BẮT ĐẦU THI TỔNG ÔN (40 CÂU) ➔
           </button>
         </div>
 
       </div>
     </div>
-
-    <!-- ======================================================== -->
+<!-- ======================================================== -->
     <!-- VIEW 2: EXAM TAKING INTERFACE (CLEAN, NO HINTS) -->
     <!-- ======================================================== -->
     <div id="exam-taking-view" class="hidden space-y-5">
