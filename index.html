@@ -1,0 +1,2458 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ngọc Trâm 🌸 桜の文法 · Góc Học & Kiểm Tra Ngữ Pháp Chill (Thang Điểm 10)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Zen+Maru+Gothic:wght@500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sakura: {
+              50: '#FFF5F8',
+              100: '#FFE4ED',
+              200: '#FFCCD9',
+              300: '#FFA3BA',
+              400: '#FF7096',
+              500: '#F43F6E',
+              600: '#E11D53',
+              700: '#BE123F',
+              800: '#9F1237',
+              900: '#4C0D1E',
+            },
+            washi: '#FCF9F7',
+            sumi: '#2E0F1A'
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Zen Maru Gothic"', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* 3D Flip Card */
+    .perspective-1000 { perspective: 1000px; }
+    .transform-style-3d { transform-style: preserve-3d; }
+    .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+    .rotate-y-180 { transform: rotateY(180deg); }
+
+    /* Washi Paper & Sakura Glass */
+    .sakura-glass {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 163, 186, 0.45);
+    }
+    .sakura-shadow {
+      box-shadow: 0 12px 36px -6px rgba(244, 63, 110, 0.14), 0 4px 14px -2px rgba(244, 63, 110, 0.06);
+    }
+    .chill-card-shadow {
+      box-shadow: 0 8px 30px rgba(100, 50, 70, 0.06), 0 2px 8px rgba(100, 50, 70, 0.04);
+    }
+    .washi-pattern {
+      background-color: #FFF6F9;
+      background-image: radial-gradient(#FFCCD9 0.75px, transparent 0.75px), radial-gradient(#FFCCD9 0.75px, #FFF6F9 0.75px);
+      background-size: 30px 30px;
+      background-position: 0 0, 15px 15px;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #FFF5F8; }
+    ::-webkit-scrollbar-thumb { background: #FFA3BA; border-radius: 999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #F43F6E; }
+
+    @keyframes sakuraFloat {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-5px) rotate(1.5deg); }
+    }
+    .animate-sakura { animation: sakuraFloat 4s ease-in-out infinite; }
+
+    .cloze-blank-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 120px;
+      padding: 2px 14px;
+      margin: 0 4px;
+      border-radius: 12px;
+      font-weight: 700;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  </style>
+</head>
+<body class="washi-pattern text-sumi font-sans min-h-screen flex flex-col selection:bg-sakura-200 selection:text-sakura-900 relative">
+
+  <!-- Sakura Falling Petals Canvas -->
+  <canvas id="sakuraCanvas" class="fixed inset-0 pointer-events-none z-10"></canvas>
+  <!-- Confetti Canvas -->
+  <canvas id="confettiCanvas" class="fixed inset-0 pointer-events-none z-50"></canvas>
+
+  <!-- Audio Synthesis & Lo-fi Chill Rain Engine -->
+  <script>
+    const AudioEngine = {
+      ctx: null,
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) this.ctx = new AudioContext();
+        }
+      },
+      play(type) {
+        try {
+          this.init();
+          if (!this.ctx) return;
+          if (this.ctx.state === 'suspended') this.ctx.resume();
+          const t = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+
+          if (type === 'click') {
+            osc.frequency.setValueAtTime(520, t);
+            gain.gain.setValueAtTime(0.04, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+            osc.start(t);
+            osc.stop(t + 0.04);
+          } else if (type === 'correct') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(523.25, t); // C5
+            osc.frequency.exponentialRampToValueAtTime(659.25, t + 0.08); // E5
+            osc.frequency.exponentialRampToValueAtTime(783.99, t + 0.18); // G5
+            gain.gain.setValueAtTime(0.09, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+            osc.start(t);
+            osc.stop(t + 0.3);
+          } else if (type === 'wrong') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(260, t);
+            osc.frequency.setValueAtTime(220, t + 0.1);
+            gain.gain.setValueAtTime(0.06, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+            osc.start(t);
+            osc.stop(t + 0.2);
+          } else if (type === 'flip') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(380, t);
+            osc.frequency.exponentialRampToValueAtTime(580, t + 0.07);
+            gain.gain.setValueAtTime(0.05, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+            osc.start(t);
+            osc.stop(t + 0.08);
+          }
+        } catch (e) { console.warn('Audio unavailable:', e); }
+      },
+      speak(text) {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const u = new SpeechSynthesisUtterance(text);
+          u.lang = 'en-US';
+          u.rate = 0.88;
+          window.speechSynthesis.speak(u);
+        }
+      }
+    };
+
+    // Lo-fi Rain Synthesizer (Native Web Audio)
+    const LofiEngine = {
+      audioCtx: null,
+      noiseNode: null,
+      gainNode: null,
+      isPlaying: false,
+      toggle() {
+        if (this.isPlaying) {
+          this.stop();
+        } else {
+          this.start();
+        }
+      },
+      start() {
+        try {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (!this.audioCtx) this.audioCtx = new AudioContext();
+          if (this.audioCtx.state === 'suspended') this.audioCtx.resume();
+
+          const sampleRate = this.audioCtx.sampleRate;
+          const bufferSize = sampleRate * 2;
+          const buffer = this.audioCtx.createBuffer(1, bufferSize, sampleRate);
+          const output = buffer.getChannelData(0);
+          let b0 = 0, b1 = 0, b2 = 0;
+          for (let i = 0; i < bufferSize; i++) {
+            const white = Math.random() * 2 - 1;
+            b0 = 0.99 * b0 + white * 0.05;
+            b1 = 0.95 * b1 + white * 0.08;
+            b2 = 0.85 * b2 + white * 0.12;
+            output[i] = (b0 + b1 + b2) * 0.45;
+          }
+
+          this.noiseNode = this.audioCtx.createBufferSource();
+          this.noiseNode.buffer = buffer;
+          this.noiseNode.loop = true;
+
+          const filter = this.audioCtx.createBiquadFilter();
+          filter.type = 'lowpass';
+          filter.frequency.setValueAtTime(650, this.audioCtx.currentTime);
+
+          this.gainNode = this.audioCtx.createGain();
+          this.gainNode.gain.setValueAtTime(0.04, this.audioCtx.currentTime);
+
+          this.noiseNode.connect(filter);
+          filter.connect(this.gainNode);
+          this.gainNode.connect(this.audioCtx.destination);
+
+          this.noiseNode.start();
+          this.isPlaying = true;
+          this.updateUI(true);
+        } catch (e) {
+          console.warn('Lofi Audio error:', e);
+        }
+      },
+      stop() {
+        if (this.noiseNode) {
+          try { this.noiseNode.stop(); } catch(e){}
+          this.noiseNode = null;
+        }
+        this.isPlaying = false;
+        this.updateUI(false);
+      },
+      updateUI(active) {
+        const btn = document.getElementById('btn-lofi-toggle');
+        if (btn) {
+          btn.innerHTML = active 
+            ? '<span>🎧</span> <span>Mưa Chill: Bật</span> <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping inline-block ml-0.5"></span>' 
+            : '<span>🎧</span> <span>Mưa Chill: Tắt</span>';
+          if (active) {
+            btn.classList.add('bg-sakura-500', 'text-white', 'border-sakura-600');
+            btn.classList.remove('bg-white', 'text-sumi');
+          } else {
+            btn.classList.remove('bg-sakura-500', 'text-white', 'border-sakura-600');
+            btn.classList.add('bg-white', 'text-sumi');
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Japan Sakura & Cozy Header -->
+  <header class="sticky top-0 z-40 sakura-glass border-b border-sakura-200">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-sakura-500 via-sakura-400 to-sakura-200 flex items-center justify-center text-white text-xl shadow-md shadow-sakura-300/50 animate-sakura border-2 border-white">
+          🌸
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-serif font-bold text-lg md:text-xl text-sumi tracking-tight flex items-center gap-1.5">
+              <span>Ngọc Trâm Cute</span>
+              <span class="text-xs font-sans font-bold text-sakura-600 bg-sakura-100/90 px-2 py-0.5 rounded-full border border-sakura-200">桜の文法</span>
+            </h1>
+            <span class="px-2 py-0.5 text-[11px] font-bold rounded-full bg-sakura-500 text-white shadow-xs">
+              NNA Exam Hub 🌸
+            </span>
+          </div>
+          <p class="text-[11px] text-sakura-700 font-medium">Luyện tập & Thi thử 13 thì + cấu trúc tương lai · Thang điểm 10 chuẩn ✨</p>
+        </div>
+      </div>
+
+      <!-- Controls: Lo-fi Rain & Navigation Tabs -->
+      <div class="flex items-center gap-2 flex-wrap">
+        <button onclick="LofiEngine.toggle()" id="btn-lofi-toggle" class="px-3 py-1.5 rounded-xl border border-sakura-200 bg-white text-xs font-bold text-sumi shadow-xs hover:bg-sakura-50 transition flex items-center gap-1.5">
+          <span>🎧</span> <span>Mưa Chill: Tắt</span>
+        </button>
+
+        <nav class="flex items-center gap-1 bg-sakura-100/80 p-1 rounded-2xl border border-sakura-200 text-xs md:text-sm font-bold">
+          <button onclick="switchTab('exam')" id="tab-exam" class="tab-btn px-3.5 py-1.5 rounded-xl transition-all duration-200 bg-white text-sakura-600 shadow-sm border border-sakura-200">
+            📝 Mục Bài Thi (10đ)
+          </button>
+          <a href="exam.html" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-sakura-500 to-sakura-600 text-white font-bold text-xs shadow-md hover:brightness-105 transition flex items-center gap-1" title="Mở trang phòng thi riêng biệt">
+            <span>🎓 Phòng Thi Độc Lập</span> ➔
+          </a>
+          <button onclick="switchTab('quiz')" id="tab-quiz" class="tab-btn px-3.5 py-1.5 rounded-xl transition-all duration-200 text-sumi/80 hover:text-sakura-600">
+            🎯 Luyện Tập Chill
+          </button>
+          <button onclick="switchTab('flashcards')" id="tab-flashcards" class="tab-btn px-3.5 py-1.5 rounded-xl transition-all duration-200 text-sumi/80 hover:text-sakura-600">
+            🌸 Thẻ Nhớ
+          </button>
+          <button onclick="switchTab('formula')" id="tab-formula" class="tab-btn px-3.5 py-1.5 rounded-xl transition-all duration-200 text-sumi/80 hover:text-sakura-600 hidden sm:block">
+            ✍️ Ghép Công Thức
+          </button>
+          <button onclick="switchTab('cheatsheet')" id="tab-cheatsheet" class="tab-btn px-3.5 py-1.5 rounded-xl transition-all duration-200 text-sumi/80 hover:text-sakura-600 hidden md:block">
+            📖 Tra Cứu
+          </button>
+        </nav>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Chill Study Buddy Greeting Banner -->
+  <div class="max-w-5xl mx-auto px-4 pt-4 relative z-20">
+    <div class="bg-white/90 backdrop-blur-md rounded-2xl px-4 py-2.5 border border-sakura-200/90 shadow-xs flex items-center justify-between text-xs text-sumi">
+      <div class="flex items-center gap-2">
+        <span class="text-base">☕</span>
+        <span><strong>Phòng thi chill của Trâm:</strong> Bài kiểm tra không có gợi ý, Trâm cứ bình tĩnh làm hết rồi nộp bài để xem điểm 10 và giải thích chi tiết câu sai nhé! 🌸</span>
+      </div>
+      <button onclick="toggleSakura()" id="btn-toggle-sakura" class="hidden sm:flex items-center gap-1 font-mono text-sakura-600 hover:text-sakura-700 bg-sakura-50 px-2 py-1 rounded-lg border border-sakura-200 font-bold transition text-[11px]">
+        🌸 <span>Hoa rơi: Bật</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-5xl w-full mx-auto p-4 md:p-6 pb-20 relative z-20">
+
+    <!-- ======================================================== -->
+    <!-- TAB: FORMAL EXAM HUB (THANG ĐIỂM 10, KHÔNG GỢI Ý, REVIEW SAI) -->
+    <!-- ======================================================== -->
+    <section id="section-exam" class="space-y-6">
+
+      <!-- View 1: Exam Selection Menu -->
+      <div id="exam-select-view" class="space-y-6">
+        <div class="bg-white/95 rounded-3xl p-6 border border-sakura-200 chill-card-shadow text-center space-y-3">
+          <div class="flex items-center justify-center gap-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-sakura-600 bg-sakura-100 px-3 py-1 rounded-full border border-sakura-200 inline-block">
+              Mục Làm Bài Kiểm Tra Riêng Biệt · Thang Điểm 10
+            </span>
+            <a href="exam.html" class="text-xs font-bold text-white bg-sakura-600 hover:bg-sakura-700 px-3 py-1 rounded-full shadow-xs transition flex items-center gap-1">
+              <span>Mở trang thi riêng</span> ➔
+            </a>
+          </div>
+          <h2 class="text-2xl md:text-3xl font-serif font-bold text-sumi">Trâm Ơi, Chọn Bài Kiểm Tra Nhé!</h2>
+          <p class="text-xs md:text-sm text-sumi/70 max-w-lg mx-auto">
+            Các bài kiểm tra dưới đây sẽ <strong>không có gợi ý</strong>. Sau khi nộp bài, hệ thống sẽ chấm theo thang điểm 10, chỉ ra câu sai và giải thích cực kỳ cặn kẽ cho Trâm nè! 💕
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          
+          <!-- Exam Card 1: 13 Thì Cơ Bản -->
+          <div class="bg-white rounded-3xl p-6 border-2 border-sakura-200 hover:border-sakura-400 chill-card-shadow transition flex flex-col justify-between space-y-4 relative group">
+            <div class="space-y-3">
+              <div class="w-12 h-12 rounded-2xl bg-sakura-100 text-sakura-600 flex items-center justify-center text-2xl font-bold border border-sakura-200">
+                🌱
+              </div>
+              <div>
+                <span class="text-[11px] font-mono font-bold text-sakura-600 uppercase tracking-wider">Dạng 1 · 20 Câu</span>
+                <h3 class="text-lg font-serif font-bold text-sumi mt-0.5">Kiểm Tra 13 Thì Cơ Bản</h3>
+              </div>
+              <p class="text-xs text-sumi/70 leading-relaxed">
+                20 câu điền từ bao quát toàn diện các thì Hiện tại, Quá khứ, Tương lai và Hoàn thành tiếp diễn.
+              </p>
+              <div class="flex items-center gap-2 text-[11px] font-bold text-sakura-700 bg-sakura-50 p-2.5 rounded-xl border border-sakura-100">
+                <span>⏱️ Không tính giờ</span> • <span>🎯 Thang điểm 10.0</span>
+              </div>
+            </div>
+            <button onclick="startExam('tenses')" class="w-full py-3 rounded-xl bg-sakura-600 hover:bg-sakura-700 text-white font-bold text-xs shadow-md transition active:scale-95 flex items-center justify-center gap-1.5">
+              <span>Bắt đầu làm bài 1</span> ➔
+            </button>
+          </div>
+
+          <!-- Exam Card 2: Cấu Trúc Tương Lai Mở Rộng -->
+          <div class="bg-white rounded-3xl p-6 border-2 border-sakura-200 hover:border-sakura-400 chill-card-shadow transition flex flex-col justify-between space-y-4 relative group">
+            <div class="space-y-3">
+              <div class="w-12 h-12 rounded-2xl bg-sakura-100 text-sakura-600 flex items-center justify-center text-2xl font-bold border border-sakura-200">
+                🌸
+              </div>
+              <div>
+                <span class="text-[11px] font-mono font-bold text-sakura-600 uppercase tracking-wider">Dạng 2 · 20 Câu</span>
+                <h3 class="text-lg font-serif font-bold text-sumi mt-0.5">Tương Lai Mở Rộng & Sắc Thái</h3>
+              </div>
+              <p class="text-xs text-sumi/70 leading-relaxed">
+                20 câu chuyên sâu: <em>Be about to, Be due to, Be to, Be likely to, Was/Were going to, Would...</em>
+              </p>
+              <div class="flex items-center gap-2 text-[11px] font-bold text-sakura-700 bg-sakura-50 p-2.5 rounded-xl border border-sakura-100">
+                <span>⏱️ Không tính giờ</span> • <span>🎯 Thang điểm 10.0</span>
+              </div>
+            </div>
+            <button onclick="startExam('future')" class="w-full py-3 rounded-xl bg-sakura-600 hover:bg-sakura-700 text-white font-bold text-xs shadow-md transition active:scale-95 flex items-center justify-center gap-1.5">
+              <span>Bắt đầu làm bài 2</span> ➔
+            </button>
+          </div>
+
+          <!-- Exam Card 3: Đề Tổng Ôn 40 Câu -->
+          <div class="bg-gradient-to-b from-white to-sakura-50 rounded-3xl p-6 border-2 border-sakura-400 chill-card-shadow transition flex flex-col justify-between space-y-4 relative group shadow-sakura-200/50">
+            <div class="absolute -top-3 right-6 bg-sakura-500 text-white text-[10px] font-bold uppercase px-3 py-0.5 rounded-full shadow-xs">
+              Đề Tổng Ôn
+            </div>
+            <div class="space-y-3">
+              <div class="w-12 h-12 rounded-2xl bg-sakura-500 text-white flex items-center justify-center text-2xl font-bold shadow-md">
+                🏆
+              </div>
+              <div>
+                <span class="text-[11px] font-mono font-bold text-sakura-700 uppercase tracking-wider">Toàn Bộ Các Dạng · 40 Câu</span>
+                <h3 class="text-lg font-serif font-bold text-sumi mt-0.5">Đề Thi Tổng Ôn Toàn Diện</h3>
+              </div>
+              <p class="text-xs text-sumi/70 leading-relaxed">
+                40 câu trắc nghiệm điền từ trộn đều tất cả các dạng ngữ pháp. Trâm làm xong là tự tin đi thi NNA điểm 10 luôn!
+              </p>
+              <div class="flex items-center gap-2 text-[11px] font-bold text-sakura-800 bg-white p-2.5 rounded-xl border border-sakura-200">
+                <span>📚 40 câu x 0.25đ</span> • <span>🎯 Thang điểm 10.0</span>
+              </div>
+            </div>
+            <button onclick="startExam('all')" class="w-full py-3 rounded-xl bg-gradient-to-r from-sakura-500 to-sakura-600 hover:brightness-105 text-white font-bold text-xs shadow-md transition active:scale-95 flex items-center justify-center gap-1.5">
+              <span>Làm đề tổng ôn 40 câu</span> ➔
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- View 2: Exam In-Progress Stage -->
+      <div id="exam-taking-view" class="hidden space-y-5">
+        
+        <!-- Exam Top Bar -->
+        <div class="bg-white/95 rounded-3xl p-5 border border-sakura-200 chill-card-shadow space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <span id="exam-active-badge" class="text-xs font-bold uppercase tracking-wider text-sakura-700 bg-sakura-100 px-3 py-1 rounded-full border border-sakura-200">
+                Bài Thi Đang Diễn Ra
+              </span>
+              <h3 id="exam-active-title" class="text-lg md:text-xl font-serif font-bold text-sumi mt-1">Đề Kiểm Tra 13 Thì Cơ Bản</h3>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <button onclick="exitExamConfirm()" class="px-3.5 py-1.5 rounded-xl bg-sakura-50 text-sumi/70 hover:text-sakura-600 text-xs font-bold transition border border-sakura-200">
+                Thoát đề thi
+              </button>
+              <button onclick="submitExamConfirm()" class="px-5 py-2 rounded-xl bg-sakura-600 hover:bg-sakura-700 text-white font-bold text-xs shadow-md transition active:scale-95 flex items-center gap-1.5">
+                <span>Nộp Bài Ngay</span> ✨
+              </button>
+            </div>
+          </div>
+
+          <!-- Question Palette Matrix (Click to jump to any question) -->
+          <div class="pt-2 border-t border-sakura-100">
+            <div class="flex items-center justify-between text-xs font-bold text-sumi/70 mb-2">
+              <span>Bảng danh sách câu hỏi (Trâm bấm vào số để nhảy câu nha):</span>
+              <span id="exam-answered-counter" class="text-sakura-600 font-mono">Đã chọn: 0 / 20</span>
+            </div>
+            <div id="exam-palette-grid" class="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto p-1">
+              <!-- Dynamically populated buttons 1, 2, 3... -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Question Box (NO HINTS, NO INSTANT ANSWER) -->
+        <div class="bg-white/95 rounded-3xl p-6 md:p-8 border border-sakura-200 sakura-shadow space-y-6">
+          
+          <div class="flex items-center justify-between">
+            <span id="exam-q-category" class="text-xs font-mono font-bold uppercase px-3 py-1 rounded-full bg-sakura-100 text-sakura-800 border border-sakura-200">
+              Câu hỏi số 1
+            </span>
+            <span class="text-xs text-sakura-600 font-medium">☕ Trâm cứ thong thả chọn đáp án nhé</span>
+          </div>
+
+          <!-- Sentence with blank -->
+          <div class="p-6 rounded-2xl bg-sakura-50/70 border border-sakura-200">
+            <div id="exam-q-sentence" class="text-lg md:text-2xl font-serif font-bold text-sumi leading-relaxed">
+              <!-- Rendered English sentence -->
+            </div>
+          </div>
+
+          <!-- Options -->
+          <div id="exam-q-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            <!-- Shuffled options -->
+          </div>
+
+          <!-- Navigation Controls -->
+          <div class="flex items-center justify-between pt-4 border-t border-sakura-100">
+            <button onclick="prevExamQuestion()" id="btn-exam-prev" class="px-5 py-2.5 rounded-xl bg-white border border-sakura-200 hover:bg-sakura-50 text-sumi font-bold text-xs chill-card-shadow transition flex items-center gap-1">
+              ← Câu trước
+            </button>
+
+            <button onclick="nextExamQuestion()" id="btn-exam-next" class="px-6 py-2.5 rounded-xl bg-sakura-600 hover:bg-sakura-700 text-white font-bold text-xs shadow-md transition active:scale-95 flex items-center gap-1">
+              <span>Câu sau</span> →
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- View 3: Exam Score Result & Detailed Mistake Explanations -->
+      <div id="exam-result-view" class="hidden space-y-6">
+        
+        <div class="bg-white rounded-3xl p-6 md:p-8 border-2 border-sakura-300 sakura-shadow text-center space-y-4">
+          <div class="w-16 h-16 mx-auto rounded-full bg-sakura-100 flex items-center justify-center text-3xl shadow-inner border border-sakura-200 animate-sakura">
+            🎓
+          </div>
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-sakura-600">Kết Quả Bài Kiểm Tra</span>
+            <h3 class="text-2xl md:text-3xl font-serif font-bold text-sumi mt-1" id="exam-result-exam-name">Đề Kiểm Tra 13 Thì</h3>
+            <p id="exam-result-msg" class="text-sm font-bold text-sakura-700 mt-1">Trâm siêu giỏi nè!</p>
+          </div>
+
+          <!-- Big 10-Point Score Banner -->
+          <div class="max-w-xs mx-auto py-4 px-6 rounded-3xl bg-gradient-to-r from-sakura-500 to-sakura-600 text-white shadow-lg space-y-1">
+            <div class="text-xs uppercase font-bold tracking-wider text-sakura-100">Điểm số (Thang 10)</div>
+            <div id="exam-score-10" class="text-4xl md:text-5xl font-mono font-bold tracking-tight">10.0</div>
+            <div id="exam-score-sub" class="text-xs text-sakura-100 font-sans font-medium">Đúng 20 / 20 câu</div>
+          </div>
+
+          <!-- Quick Stats -->
+          <div class="grid grid-cols-3 gap-3 max-w-md mx-auto p-3.5 bg-sakura-50 rounded-2xl border border-sakura-200 font-mono text-center text-xs">
+            <div>
+              <div class="text-sumi/70 font-bold">Số câu đúng</div>
+              <div id="exam-stat-correct" class="text-xl font-bold text-emerald-600">0</div>
+            </div>
+            <div>
+              <div class="text-sumi/70 font-bold">Số câu sai</div>
+              <div id="exam-stat-wrong" class="text-xl font-bold text-rose-500">0</div>
+            </div>
+            <div>
+              <div class="text-sumi/70 font-bold">Tỷ lệ chính xác</div>
+              <div id="exam-stat-pct" class="text-xl font-bold text-sakura-600">0%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detailed Review of Mistaken Questions (Sau khi làm hết sẽ hiện câu sai và giải thích) -->
+        <div id="exam-mistakes-section" class="bg-white/95 rounded-3xl p-6 border border-sakura-200 chill-card-shadow space-y-4">
+          <!-- Dynamically populated review list -->
+        </div>
+
+        <!-- Bottom Action Buttons -->
+        <div class="flex flex-wrap justify-center gap-3 pt-2">
+          <button id="btn-exam-retry-wrong" onclick="startExamMistakeReview()" class="hidden px-6 py-3 rounded-xl bg-gradient-to-r from-sakura-500 to-sakura-600 text-white font-bold text-xs shadow-md hover:brightness-105 transition flex items-center gap-1.5">
+            <span>🌸 Làm Lại Riêng Các Câu Sai Để Gỡ Điểm 10</span> ↺
+          </button>
+          <button onclick="retestCurrentExam()" class="px-6 py-3 rounded-xl bg-white border border-sakura-300 text-sumi font-bold text-xs hover:bg-sakura-50 transition">
+            🔄 Làm Lại Đề Này Từ Đầu
+          </button>
+          <button onclick="backToExamSelect()" class="px-6 py-3 rounded-xl bg-sakura-100 text-sakura-800 font-bold text-xs hover:bg-sakura-200 transition">
+            📋 Quay Về Chọn Đề Khác
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB: CASUAL CLOZE QUIZ (CHILL PRACTICE) -->
+    <!-- ========================================== -->
+    <section id="section-quiz" class="hidden space-y-6">
+
+      <!-- Quiz Header Card -->
+      <div class="bg-white/95 rounded-3xl p-5 md:p-6 border border-sakura-200 chill-card-shadow">
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-sakura-100 pb-4 mb-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span id="quiz-mode-pill" class="text-xs font-bold uppercase tracking-wider text-sakura-700 bg-sakura-100 px-3 py-1 rounded-full border border-sakura-200">
+                Luyện Tập Tự Do · Có Gợi Ý
+              </span>
+              <span class="text-xs text-sakura-600 font-bold hidden sm:inline">🌸 Học từng câu chill chill</span>
+            </div>
+            <h2 id="quiz-main-title" class="text-xl md:text-2xl font-serif font-bold text-sumi mt-1">Chọn từ chuẩn nhất để hoàn thành câu</h2>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div class="text-right">
+              <div class="text-xs text-sumi/70 font-bold">Điểm luyện tập</div>
+              <div class="text-xl font-bold font-mono text-sakura-600"><span id="quiz-score">0</span> / <span id="quiz-total-done">0</span></div>
+            </div>
+            <button onclick="resetQuiz()" class="px-3 py-2 rounded-xl bg-sakura-50 text-sakura-600 hover:bg-sakura-100 font-bold text-xs transition flex items-center gap-1 border border-sakura-200" title="Làm lại tất cả câu">
+              🔄 Làm lại
+            </button>
+          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="space-y-1.5">
+          <div class="flex justify-between text-xs font-bold text-sumi">
+            <span>Tiến độ: <span id="quiz-progress-text">1 / 15</span></span>
+            <span id="quiz-pct-text" class="text-sakura-600 font-mono">0%</span>
+          </div>
+          <div class="w-full h-3 bg-sakura-100 rounded-full overflow-hidden p-0.5 border border-sakura-200">
+            <div id="quiz-progress-bar" class="h-full bg-gradient-to-r from-sakura-400 to-sakura-600 rounded-full transition-all duration-300 w-[6%]"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question Card -->
+      <div id="quiz-question-card" class="bg-white/95 rounded-3xl p-6 md:p-8 border border-sakura-200 sakura-shadow space-y-6 transition-all duration-300">
+        
+        <div class="space-y-3">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <span id="q-category" class="text-xs font-mono font-bold uppercase px-3 py-1 rounded-full bg-sakura-100 text-sakura-800 inline-block border border-sakura-200">
+              Lịch Trình Tàu Xe
+            </span>
+            <span class="text-xs text-sakura-600 font-medium italic">☕ Đọc kỹ ngữ cảnh tiếng Anh nha Trâm</span>
+          </div>
+
+          <!-- English Cloze Sentence Container -->
+          <div class="p-5 md:p-6 rounded-2xl bg-sakura-50/70 border border-sakura-200">
+            <div id="q-sentence" class="text-lg md:text-2xl font-serif font-bold text-sumi leading-relaxed">
+              <!-- Rendered with dynamic cloze blank -->
+            </div>
+            <div id="q-clue-badge" class="mt-3 flex items-center gap-1.5 text-xs text-sakura-700 font-bold">
+              <span>🔍 Dấu hiệu gợi ý:</span>
+              <span id="q-clue-text" class="bg-white px-2.5 py-0.5 rounded-lg border border-sakura-200 font-sans font-medium"></span>
+            </div>
+          </div>
+
+          <p class="text-xs text-sumi/70 font-bold">🌸 Trâm bấm chọn 1 phương án thích hợp nhất điền vào ô trống:</p>
+        </div>
+
+        <!-- Shuffled Options Container -->
+        <div id="q-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+          <!-- Rendered dynamically with randomized positions -->
+        </div>
+
+        <!-- Explanation box -->
+        <div id="q-explanation-box" class="hidden rounded-2xl p-5 border transition-all duration-300 space-y-3">
+          <div class="flex items-center gap-2 font-bold text-base" id="q-status-title">
+            <!-- Dynamic cute status -->
+          </div>
+          <div id="q-explanation-text" class="text-xs md:text-sm leading-relaxed text-sumi bg-white/90 p-4 rounded-xl border border-sakura-200 font-medium">
+            <!-- Detailed explanation written specifically for Tram -->
+          </div>
+          <div class="pt-1 flex justify-end">
+            <button onclick="nextQuizQuestion()" id="btn-quiz-next" class="px-6 py-2.5 rounded-xl bg-sakura-600 hover:bg-sakura-700 text-white font-bold text-sm shadow-md transition active:scale-95 flex items-center gap-1.5">
+              <span>Qua câu tiếp theo nhé Trâm</span> ➔
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Casual Quiz Summary -->
+      <div id="quiz-result-summary" class="hidden bg-white rounded-3xl p-6 md:p-8 border-2 border-sakura-300 sakura-shadow space-y-6">
+        
+        <div class="text-center space-y-3">
+          <div class="w-16 h-16 mx-auto rounded-full bg-sakura-100 flex items-center justify-center text-3xl shadow-inner border border-sakura-200 animate-sakura">
+            🎉
+          </div>
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-sakura-600">Tuyệt Vời Trâm Ơi!</span>
+            <h3 class="text-2xl md:text-3xl font-serif font-bold text-sumi mt-1">Đã Hoàn Thành Luyện Tập!</h3>
+            <p id="quiz-rank-msg" class="text-sm md:text-base font-bold text-sakura-700 mt-1.5">Trâm làm siêu đỉnh luôn á! 💕</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3 md:gap-4 max-w-md mx-auto p-4 bg-sakura-50/90 rounded-2xl border border-sakura-200 font-mono text-center">
+          <div>
+            <div class="text-xs text-sumi/70 font-bold">Số câu đúng</div>
+            <div id="res-correct" class="text-2xl font-bold text-emerald-600">0</div>
+          </div>
+          <div>
+            <div class="text-xs text-sumi/70 font-bold">Số câu sai</div>
+            <div id="res-wrong" class="text-2xl font-bold text-rose-500">0</div>
+          </div>
+          <div>
+            <div class="text-xs text-sumi/70 font-bold">Độ chính xác</div>
+            <div id="res-pct" class="text-2xl font-bold text-sakura-600">0%</div>
+          </div>
+        </div>
+
+        <div id="wrong-review-container" class="space-y-4 pt-2">
+          <!-- Dynamic wrong answers list -->
+        </div>
+
+        <div class="pt-3 flex flex-wrap justify-center gap-3">
+          <button id="btn-review-wrong-only" onclick="startWrongReviewMode()" class="hidden px-6 py-2.5 rounded-xl bg-gradient-to-r from-sakura-500 to-sakura-600 text-white font-bold text-sm shadow-md hover:brightness-105 transition flex items-center gap-1.5">
+            <span>🌸 Làm Lại Riêng Các Câu Sai Này</span> ↺
+          </button>
+          <button onclick="resetQuiz()" class="px-6 py-2.5 rounded-xl bg-white border border-sakura-300 text-sumi font-bold text-sm hover:bg-sakura-50 transition">
+            🔄 Làm Lại Luyện Tập
+          </button>
+          <button onclick="switchTab('exam')" class="px-6 py-2.5 rounded-xl bg-sakura-600 text-white font-bold text-sm hover:bg-sakura-700 transition">
+            📝 Vào Phòng Thi (Thang Điểm 10) ➔
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB: 3D SAKURA FLASHCARDS -->
+    <!-- ========================================== -->
+    <section id="section-flashcards" class="hidden space-y-6">
+      
+      <div class="flex flex-wrap items-center justify-between gap-3 bg-white/90 p-3.5 rounded-2xl border border-sakura-200 chill-card-shadow">
+        <div class="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 text-xs font-semibold">
+          <span class="text-sumi/70 uppercase tracking-wider pl-1">🌸 Chọn bài:</span>
+          <button onclick="filterCards('all')" id="fc-filter-all" class="fc-filter-btn px-3.5 py-1.5 rounded-full bg-sakura-500 text-white font-bold shadow-xs">Tất cả (21 cấu trúc)</button>
+          <button onclick="filterCards('tenses')" id="fc-filter-tenses" class="fc-filter-btn px-3.5 py-1.5 rounded-full bg-sakura-50 text-sumi hover:bg-sakura-100">13 Thì cơ bản</button>
+          <button onclick="filterCards('future-extra')" id="fc-filter-future-extra" class="fc-filter-btn px-3.5 py-1.5 rounded-full bg-sakura-50 text-sumi hover:bg-sakura-100">Cấu trúc tương lai mở rộng</button>
+        </div>
+
+        <div class="flex items-center gap-2 text-xs font-bold text-sakura-700 ml-auto">
+          <span id="fc-counter" class="bg-sakura-100 px-3 py-1 rounded-xl font-mono text-sakura-800 border border-sakura-200">1 / 21</span>
+          <button onclick="shuffleCards()" title="Xáo thẻ ngẫu nhiên" class="px-3 py-1 rounded-xl bg-sakura-50 hover:bg-sakura-100 text-sakura-600 transition flex items-center gap-1 border border-sakura-200">
+            🔀 Đổi thứ tự
+          </button>
+        </div>
+      </div>
+
+      <div class="perspective-1000 w-full max-w-xl mx-auto h-[410px] md:h-[440px] cursor-pointer" onclick="flipCard()">
+        <div id="flashcard-inner" class="relative w-full h-full transform-style-3d transition-transform duration-500 rounded-3xl sakura-shadow">
+          
+          <div class="absolute inset-0 backface-hidden bg-white/95 border-2 border-sakura-200 rounded-3xl p-7 md:p-8 flex flex-col justify-between overflow-hidden">
+            <div class="flex items-center justify-between">
+              <span id="fc-tag" class="text-xs font-bold uppercase tracking-wider px-3.5 py-1 rounded-full bg-sakura-100 text-sakura-800 border border-sakura-200 flex items-center gap-1.5">
+                <span>🌸</span> <span>13 Thì Cơ Bản</span>
+              </span>
+              <span class="text-xs text-sakura-600 font-bold flex items-center gap-1 bg-sakura-50 px-3 py-1 rounded-xl border border-sakura-200">
+                <span>Chạm để lật thẻ</span> ↺
+              </span>
+            </div>
+
+            <div class="text-center my-auto space-y-3.5">
+              <span class="inline-block px-3 py-0.5 bg-sakura-50 text-sakura-600 rounded-full text-xs font-bold">Thì / Cấu Trúc</span>
+              <h2 id="fc-name" class="font-serif font-bold text-3xl md:text-4xl text-sumi tracking-tight">Present Simple</h2>
+              <p id="fc-viet-name" class="text-sm font-bold text-sakura-600 italic">(Hiện tại đơn)</p>
+
+              <div class="pt-3 border-t border-sakura-100 max-w-md mx-auto">
+                <span class="text-xs uppercase font-bold text-sumi/70 tracking-wider">Ví dụ ngữ cảnh thực tế:</span>
+                <div class="flex items-center justify-center gap-2 mt-2">
+                  <p id="fc-front-example" class="font-serif text-lg md:text-xl text-sakura-900 font-medium bg-sakura-50/70 p-3 rounded-2xl border border-sakura-200 w-full">"The train leaves at 7 a.m. tomorrow."</p>
+                  <button onclick="event.stopPropagation(); AudioEngine.speak(document.getElementById('fc-front-example').innerText)" class="p-2.5 rounded-2xl bg-sakura-100 hover:bg-sakura-200 text-sakura-700 transition shrink-0 shadow-xs border border-sakura-200" title="Bấm nghe phát âm chuẩn nè">
+                    🔊
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between text-xs text-sumi/60 pt-2 border-t border-sakura-100">
+              <span>🌸 Dành riêng cho Trâm</span>
+              <span class="text-sakura-600 font-bold">Xem công thức & mẹo nhớ ➔</span>
+            </div>
+          </div>
+
+          <div class="absolute inset-0 backface-hidden rotate-y-180 bg-gradient-to-br from-white via-sakura-50/70 to-sakura-100/60 border-2 border-sakura-300 rounded-3xl p-7 md:p-8 flex flex-col justify-between overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-sakura-200 pb-2.5">
+              <span class="text-xs font-bold uppercase tracking-wider text-sakura-800 flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-sakura-500"></span> Công Thức & Mẹo Nhớ Dành Cho Trâm
+              </span>
+              <span class="text-xs text-sakura-600 font-bold">Chạm để quay lại ↺</span>
+            </div>
+
+            <div class="space-y-3.5 my-auto py-2">
+              <div>
+                <span class="text-xs uppercase font-bold tracking-wider text-sakura-800">Công thức trọng tâm:</span>
+                <div class="mt-1 px-4 py-3 rounded-2xl bg-sakura-900 text-white font-mono text-base md:text-lg font-bold shadow-inner flex items-center justify-between border border-sakura-800">
+                  <code id="fc-formula">S + V(s/es)</code>
+                  <span class="text-xs text-sakura-200 font-sans font-normal opacity-90">DỄ THUỘC</span>
+                </div>
+              </div>
+
+              <div>
+                <span class="text-xs uppercase font-bold tracking-wider text-sumi/80">Cách dùng cốt lõi:</span>
+                <p id="fc-usage" class="mt-1 text-sm md:text-base font-bold text-sumi leading-relaxed bg-white/95 p-3 rounded-2xl border border-sakura-200">
+                  Thói quen, sự thật hiển nhiên, lịch trình cố định.
+                </p>
+              </div>
+
+              <div id="fc-nuance-box" class="text-xs bg-white/90 p-3.5 rounded-2xl text-sumi border border-sakura-200 space-y-1">
+                <span class="font-bold text-sakura-700 flex items-center gap-1">
+                  <span>💡 Mẹo bỏ túi cho Trâm:</span>
+                </span>
+                <p id="fc-nuance" class="leading-relaxed font-semibold">Cứ cái gì gắn liền với lịch trình tàu xe, máy bay, rạp phim chạy theo giờ cố định là Trâm phang ngay Hiện Tại Đơn nha!</p>
+              </div>
+            </div>
+
+            <div class="pt-2 text-center text-xs text-sumi/70 border-t border-sakura-200 font-medium">
+              Trâm bấm "Thẻ sau" bên dưới để qua cấu trúc mới nhé 👇
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="flex items-center justify-center gap-3 md:gap-4 max-w-md mx-auto pt-2">
+        <button onclick="prevCard()" class="px-5 py-2.5 rounded-2xl bg-white border border-sakura-200 hover:bg-sakura-50 text-sumi font-bold text-sm chill-card-shadow active:scale-95 transition flex items-center gap-1.5">
+          ← Thẻ trước
+        </button>
+        <button onclick="flipCard()" class="px-6 py-2.5 rounded-2xl bg-gradient-to-r from-sakura-500 to-sakura-600 text-white font-bold text-sm shadow-md shadow-sakura-300/50 hover:brightness-105 active:scale-95 transition flex items-center gap-1.5">
+          <span>Lật xem mẹo nhớ</span> ↺
+        </button>
+        <button onclick="nextCard()" class="px-5 py-2.5 rounded-2xl bg-white border border-sakura-200 hover:bg-sakura-50 text-sumi font-bold text-sm chill-card-shadow active:scale-95 transition flex items-center gap-1.5">
+          Thẻ sau →
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB: FORMULA RECALL (GHÉP CÔNG THỨC) -->
+    <!-- ========================================== -->
+    <section id="section-formula" class="hidden space-y-6">
+
+      <div class="bg-white/95 rounded-3xl p-6 md:p-8 border border-sakura-200 chill-card-shadow space-y-6">
+        <div class="flex items-center justify-between border-b border-sakura-100 pb-4">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-sakura-700 bg-sakura-100 px-3 py-1 rounded-full border border-sakura-200">
+              Ghép Công Thức Siêu Dễ
+            </span>
+            <h2 class="text-xl md:text-2xl font-serif font-bold text-sumi mt-1">Trâm Ơi, Ghép Nốt Cấu Trúc Này Nhé!</h2>
+          </div>
+          <span id="formula-counter" class="text-xs font-mono font-bold bg-sakura-100 px-3 py-1.5 rounded-xl text-sakura-700 border border-sakura-200">1 / 21</span>
+        </div>
+
+        <div class="space-y-2 bg-sakura-50/80 p-5 rounded-2xl border border-sakura-200">
+          <div class="text-xs font-bold uppercase text-sakura-700 tracking-wider">Cấu trúc cần ghép:</div>
+          <div id="fr-target-name" class="font-serif font-bold text-2xl md:text-3xl text-sumi">Future Perfect Continuous</div>
+          <div id="fr-target-usage" class="text-xs md:text-sm text-sumi font-semibold italic">"Nhấn mạnh khoảng thời gian kéo dài đến một thời điểm trong tương lai"</div>
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-sumi uppercase tracking-wider mb-2">
+              Trâm có thể tự gõ hoặc bấm các ô gợi ý màu hồng bên dưới nha:
+            </label>
+            <div class="relative">
+              <input type="text" id="fr-input" placeholder="Ví dụ: S + will have been + V-ing" 
+                class="w-full px-5 py-4 rounded-2xl border-2 border-sakura-200 focus:border-sakura-500 focus:ring-4 focus:ring-sakura-100 font-mono text-base md:text-lg text-sumi outline-none transition bg-white shadow-inner"
+                onkeypress="if(event.key === 'Enter') checkFormulaAnswer()">
+              <button onclick="checkFormulaAnswer()" class="absolute right-2.5 top-2.5 bottom-2.5 px-5 rounded-xl bg-sakura-600 hover:bg-sakura-700 text-white font-bold text-sm shadow-md transition active:scale-95">
+                Kiểm tra
+              </button>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <span class="text-xs text-sakura-700 font-bold">🌸 Trâm bấm vào các ô này để chèn chữ tự động nè:</span>
+            <div class="flex flex-wrap gap-1.5 font-mono text-xs" id="formula-token-tags">
+              <button onclick="insertFormulaToken('S + ')" class="px-3 py-1.5 rounded-xl bg-sakura-100 text-sakura-800 hover:bg-sakura-200 transition font-bold shadow-xs border border-sakura-200">S +</button>
+              <button onclick="insertFormulaToken('will ')" class="px-3 py-1.5 rounded-xl bg-sakura-100 text-sakura-800 hover:bg-sakura-200 transition font-bold shadow-xs border border-sakura-200">will</button>
+              <button onclick="insertFormulaToken('have ')" class="px-3 py-1.5 rounded-xl bg-sakura-100 text-sakura-800 hover:bg-sakura-200 transition font-bold shadow-xs border border-sakura-200">have</button>
+              <button onclick="insertFormulaToken('has ')" class="px-3 py-1.5 rounded-xl bg-sakura-100 text-sakura-800 hover:bg-sakura-200 transition font-bold shadow-xs border border-sakura-200">has</button>
+              <button onclick="insertFormulaToken('had ')" class="px-3 py-1.5 rounded-xl bg-sakura-100 text-sakura-800 hover:bg-sakura-200 transition font-bold shadow-xs border border-sakura-200">had</button>
+              <button onclick="insertFormulaToken('been ')" class="px-3 py-1.5 rounded-xl bg-sakura-100 text-sakura-800 hover:bg-sakura-200 transition font-bold shadow-xs border border-sakura-200">been</button>
+              <button onclick="insertFormulaToken('V-ing')" class="px-3 py-1.5 rounded-xl bg-sakura-100 text-sakura-800 hover:bg-sakura-200 transition font-bold shadow-xs border border-sakura-200">V-ing</button>
+              <button onclick="insertFormulaToken('V3/ed')" class="px-3 py-1.5 rounded-xl bg-sakura-100 text-sakura-800 hover:bg-sakura-200 transition font-bold shadow-xs border border-sakura-200">V3/ed</button>
+              <button onclick="insertFormulaToken('am/is/are ')" class="px-3 py-1.5 rounded-xl bg-sakura-100 text-sakura-800 hover:bg-sakura-200 transition font-bold shadow-xs border border-sakura-200">am/is/are</button>
+              <button onclick="insertFormulaToken('was/were ')" class="px-3 py-1.5 rounded-xl bg-sakura-100 text-sakura-800 hover:bg-sakura-200 transition font-bold shadow-xs border border-sakura-200">was/were</button>
+              <button onclick="insertFormulaToken('going to + V')" class="px-3 py-1.5 rounded-xl bg-sakura-100 text-sakura-800 hover:bg-sakura-200 transition font-bold shadow-xs border border-sakura-200">going to + V</button>
+              <button onclick="insertFormulaToken('about to + V')" class="px-3 py-1.5 rounded-xl bg-sakura-100 text-sakura-800 hover:bg-sakura-200 transition font-bold shadow-xs border border-sakura-200">about to + V</button>
+              <button onclick="insertFormulaToken('likely to + V')" class="px-3 py-1.5 rounded-xl bg-sakura-100 text-sakura-800 hover:bg-sakura-200 transition font-bold shadow-xs border border-sakura-200">likely to + V</button>
+              <button onclick="insertFormulaToken('due to + V')" class="px-3 py-1.5 rounded-xl bg-sakura-100 text-sakura-800 hover:bg-sakura-200 transition font-bold shadow-xs border border-sakura-200">due to + V</button>
+              <button onclick="insertFormulaToken('to + V')" class="px-3 py-1.5 rounded-xl bg-sakura-100 text-sakura-800 hover:bg-sakura-200 transition font-bold shadow-xs border border-sakura-200">to + V</button>
+              <button onclick="clearFormulaInput()" class="px-3 py-1.5 rounded-xl bg-rose-100 text-rose-700 hover:bg-rose-200 transition ml-auto font-sans font-bold border border-rose-200">Xóa gõ lại</button>
+            </div>
+          </div>
+
+          <div id="fr-feedback" class="hidden p-4 rounded-2xl border text-sm font-medium space-y-2">
+            <div id="fr-feedback-title" class="font-bold flex items-center gap-2"></div>
+            <div id="fr-feedback-correct" class="text-xs"></div>
+          </div>
+
+          <div class="flex items-center justify-between pt-3 border-t border-sakura-100">
+            <button onclick="showFormulaHint()" class="text-xs text-sakura-600 font-bold hover:underline flex items-center gap-1">
+              💡 Bấm xem gợi ý bí mật
+            </button>
+            <button onclick="nextFormulaItem()" class="px-5 py-2.5 rounded-xl bg-white border border-sakura-200 hover:bg-sakura-50 text-sumi font-bold text-xs chill-card-shadow transition">
+              Đổi cấu trúc khác ➔
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB: CHEATSHEET -->
+    <!-- ========================================== -->
+    <section id="section-cheatsheet" class="hidden space-y-6">
+
+      <div class="bg-white/95 rounded-3xl p-6 border border-sakura-200 chill-card-shadow space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-sakura-700 bg-sakura-100 px-3 py-1 rounded-full border border-sakura-200">
+              Sổ Tay Tra Cứu Cực Nhanh
+            </span>
+            <h2 class="text-xl md:text-2xl font-serif font-bold text-sumi mt-1">Bảng 13 Thì & 8 Cấu Trúc Tương Lai</h2>
+          </div>
+          
+          <div class="w-full sm:w-72">
+            <input type="text" id="cheatsheet-search" placeholder="🔍 Gõ tên thì hoặc từ khóa..." 
+              oninput="searchCheatsheet(this.value)"
+              class="w-full px-4 py-2.5 rounded-xl border border-sakura-200 focus:border-sakura-500 focus:ring-2 focus:ring-sakura-100 text-xs font-medium outline-none transition bg-sakura-50/50">
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-r from-sakura-900 to-sumi text-white p-5 rounded-2xl space-y-3 text-xs">
+          <div class="font-bold text-sakura-300 uppercase tracking-wider flex items-center gap-1.5">
+            <span>✨</span> BÍ KÍP PHÂN BIỆT CÁC THÌ TƯƠNG LAI HAY BỊ LỪA TRONG BÀI THI NNA
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 leading-relaxed text-sakura-100">
+            <div class="bg-white/10 p-2.5 rounded-xl backdrop-blur-xs">
+              <span class="font-bold text-sakura-200">Will + V:</span> Quyết định ngay tại thời điểm nói ("Chuông reo ➔ Ra mở liền").
+            </div>
+            <div class="bg-white/10 p-2.5 rounded-xl backdrop-blur-xs">
+              <span class="font-bold text-sakura-200">Be going to + V:</span> Dự định ấp ủ từ trước; hoặc dự đoán có bằng chứng trước mắt ("Mây đen ➔ sắp mưa").
+            </div>
+            <div class="bg-white/10 p-2.5 rounded-xl backdrop-blur-xs">
+              <span class="font-bold text-sakura-200">Present Continuous:</span> Đã lên lịch, chốt giờ và địa điểm với người khác ("Gặp cô giáo ngày mai").
+            </div>
+            <div class="bg-white/10 p-2.5 rounded-xl backdrop-blur-xs">
+              <span class="font-bold text-sakura-200">Present Simple:</span> Giờ tàu xe, lịch trình công cộng cố định ("Tàu chạy lúc 7h sáng mai").
+            </div>
+            <div class="bg-white/10 p-2.5 rounded-xl backdrop-blur-xs">
+              <span class="font-bold text-sakura-200">Be about to + V:</span> Sắp sửa xảy ra ngay tắp lự trong tích tắc ("Buổi diễn sắp bắt đầu rồi!").
+            </div>
+            <div class="bg-white/10 p-2.5 rounded-xl backdrop-blur-xs">
+              <span class="font-bold text-sakura-200">Was/Were going to:</span> Định làm trong quá khứ nhưng bị bể kèo ("Định đi chơi mà trời mưa").
+            </div>
+            <div class="bg-white/10 p-2.5 rounded-xl backdrop-blur-xs">
+              <span class="font-bold text-sakura-200">Future Perfect (will have V3):</span> Xong xuôi TRƯỚC một mốc tương lai ("Thần chú By + thời gian tương lai").
+            </div>
+            <div class="bg-white/10 p-2.5 rounded-xl backdrop-blur-xs">
+              <span class="font-bold text-sakura-200">Future Continuous:</span> Đang diễn ra vào một mốc giờ cụ thể ở tương lai ("8h tối mai đang ngồi học bài").
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-3xl border border-sakura-200 chill-card-shadow overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs md:text-sm">
+            <thead class="bg-sakura-100/70 text-sumi font-bold border-b border-sakura-200">
+              <tr>
+                <th class="p-4">Thì / Cấu Trúc</th>
+                <th class="p-4">Công Thức Cần Nhớ</th>
+                <th class="p-4">Cách Dùng Rất Dễ Hiểu</th>
+                <th class="p-4">Ví Dụ Minh Họa</th>
+              </tr>
+            </thead>
+            <tbody id="cheatsheet-tbody" class="divide-y divide-sakura-100 text-sumi font-medium">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Sticky Footer -->
+  <footer class="mt-auto bg-white/90 border-t border-sakura-200 py-4 text-center text-xs text-sumi/70 font-medium relative z-20">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <p>🌸 Trang web được làm riêng tặng <strong>Ngọc Trâm Cute (桜の文法)</strong> · Chúc Trâm luôn học giỏi và vui vẻ nhé! ✨</p>
+      <p class="font-mono text-sakura-600 font-bold">Giao diện Japan Sakura · Thang Điểm 10 Chuẩn</p>
+    </div>
+  </footer>
+
+  <!-- ======================================================== -->
+  <!-- JAVASCRIPT LOGIC (100% CLEAN SYNTAX & BUG FREE) -->
+  <!-- ======================================================== -->
+  <script>
+    // Helper Fisher-Yates Shuffle
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    // --- 1. Clean Grammar Database (21 items from Word document) ---
+    const GRAMMAR_DATA = [
+      {
+        id: 1,
+        type: 'tenses',
+        name: 'Present Simple',
+        vietName: 'Hiện tại đơn',
+        formula: 'S + V(s/es)',
+        usage: 'Thói quen, sự thật hiển nhiên, lịch trình cố định của tàu xe.',
+        example: 'The train leaves at 7 a.m. tomorrow.',
+        nuance: 'Cứ cái gì gắn liền với thời khóa biểu xe bus, tàu hỏa, rạp phim thì Trâm dùng thì này nha!'
+      },
+      {
+        id: 2,
+        type: 'tenses',
+        name: 'Present Continuous',
+        vietName: 'Hiện tại tiếp diễn',
+        formula: 'S + am/is/are + V-ing',
+        usage: 'Đang diễn ra bây giờ; hoặc kế hoạch đã chốt hẹn với người khác.',
+        example: 'I am meeting my teacher tomorrow.',
+        nuance: 'Đã hẹn trước với cô giáo, cả 2 bên cùng biết thời gian địa điểm rõ ràng.'
+      },
+      {
+        id: 3,
+        type: 'tenses',
+        name: 'Present Perfect',
+        vietName: 'Hiện tại hoàn thành',
+        formula: 'S + have/has + V3/ed',
+        usage: 'Kể về kinh nghiệm, kết quả còn tới bây giờ, bắt đầu từ quá khứ tới nay.',
+        example: 'She has lived in Da Nang for five years.',
+        nuance: 'Cầu nối từ quá khứ đến hiện tại: Sống ở Đà Nẵng 5 năm và bây giờ vẫn đang ở đó.'
+      },
+      {
+        id: 4,
+        type: 'tenses',
+        name: 'Present Perfect Continuous',
+        vietName: 'Hiện tại hoàn thành tiếp diễn',
+        formula: 'S + have/has been + V-ing',
+        usage: 'Nhấn mạnh hành động làm liên tục không ngừng nghỉ đến tận lúc này.',
+        example: 'He has been studying English for three hours without a break.',
+        nuance: 'Nhấn mạnh độ cày cuốc liên tục, mệt nhoài người vì học suốt 3 tiếng liền.'
+      },
+      {
+        id: 5,
+        type: 'tenses',
+        name: 'Past Simple',
+        vietName: 'Quá khứ đơn',
+        formula: 'S + V2/ed',
+        usage: 'Việc gì đã làm và kết thúc xong xuôi hẳn trong quá khứ rồi.',
+        example: 'We visited Hue Citadel last summer.',
+        nuance: 'Chuyện ngày hôm qua, năm ngoái, đã qua rồi không còn dính dáng tới hiện tại.'
+      },
+      {
+        id: 6,
+        type: 'tenses',
+        name: 'Past Continuous',
+        vietName: 'Quá khứ tiếp diễn',
+        formula: 'S + was/were + V-ing',
+        usage: 'Đang diễn ra vào một giờ chính xác trong quá khứ.',
+        example: 'At 8 p.m. last night, I was reviewing grammar.',
+        nuance: 'Đúng 8h tối hôm qua thì Trâm đang cắm đầu học bài á!'
+      },
+      {
+        id: 7,
+        type: 'tenses',
+        name: 'Past Perfect',
+        vietName: 'Quá khứ hoàn thành',
+        formula: 'S + had + V3/ed',
+        usage: 'Xảy ra và xong trước một việc khác trong quá khứ.',
+        example: 'When she arrived, the train had already left.',
+        nuance: 'Tàu chạy mất tiêu trước rồi thì cô ấy mới tới nơi (chuyện xảy ra trước dùng Had V3/ed).'
+      },
+      {
+        id: 8,
+        type: 'tenses',
+        name: 'Past Perfect Continuous',
+        vietName: 'Quá khứ hoàn thành tiếp diễn',
+        formula: 'S + had been + V-ing',
+        usage: 'Nhấn mạnh quá trình làm liên tục trước một mốc quá khứ.',
+        example: 'They had been waiting for two hours before the bus finally arrived.',
+        nuance: 'Đứng chờ xe bus mỏi cả chân suốt 2 tiếng trước khi xe chịu chạy tới.'
+      },
+      {
+        id: 9,
+        type: 'tenses',
+        name: 'Future Simple (will)',
+        vietName: 'Tương lai đơn',
+        formula: 'S + will + V',
+        usage: 'Quyết định cái rụp ngay lúc nói, lời hứa, dự đoán theo cảm tính.',
+        example: 'I will call you tonight.',
+        nuance: 'Bộc phát ngay tức thì: Chuông reo là Tớ sẽ mở cửa liền! ➔ dùng Will.'
+      },
+      {
+        id: 10,
+        type: 'tenses',
+        name: 'Be going to',
+        vietName: 'Tương lai gần',
+        formula: 'S + am/is/are going to + V',
+        usage: 'Dự định đã tính từ trước; hoặc nhìn thấy dấu hiệu trước mắt rồi đoán.',
+        example: 'Look at those dark clouds, it is going to rain.',
+        nuance: 'Nhìn thấy mây đen nghịt trước mắt là biết chắc trời sắp mưa rồi ➔ dùng Be going to.'
+      },
+      {
+        id: 11,
+        type: 'tenses',
+        name: 'Future Continuous',
+        vietName: 'Tương lai tiếp diễn',
+        formula: 'S + will be + V-ing',
+        usage: 'Đang diễn ra vào một mốc giờ cụ thể ở tương lai.',
+        example: 'At 8 p.m. tomorrow, I will be studying.',
+        nuance: 'Đúng 8h tối ngày mai là Trâm sẽ đang ngồi học bài chăm chỉ nè.'
+      },
+      {
+        id: 12,
+        type: 'tenses',
+        name: 'Future Perfect',
+        vietName: 'Tương lai hoàn thành',
+        formula: 'S + will have + V3/ed',
+        usage: 'Xong xuôi hoàn tất TRƯỚC một mốc tương lai.',
+        example: 'By next June, I will have graduated.',
+        nuance: 'Cứ có chữ By + thời gian tương lai là nhớ ngay tới thì này nha Trâm!'
+      },
+      {
+        id: 13,
+        type: 'tenses',
+        name: 'Future Perfect Continuous',
+        vietName: 'Tương lai hoàn thành tiếp diễn',
+        formula: 'S + will have been + V-ing',
+        usage: 'Tính đến một mốc tương lai thì đã làm việc đó được bao lâu liên tục.',
+        example: 'By December, I will have been studying here for 3 years.',
+        nuance: 'Nhấn mạnh độ dài thời gian liên tục tính tới mốc tương lai đó.'
+      },
+      {
+        id: 14,
+        type: 'future-extra',
+        name: 'Be about to',
+        vietName: 'Sắp sửa làm gì ngay trong tích tắc',
+        formula: 'S + am/is/are (was/were) about to + V',
+        usage: 'Sắp sửa diễn ra ngay tắp lự trong vài giây/phút tới.',
+        example: 'The show is about to start.',
+        nuance: 'Đếm 1, 2, 3 là chương trình bắt đầu luôn á!'
+      },
+      {
+        id: 15,
+        type: 'future-extra',
+        name: 'Be likely to',
+        vietName: 'Rất có khả năng sẽ xảy ra',
+        formula: 'S + am/is/are (was/were) likely to + V',
+        usage: 'Khả năng cao, xác suất rất lớn sẽ diễn ra.',
+        example: 'She is likely to win the competition.',
+        nuance: 'Học giỏi và tự tin thế này thì Trâm rất có khả năng ẵm điểm 10 nè!'
+      },
+      {
+        id: 16,
+        type: 'future-extra',
+        name: 'Was/Were going to',
+        vietName: 'Dự định quá khứ nhưng bị bể kèo',
+        formula: 'S + was/were going to + V',
+        usage: 'Tính làm gì đó nhưng vì lý do nào đó mà đành thôi không làm được.',
+        example: 'We were going to visit Hue, but it rained.',
+        nuance: 'Thường có chữ but (nhưng mà): Tính đi chơi mà trời mưa to quá!'
+      },
+      {
+        id: 17,
+        type: 'future-extra',
+        name: 'Be due to',
+        vietName: 'Dự kiến theo kế hoạch đã định',
+        formula: 'S + am/is/are due to + V',
+        usage: 'Dự kiến diễn ra theo lịch trình sẵn của máy bay, hội nghị, sự kiện.',
+        example: 'The flight is due to land at 3 p.m.',
+        nuance: 'Lịch trên bảng điện tử sân bay ghi hạ cánh lúc 3h chiều.'
+      },
+      {
+        id: 18,
+        type: 'future-extra',
+        name: 'Be to',
+        vietName: 'Kế hoạch hoặc chỉ thị chính thức',
+        formula: 'S + am/is/are to + V',
+        usage: 'Kế hoạch chính thức hoặc mệnh lệnh trang trọng.',
+        example: 'The Prime Minister is to visit France next month.',
+        nuance: 'Văn phong báo chí, tin tức thời sự chính phủ.'
+      },
+      {
+        id: 19,
+        type: 'future-extra',
+        name: 'Will be going to',
+        vietName: 'Nhấn mạnh dự định từ góc nhìn tương lai',
+        formula: 'S + will be going to + V',
+        usage: 'Nhấn mạnh dự định tương lai từ góc nhìn của thời điểm tương lai.',
+        example: 'Next year, she will be going to study abroad.',
+        nuance: 'Cấu trúc nhấn mạnh nâng cao dành cho dân NNA.'
+      },
+      {
+        id: 20,
+        type: 'future-extra',
+        name: 'Will be about to',
+        vietName: 'Sẽ sắp sửa làm gì tại một thời điểm tương lai',
+        formula: 'S + will be about to + V',
+        usage: 'Sẽ ở trạng thái chuẩn bị làm gì ngay khi một mốc tương lai tới.',
+        example: 'When you arrive, they will be about to cut the cake.',
+        nuance: 'Vừa bước chân vào cửa là thấy mọi người chuẩn bị cầm dao cắt bánh kem liền!'
+      },
+      {
+        id: 21,
+        type: 'future-extra',
+        name: 'Future in the Past / Would',
+        vietName: 'Tương lai nhìn từ quá khứ',
+        formula: 'S + would + V',
+        usage: 'Lùi thì trong câu gián tiếp khi nhắc lại lời hứa trong quá khứ.',
+        example: 'He said he would call me later.',
+        nuance: 'Hôm qua anh ấy hứa là anh ấy sẽ gọi điện (will biến thành would).'
+      }
+    ];
+
+    // --- 2. Bank 1: 20 Questions on 13 Tenses (13 Thì Cơ Bản) ---
+    const EXAM_TENSES_20 = [
+      {
+        id: 1,
+        category: 'Sự Thật Tự Nhiên & Quy Luật',
+        sentence: 'Water ______ at 100 degrees Celsius under standard atmospheric pressure.',
+        options: ['boils', 'is boiling', 'will boil', 'boiled'],
+        answer: 'boils',
+        clue: 'Quy luật tự nhiên muôn đời',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Sự thật hiển nhiên và quy luật tự nhiên bất biến luôn luôn chia ở <strong>Hiện Tại Đơn (boils)</strong> nha Trâm!'
+      },
+      {
+        id: 2,
+        category: 'Thói Quen Thường Xuyên',
+        sentence: 'Every evening, Trâm ______ her English vocabulary notebook before going to bed.',
+        options: ['reviews', 'is reviewing', 'has reviewed', 'reviewed'],
+        answer: 'reviews',
+        clue: 'Every evening (Thói quen lặp lại)',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Dấu hiệu "Every evening" chỉ thói quen lặp đi lặp lại hàng ngày ➔ Dùng <strong>Hiện Tại Đơn (reviews)</strong>.'
+      },
+      {
+        id: 3,
+        category: 'Hành Động Đang Diễn Ra Lúc Nói',
+        sentence: 'Quiet, please! The students ______ their listening exam in room 201 right now.',
+        options: ['are taking', 'take', 'took', 'have taken'],
+        answer: 'are taking',
+        clue: 'Quiet, please! & right now',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Có câu mệnh lệnh "Quiet, please!" và "right now" ➔ Hành động đang diễn ra ngay tại thời điểm nói ➔ <strong>Hiện Tại Tiếp Diễn (are taking)</strong>.'
+      },
+      {
+        id: 4,
+        category: 'Thói Quen Gây Phiền Toái',
+        sentence: 'He is so forgetful! He ______ his student ID card at home.',
+        options: ['is always leaving', 'always leaves', 'always left', 'has always left'],
+        answer: 'is always leaving',
+        clue: 'He is so forgetful! & always',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> "Always" kết hợp với <strong>Hiện Tại Tiếp Diễn (is always leaving)</strong> dùng để phàn nàn về một thói quen xấu gây khó chịu cho người khác!'
+      },
+      {
+        id: 5,
+        category: 'Trải Nghiệm Tính Đến Nay (Số Lần)',
+        sentence: 'Trâm ______ this British linguistics movie three times because she loves the accent.',
+        options: ['has watched', 'watches', 'watched', 'is watching'],
+        answer: 'has watched',
+        clue: 'three times (Số lần trải nghiệm)',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Nói về số lần đã trải nghiệm tính đến hiện tại ("three times") ➔ Dùng <strong>Hiện Tại Hoàn Thành (has watched)</strong>.'
+      },
+      {
+        id: 6,
+        category: 'Vừa Mới / Đã Làm Xong',
+        sentence: 'Don\'t worry about printing the handouts, Trâm ______ them for our seminar.',
+        options: ['has already printed', 'printed', 'is printing', 'prints'],
+        answer: 'has already printed',
+        clue: 'already (Đã làm xong xuôi)',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> "Already" diễn tả hành động đã hoàn tất xong trước dự kiến ➔ <strong>Hiện Tại Hoàn Thành (has already printed)</strong>.'
+      },
+      {
+        id: 7,
+        category: 'Hành Động Kéo Dài Dẫn Tới Kết Quả',
+        sentence: 'Trâm\'s eyes are tired because she ______ on her laptop for four hours without resting.',
+        options: ['has been working', 'worked', 'works', 'had worked'],
+        answer: 'has been working',
+        clue: 'eyes are tired & for four hours',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Kết quả mắt mỏi ở hiện tại ("eyes are tired") do cày liên tục suốt 4 tiếng ➔ Dùng <strong>Hiện Tại Hoàn Thành Tiếp Diễn (has been working)</strong>.'
+      },
+      {
+        id: 8,
+        category: 'Mưa Kéo Dài Từ Sáng Tới Giờ',
+        sentence: 'It is still drizzling outside. It ______ non-stop since early this morning.',
+        options: ['has been raining', 'rained', 'rains', 'was raining'],
+        answer: 'has been raining',
+        clue: 'still drizzling & since early morning',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Việc mưa bắt đầu từ sáng và bây giờ vẫn đang tiếp tục ("still drizzling") ➔ <strong>Hiện Tại Hoàn Thành Tiếp Diễn (has been raining)</strong>.'
+      },
+      {
+        id: 9,
+        category: 'Mốc Thời Gian Quá Khứ Rõ Ràng',
+        sentence: 'Two years ago, Trâm ______ the university entrance exam with flying colors.',
+        options: ['passed', 'has passed', 'passes', 'was passing'],
+        answer: 'passed',
+        clue: 'Two years ago (Thời điểm xác định trong quá khứ)',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Có mốc thời gian quá khứ xác định ("Two years ago") ➔ Dùng <strong>Quá Khứ Đơn (passed)</strong>.'
+      },
+      {
+        id: 10,
+        category: 'Chuỗi Hành Động Quá Khứ Liên Tiếp',
+        sentence: 'Yesterday, Trâm arrived at the library, ______ her laptop, and started writing her assignment.',
+        options: ['opened', 'opens', 'has opened', 'was opening'],
+        answer: 'opened',
+        clue: 'arrived... opened... and started...',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Chuỗi các hành động liên tiếp đã xảy ra và chấm dứt trong quá khứ ➔ Tất cả đều chia <strong>Quá Khứ Đơn (opened)</strong>.'
+      },
+      {
+        id: 11,
+        category: 'Giờ Cụ Thể Trong Quá Khứ',
+        sentence: 'At 9:00 PM yesterday evening, Trâm ______ English grammar exercises at her desk.',
+        options: ['was doing', 'did', 'has done', 'does'],
+        answer: 'was doing',
+        clue: 'At 9:00 PM yesterday evening',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Có thời điểm chính xác trong quá khứ ("At 9:00 PM yesterday evening") ➔ Hành động đang diễn ra ➔ <strong>Quá Khứ Tiếp Diễn (was doing)</strong>.'
+      },
+      {
+        id: 12,
+        category: 'Quá Khứ Đang Làm Thì Bị Xen Ngang',
+        sentence: 'While the professor ______ syntax rules, the fire alarm suddenly went off.',
+        options: ['was explaining', 'explained', 'had explained', 'is explaining'],
+        answer: 'was explaining',
+        clue: 'While the professor... & suddenly went off',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Hành động dài đang xảy ra chia Quá Khứ Tiếp Diễn (was explaining), hành động ngắn xen ngang dùng Quá Khứ Đơn (went off)!'
+      },
+      {
+        id: 13,
+        category: 'Xảy Ra Trước Một Hành Động Quá Khứ',
+        sentence: 'By the time Trâm reached the bus stop, the last bus ______ .',
+        options: ['had already departed', 'already departed', 'has departed', 'was departing'],
+        answer: 'had already departed',
+        clue: 'By the time Trâm reached (V2)',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Việc xe bus rời bến xảy ra và xong TRƯỚC khi Trâm tới trạm ➔ Dùng <strong>Quá Khứ Hoàn Thành (had already departed)</strong>.'
+      },
+      {
+        id: 14,
+        category: 'Sau "After" Trong Quá Khứ',
+        sentence: 'After Trâm ______ all the grammar lessons, she felt completely confident about the test.',
+        options: ['had revised', 'revised', 'has revised', 'revises'],
+        answer: 'had revised',
+        clue: 'After... (Hành động xảy ra trước)',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Sau "After" là hành động hoàn tất trước ➔ Dùng <strong>Quá Khứ Hoàn Thành (had revised)</strong>.'
+      },
+      {
+        id: 15,
+        category: 'Nguyên Nhân Kéo Dài Trong Quá Khứ',
+        sentence: 'They were out of breath because they ______ for twenty minutes to catch the train.',
+        options: ['had been running', 'have been running', 'were running', 'ran'],
+        answer: 'had been running',
+        clue: 'were out of breath & for twenty minutes',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Kết quả thở dốc ở quá khứ ("were out of breath") do chạy liên tục 20 phút trước đó ➔ <strong>Quá Khứ Hoàn Thành Tiếp Diễn (had been running)</strong>.'
+      },
+      {
+        id: 16,
+        category: 'Quyết Định / Lời Ngỏ Ý Tức Thì',
+        sentence: '— That heavy bag looks difficult to carry. — Don\'t worry, Trâm, I ______ you carry it.',
+        options: ['will help', 'am helping', 'help', 'am going to help'],
+        answer: 'will help',
+        clue: 'Quyết định giúp ngay tại lúc nói',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Thấy bạn xách nặng, đưa ra lời đề nghị giúp đỡ tức thì ngay tại thời điểm nói ➔ Dùng <strong>WILL (will help)</strong>.'
+      },
+      {
+        id: 17,
+        category: 'Dự Định Đã Có Chuẩn Bị Từ Trước',
+        sentence: 'Trâm bought a new sketchbook yesterday because she ______ Japanese calligraphy.',
+        options: ['is going to learn', 'will learn', 'learns', 'learned'],
+        answer: 'is going to learn',
+        clue: 'bought a new sketchbook yesterday',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Đã đi mua sổ từ hôm qua ➔ Kế hoạch/dự định đã được ấp ủ và có sự chuẩn bị từ trước ➔ Dùng <strong>Be going to (is going to learn)</strong>.'
+      },
+      {
+        id: 18,
+        category: 'Mốc Thời Điểm Cụ Thể Ở Tương Lai',
+        sentence: 'This time next week, we ______ on the beach during our class vacation trip.',
+        options: ['will be relaxing', 'will relax', 'relax', 'are relaxing'],
+        answer: 'will be relaxing',
+        clue: 'This time next week',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> "This time next week" (đúng vào giờ này tuần sau) ➔ Hành động sẽ đang diễn ra dở dang ➔ <strong>Tương Lai Tiếp Diễn (will be relaxing)</strong>.'
+      },
+      {
+        id: 19,
+        category: 'Hoàn Thành Trước Mốc Tương Lai (By...)',
+        sentence: 'By December 2026, Trâm ______ her second year at university.',
+        options: ['will have finished', 'will finish', 'finishes', 'is finishing'],
+        answer: 'will have finished',
+        clue: 'By December 2026',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Cứ thấy thần chú "By + mốc tương lai" (By December 2026) ➔ Chọn ngay <strong>Tương Lai Hoàn Thành (will have finished)</strong>.'
+      },
+      {
+        id: 20,
+        category: 'Độ Dài Thời Gian Kéo Dài Tới Tương Lai',
+        sentence: 'By next month, Trâm ______ English linguistics for exactly two years.',
+        options: ['will have been studying', 'will study', 'studies', 'is studying'],
+        answer: 'will have been studying',
+        clue: 'By next month & for exactly two years',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Tính tới mốc "By next month" được khoảng thời gian liên tục "for two years" ➔ <strong>Tương Lai Hoàn Thành Tiếp Diễn (will have been studying)</strong>.'
+      }
+    ];
+
+    // --- 3. Bank 2: 20 Questions on Future Nuances & Modals (Tương Lai Mở Rộng) ---
+    const EXAM_FUTURE_20 = [
+      {
+        id: 21,
+        category: 'Thời Khóa Biểu & Lịch Thi Cố Định',
+        sentence: 'The final semester exam ______ at 8:00 AM sharp next Monday according to the faculty schedule.',
+        options: ['begins', 'will begin', 'is beginning', 'began'],
+        answer: 'begins',
+        clue: 'according to the faculty schedule',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Lịch thi, thời khóa biểu của trường học là lịch trình cố định của tổ chức ➔ Dùng <strong>Hiện Tại Đơn (begins)</strong>.'
+      },
+      {
+        id: 22,
+        category: 'Kế Hoạch Cá Nhân Đã Chốt Hẹn',
+        sentence: 'Trâm cannot attend the meeting on Friday because she ______ her academic advisor at 2 PM.',
+        options: ['is seeing', 'sees', 'will have seen', 'saw'],
+        answer: 'is seeing',
+        clue: 'at 2 PM on Friday with her advisor',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Kế hoạch cá nhân đã chốt giờ và hẹn trước với thầy cô ➔ Dùng <strong>Hiện Tại Tiếp Diễn (is seeing)</strong>.'
+      },
+      {
+        id: 23,
+        category: 'Sắp Sửa Trong Tích Tắc (Seconds)',
+        sentence: 'Listen to the countdown! The clock is at 3... 2... 1... The fireworks ______ explode.',
+        options: ['are about to', 'are due to', 'are likely to', 'were to'],
+        answer: 'are about to',
+        clue: 'countdown 3... 2... 1...',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Đếm 3, 2, 1... sắp sửa diễn ra ngay tức khắc trong tích tắc ➔ Dùng <strong>Be about to + V (are about to explode)</strong>.'
+      },
+      {
+        id: 24,
+        category: 'Sắp Sửa Trong Quá Khứ Bị Cắt Ngang',
+        sentence: 'Trâm ______ turn off her bedside lamp when her phone suddenly buzzed with a message.',
+        options: ['was about to', 'is about to', 'will be about to', 'has been about to'],
+        answer: 'was about to',
+        clue: 'in the past, when her phone buzzed',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Trong quá khứ sắp sửa làm gì thì bị một việc khác cắt ngang ➔ Dùng <strong>Was/Were about to + V (was about to turn off)</strong>.'
+      },
+      {
+        id: 25,
+        category: 'Lịch Trình Ấn Định Của Sự Kiện',
+        sentence: 'The international symposium on linguistics ______ commence at 9:00 AM tomorrow.',
+        options: ['is due to', 'is about to', 'is likely to', 'was going to'],
+        answer: 'is due to',
+        clue: 'at 9:00 AM tomorrow (Hội nghị quốc tế)',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Sự kiện, hội nghị dự kiến diễn ra theo đúng lịch trình đã ấn định ➔ Dùng <strong>Be due to + V</strong>.'
+      },
+      {
+        id: 26,
+        category: 'Lịch Trình Quá Khứ Bị Trì Hoãn',
+        sentence: 'The express train ______ arrive at 10:15 AM, but mechanical issues caused a 30-minute delay.',
+        options: ['was due to', 'is due to', 'will be due to', 'has been due to'],
+        answer: 'was due to',
+        clue: 'arrived at 10:15, but delayed',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Chuyến tàu dự kiến đến lúc 10:15 theo lịch trình quá khứ nhưng bị hoãn ➔ Dùng <strong>Was due to + V</strong>.'
+      },
+      {
+        id: 27,
+        category: 'Dự Đoán Khả Năng Rất Cao',
+        sentence: 'Given the sunny weather forecast, the outdoor cherry blossom picnic ______ be a great success.',
+        options: ['is likely to', 'is about to', 'is due to', 'is to'],
+        answer: 'is likely to',
+        clue: 'sunny weather forecast (Khả năng cao)',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Dự đoán có xác suất cao / khả năng lớn sẽ thành công tốt đẹp ➔ Dùng <strong>Be likely to + V</strong>.'
+      },
+      {
+        id: 28,
+        category: 'Ít Khả Năng / Khó Xảy Ra',
+        sentence: 'With her solid preparation, Trâm ______ encounter any major difficulties during the grammar test.',
+        options: ['is unlikely to', 'is about to', 'is due to', 'is to'],
+        answer: 'is unlikely to',
+        clue: 'solid preparation (Khó có khả năng gặp nạn)',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Ôn tập kỹ càng như thế này thì Trâm khó lòng / ít có khả năng gặp khó khăn ➔ Dùng <strong>Be unlikely to + V</strong>.'
+      },
+      {
+        id: 29,
+        category: 'Thông Cáo Trang Trọng Của Lãnh Đạo',
+        sentence: 'The Education Minister ______ unveil the new curriculum standards at the national conference next week.',
+        options: ['is to', 'is about to', 'was going to', 'is likely'],
+        answer: 'is to',
+        clue: 'The Education Minister & national conference',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Văn phong báo chí trang trọng thông báo lịch trình chính thức của các vị bộ trưởng, lãnh đạo ➔ Dùng <strong>Be to + V</strong>.'
+      },
+      {
+        id: 30,
+        category: 'Định Mệnh / Được Sắp Đặt Trong Quá Khứ',
+        sentence: 'Little did they know that this small grammar seminar ______ change the way they teach English forever.',
+        options: ['was to', 'is to', 'will be to', 'has been to'],
+        answer: 'was to',
+        clue: 'Little did they know (Góc nhìn quá khứ)',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> <strong>Was/Were to + V</strong> dùng để diễn tả một điều được định sẵn sẽ xảy ra nhìn từ góc độ quá khứ.'
+      },
+      {
+        id: 31,
+        category: 'Dự Định Quá Khứ Bị "Bể Kèo"',
+        sentence: 'Trâm ______ buy that linguistics reference book yesterday, but the bookstore was closed.',
+        options: ['was going to', 'is going to', 'will', 'had been going to'],
+        answer: 'was going to',
+        clue: 'yesterday, but the bookstore was closed',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Tính làm trong quá khứ nhưng vì trở ngại khách quan mà đành hủy ➔ Dùng <strong>Was/Were going to + V</strong>.'
+      },
+      {
+        id: 32,
+        category: 'Lùi Thì Lời Hứa (Future in the Past)',
+        sentence: 'The teacher told Trâm that she ______ receive feedback on her paper by Wednesday.',
+        options: ['would', 'will', 'can', 'is going to'],
+        answer: 'would',
+        clue: 'The teacher told (Động từ quá khứ)',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Mệnh đề chính ở quá khứ ("told") ➔ Chữ "will" phải lùi thì thành <strong>would</strong> trong câu gián tiếp.'
+      },
+      {
+        id: 33,
+        category: 'Hành Động Sẵn Lòng Lặp Lại Trong Quá Khứ',
+        sentence: 'Whenever Trâm struggled with difficult vocabulary, her roommate ______ patiently explain each word.',
+        options: ['would', 'will', 'is about to', 'is due to'],
+        answer: 'would',
+        clue: 'Whenever Trâm struggled (Thói quen sẵn lòng quá khứ)',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> "Would" diễn tả một hành vi lặp đi lặp lại một cách tự nguyện trong quá khứ ("mỗi khi gặp khó là bạn đều sẵn lòng giải thích").'
+      },
+      {
+        id: 34,
+        category: 'Cận Kề / Bên Bờ Vực Biến Chuyển',
+        sentence: 'The two research groups were on the verge of ______ a groundbreaking linguistic discovery.',
+        options: ['making', 'make', 'made', 'to make'],
+        answer: 'making',
+        clue: 'on the verge of (Giới từ of)',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Cụm "be on the verge of + V-ing" (cận kề bên ngưỡng cửa) ➔ Sau giới từ "of" luôn luôn là <strong>V-ing (making)</strong>.'
+      },
+      {
+        id: 35,
+        category: 'Sắp Sửa Ngay Lúc Đó (On the point of)',
+        sentence: 'Trâm was on the point of ______ the front door when she remembered her student ID.',
+        options: ['locking', 'lock', 'locked', 'to lock'],
+        answer: 'locking',
+        clue: 'on the point of + V-ing',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> "Be on the point of + V-ing" đồng nghĩa với "be about to" (sắp sửa làm gì) ➔ Dùng <strong>V-ing (locking)</strong>.'
+      },
+      {
+        id: 36,
+        category: 'Dự Định Nhìn Từ Mốc Tương Lai',
+        sentence: 'By this time next autumn, Trâm will be ______ her master\'s degree application.',
+        options: ['going to submit', 'go to submit', 'gone to submit', 'went to submit'],
+        answer: 'going to submit',
+        clue: 'will be going to + V',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Cấu trúc tương lai nâng cao "will be going to + V" nhấn mạnh trạng thái dự định khi nhìn từ một mốc thời gian tương lai.'
+      },
+      {
+        id: 37,
+        category: 'Sắp Sửa Làm Gì Tại Một Mốc Tương Lai',
+        sentence: 'When the bell chimes at 5:00 PM, the students ______ hand in their test papers.',
+        options: ['will be about to', 'were about to', 'are about', 'would be about to'],
+        answer: 'will be about to',
+        clue: 'When the bell chimes at 5:00 PM (Mốc tương lai)',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Tại mốc tương lai chuông reo lúc 5h, sinh viên sắp sửa nộp bài ➔ Dùng <strong>will be about to + V</strong>.'
+      },
+      {
+        id: 38,
+        category: 'Chắc Chắn Sẽ Diễn Ra (Bound to)',
+        sentence: 'With so much passionate study and practice, Trâm ______ achieve full fluency in English.',
+        options: ['is bound to', 'is due to', 'is about to', 'was to'],
+        answer: 'is bound to',
+        clue: 'Chắc chắn không thể tránh khỏi',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> "Be bound to + V" diễn tả điều chắc chắn sẽ xảy ra (Trâm học chăm thế này chắc chắn thành thạo tiếng Anh)!'
+      },
+      {
+        id: 39,
+        category: 'Sẵn Sàng Triển Khai (Set to)',
+        sentence: 'The faculty board ______ announce the annual scholarship recipients later this afternoon.',
+        options: ['is set to', 'is about to', 'was due to', 'likely'],
+        answer: 'is set to',
+        clue: 'Đã chuẩn bị sẵn sàng',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> "Be set to + V" là văn phong báo chí trang trọng diễn tả việc đã chuẩn bị sẵn sàng để công bố trong ít giờ tới.'
+      },
+      {
+        id: 40,
+        category: 'Dự Tính Nhưng Rốt Cuộc Không Diễn Ra',
+        sentence: 'The international guest lecture ______ take place in the main hall, but it was cancelled.',
+        options: ['was to have taken', 'is to have taken', 'will have taken', 'had to take'],
+        answer: 'was to have taken',
+        clue: 'Dự định trang trọng nhưng không thành',
+        explanation: '🌸 <strong>Mẹo cho Trâm:</strong> Cấu trúc nâng cao "Was/Were to have + V3/ed" diễn tả một sự việc đã được dự tính diễn ra nhưng rốt cuộc không thành!'
+      }
+    ];
+
+    // Bank 3: 40 Questions Final Comprehensive Mock Exam (Đề Tổng Ôn)
+    const EXAM_ALL_40 = [...EXAM_TENSES_20, ...EXAM_FUTURE_20];
+
+    // --- 4. Exam Engine State ---
+    let activeExamType = 'tenses'; // 'tenses', 'future', 'all', 'review'
+    let currentExamQuestions = [];
+    let currentExamIndex = 0;
+    let userExamAnswers = {}; // Map: questionId -> selectedOptionText
+    let examMistakesList = []; // Review items
+
+    function startExam(type) {
+      AudioEngine.play('click');
+      activeExamType = type;
+      userExamAnswers = {};
+      examMistakesList = [];
+      currentExamIndex = 0;
+
+      if (type === 'tenses') {
+        currentExamQuestions = shuffleArray(EXAM_TENSES_20);
+        document.getElementById('exam-active-title').textContent = 'Bài Kiểm Tra: 13 Thì Cơ Bản (20 Câu · Thang 10đ)';
+      } else if (type === 'future') {
+        currentExamQuestions = shuffleArray(EXAM_FUTURE_20);
+        document.getElementById('exam-active-title').textContent = 'Bài Kiểm Tra: Cấu Trúc Tương Lai Mở Rộng (20 Câu · Thang 10đ)';
+      } else if (type === 'all') {
+        currentExamQuestions = shuffleArray(EXAM_ALL_40);
+        document.getElementById('exam-active-title').textContent = 'Đề Thi Tổng Ôn Toàn Diện (40 Câu Các Dạng · Thang 10đ)';
+      }
+
+      // Prepare questions with shuffled options
+      currentExamQuestions = currentExamQuestions.map(q => {
+        return {
+          ...q,
+          shuffledOptions: shuffleArray(q.options)
+        };
+      });
+
+      document.getElementById('exam-select-view').classList.add('hidden');
+      document.getElementById('exam-result-view').classList.add('hidden');
+      document.getElementById('exam-taking-view').classList.remove('hidden');
+
+      renderExamPalette();
+      renderExamQuestion();
+    }
+
+    function renderExamPalette() {
+      const container = document.getElementById('exam-palette-grid');
+      container.innerHTML = '';
+      const total = currentExamQuestions.length;
+
+      for (let i = 0; i < total; i++) {
+        const btn = document.createElement('button');
+        const q = currentExamQuestions[i];
+        const isAnswered = !!userExamAnswers[q.id];
+        const isCurrent = (i === currentExamIndex);
+
+        let cls = 'w-7 h-7 rounded-lg text-xs font-mono font-bold transition flex items-center justify-center border ';
+        if (isCurrent) {
+          cls += 'bg-sakura-500 text-white border-sakura-600 ring-2 ring-sakura-300';
+        } else if (isAnswered) {
+          cls += 'bg-emerald-100 text-emerald-800 border-emerald-300';
+        } else {
+          cls += 'bg-sakura-50/70 text-sumi/70 border-sakura-200 hover:bg-sakura-100';
+        }
+
+        btn.className = cls;
+        btn.textContent = (i + 1);
+        btn.onclick = () => {
+          AudioEngine.play('click');
+          currentExamIndex = i;
+          renderExamPalette();
+          renderExamQuestion();
+        };
+        container.appendChild(btn);
+      }
+
+      const answeredCount = Object.keys(userExamAnswers).length;
+      document.getElementById('exam-answered-counter').textContent = `Đã chọn: ${answeredCount} / ${total}`;
+    }
+
+    function renderExamQuestion() {
+      const q = currentExamQuestions[currentExamIndex];
+      if (!q) return;
+
+      const total = currentExamQuestions.length;
+      document.getElementById('exam-q-category').textContent = `Câu ${currentExamIndex + 1} / ${total} · ${q.category}`;
+
+      // Sentence with clean blank (NO hints!)
+      const parts = q.sentence.split('______');
+      const chosen = userExamAnswers[q.id] || '______';
+      const isAnswered = !!userExamAnswers[q.id];
+
+      document.getElementById('exam-q-sentence').innerHTML = `
+        <span>${parts[0]}</span>
+        <span class="cloze-blank-chip ${isAnswered ? 'bg-sakura-100 border-2 border-sakura-400 text-sakura-800' : 'bg-white border-2 border-dashed border-sakura-300 text-sakura-600'} font-mono text-base md:text-xl shadow-inner">
+          ${chosen}
+        </span>
+        <span>${parts[1] || ''}</span>
+      `;
+
+      // Render shuffled options (NO feedback shown until submitted!)
+      const optsBox = document.getElementById('exam-q-options');
+      optsBox.innerHTML = '';
+
+      q.shuffledOptions.forEach((optText, idx) => {
+        const btn = document.createElement('button');
+        const letter = String.fromCharCode(65 + idx);
+        const isSelected = (userExamAnswers[q.id] === optText);
+
+        let btnClass = 'w-full text-left p-4 rounded-2xl border-2 font-semibold text-sm transition flex items-center gap-3 active:scale-[0.99] shadow-xs ';
+        if (isSelected) {
+          btnClass += 'bg-sakura-50 border-sakura-500 text-sakura-900 ring-2 ring-sakura-200';
+        } else {
+          btnClass += 'border-sakura-100 bg-white hover:bg-sakura-50/60 hover:border-sakura-300 text-sumi';
+        }
+
+        btn.className = btnClass;
+        btn.innerHTML = `
+          <span class="w-8 h-8 rounded-xl ${isSelected ? 'bg-sakura-500 text-white border-sakura-500' : 'bg-sakura-50 text-sakura-600 border-sakura-200'} border flex items-center justify-center font-bold shrink-0 font-mono text-xs">${letter}</span>
+          <span class="flex-1 font-mono text-sm">${optText}</span>
+          ${isSelected ? '<span class="text-sakura-600 font-bold text-sm">✓ Đã chọn</span>' : ''}
+        `;
+
+        btn.onclick = () => {
+          AudioEngine.play('click');
+          userExamAnswers[q.id] = optText;
+          renderExamPalette();
+          renderExamQuestion();
+        };
+
+        optsBox.appendChild(btn);
+      });
+
+      // Update Nav Buttons
+      document.getElementById('btn-exam-prev').disabled = (currentExamIndex === 0);
+      document.getElementById('btn-exam-prev').style.opacity = (currentExamIndex === 0) ? '0.5' : '1';
+      document.getElementById('btn-exam-next').innerHTML = (currentExamIndex === total - 1) 
+        ? '<span>Nộp bài</span> ✨' 
+        : '<span>Câu sau</span> →';
+    }
+
+    function prevExamQuestion() {
+      if (currentExamIndex > 0) {
+        AudioEngine.play('click');
+        currentExamIndex--;
+        renderExamPalette();
+        renderExamQuestion();
+      }
+    }
+
+    function nextExamQuestion() {
+      AudioEngine.play('click');
+      if (currentExamIndex < currentExamQuestions.length - 1) {
+        currentExamIndex++;
+        renderExamPalette();
+        renderExamQuestion();
+      } else {
+        submitExamConfirm();
+      }
+    }
+
+    function exitExamConfirm() {
+      AudioEngine.play('click');
+      if (confirm('Trâm có chắc muốn dừng bài thi này để quay lại danh sách đề không nè?')) {
+        backToExamSelect();
+      }
+    }
+
+    function backToExamSelect() {
+      document.getElementById('exam-taking-view').classList.add('hidden');
+      document.getElementById('exam-result-view').classList.add('hidden');
+      document.getElementById('exam-select-view').classList.remove('hidden');
+    }
+
+    function submitExamConfirm() {
+      AudioEngine.play('click');
+      const total = currentExamQuestions.length;
+      const answeredCount = Object.keys(userExamAnswers).length;
+      const unanswered = total - answeredCount;
+
+      if (unanswered > 0) {
+        if (!confirm(`Trâm còn ${unanswered} câu chưa làm nè! Trâm có chắc chắn muốn nộp bài luôn để xem điểm không?`)) {
+          return;
+        }
+      }
+      finishExamGrading();
+    }
+
+    function finishExamGrading() {
+      AudioEngine.play('correct');
+      triggerConfetti();
+
+      const total = currentExamQuestions.length;
+      let correctCount = 0;
+      examMistakesList = [];
+
+      currentExamQuestions.forEach(q => {
+        const userPick = userExamAnswers[q.id];
+        if (userPick && userPick.trim().toLowerCase() === q.answer.trim().toLowerCase()) {
+          correctCount++;
+        } else {
+          examMistakesList.push({
+            question: q,
+            userPick: userPick || '(Trâm chưa chọn)',
+            correctAnswer: q.answer,
+            explanation: q.explanation
+          });
+        }
+      });
+
+      // Calculate score on 10-point scale
+      const score10 = ((correctCount / total) * 10).toFixed(1);
+      const pct = Math.round((correctCount / total) * 100);
+
+      document.getElementById('exam-score-10').textContent = score10;
+      document.getElementById('exam-score-sub').textContent = `Đúng ${correctCount} / ${total} câu (Thang điểm 10.0)`;
+      document.getElementById('exam-stat-correct').textContent = correctCount;
+      document.getElementById('exam-stat-wrong').textContent = total - correctCount;
+      document.getElementById('exam-stat-pct').textContent = pct + '%';
+
+      // Title & friendly comment for Tram
+      let examName = 'Bài Kiểm Tra';
+      if (activeExamType === 'tenses') examName = 'Bài Kiểm Tra: 13 Thì Cơ Bản';
+      else if (activeExamType === 'future') examName = 'Bài Kiểm Tra: Cấu Trúc Tương Lai';
+      else if (activeExamType === 'all') examName = 'Đề Thi Tổng Ôn Toàn Diện (40 Câu)';
+      else if (activeExamType === 'review') examName = 'Ôn Lại Câu Bị Nhầm';
+
+      document.getElementById('exam-result-exam-name').textContent = examName;
+
+      let msg = '';
+      if (score10 >= 9.5) {
+        msg = '👑 ĐỈNH CAO ĐIỂM 10! Trâm thông minh và xuất sắc tuyệt đối luôn á! 💖✨';
+      } else if (score10 >= 8.0) {
+        msg = '🏆 Giỏi quá chừng Trâm ơi! Nắm bài siêu chắc, xem lại mấy câu sai là đi thi ẵm trọn 10 điểm! 💕';
+      } else if (score10 >= 6.5) {
+        msg = '⭐ Trâm làm khá tốt nè! Chỉ cần đọc kỹ giải thích các câu sai ở dưới là nhớ dai liền á! ✨';
+      } else {
+        msg = '☕ Hổng sao đâu nè Trâm ơi! Xem kỹ giải thích ở dưới rồi bấm "Làm lại riêng câu sai" để gỡ điểm 10 nha! 💕';
+      }
+      document.getElementById('exam-result-msg').textContent = msg;
+
+      // Render Mistake Explanations (Làm hết sẽ hiện câu sai và giải thích câu sai đó)
+      const reviewBox = document.getElementById('exam-mistakes-section');
+      const retryWrongBtn = document.getElementById('btn-exam-retry-wrong');
+
+      if (examMistakesList.length > 0) {
+        retryWrongBtn.classList.remove('hidden');
+        retryWrongBtn.innerHTML = `<span>🌸 Làm Lại Riêng ${examMistakesList.length} Câu Sai Này</span> ↺`;
+
+        let html = `
+          <div class="space-y-3 text-left">
+            <div class="flex items-center justify-between border-b border-sakura-100 pb-3">
+              <h4 class="font-serif font-bold text-lg md:text-xl text-sumi flex items-center gap-2">
+                <span>📝</span> <span>Chi Tiết Giải Thích ${examMistakesList.length} Câu Trâm Cần Lưu Ý</span>
+              </h4>
+              <span class="text-xs text-rose-600 font-bold bg-rose-50 px-3 py-1 rounded-full border border-rose-200">
+                ${examMistakesList.length} câu chưa đúng
+              </span>
+            </div>
+            <div class="space-y-3.5 max-h-[500px] overflow-y-auto pr-1">
+        `;
+
+        examMistakesList.forEach((m, idx) => {
+          html += `
+            <div class="p-4 rounded-2xl bg-sakura-50/80 border border-sakura-200 space-y-2.5 text-xs">
+              <div class="flex items-center justify-between text-sumi/70 font-mono">
+                <span class="font-bold text-sakura-700 uppercase">Câu ${idx + 1} · Dạng: ${m.question.category}</span>
+                <span class="text-rose-500 font-bold bg-rose-100/70 px-2 py-0.5 rounded-md">Chưa chính xác</span>
+              </div>
+              <div class="font-serif font-bold text-sm md:text-base text-sumi leading-relaxed">
+                "${m.question.sentence.replace('______', '<span class=\"underline text-emerald-700 bg-white px-2 py-0.5 rounded-lg border border-emerald-300 font-mono font-bold\">' + m.correctAnswer + '</span>')}"
+              </div>
+              <div class="flex flex-wrap gap-2 pt-0.5 font-mono">
+                <span class="px-2.5 py-1 rounded-lg bg-rose-100 text-rose-800 border border-rose-200 font-medium">❌ Trâm đã chọn: ${m.userPick}</span>
+                <span class="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold">✅ Đáp án chuẩn: ${m.correctAnswer}</span>
+              </div>
+              <div class="text-[12px] text-sumi bg-white p-3.5 rounded-xl border border-sakura-100 font-sans leading-relaxed">
+                ${m.explanation}
+              </div>
+            </div>
+          `;
+        });
+
+        html += `
+            </div>
+          </div>
+        `;
+        reviewBox.innerHTML = html;
+      } else {
+        retryWrongBtn.classList.add('hidden');
+        reviewBox.innerHTML = `
+          <div class="p-6 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-center space-y-2">
+            <div class="text-3xl">🎉 👑 ✨</div>
+            <h4 class="font-serif font-bold text-xl text-emerald-900">Trâm Đạt Điểm 10 Tuyệt Đối!</h4>
+            <p class="text-xs text-emerald-800">Trâm không làm sai bất kỳ một câu nào cả. Kiến thức ngữ pháp của Trâm quá xuất sắc rồi nè!</p>
+          </div>
+        `;
+      }
+
+      document.getElementById('exam-taking-view').classList.add('hidden');
+      document.getElementById('exam-result-view').classList.remove('hidden');
+    }
+
+    function startExamMistakeReview() {
+      AudioEngine.play('click');
+      if (examMistakesList.length === 0) return;
+
+      activeExamType = 'review';
+      currentExamQuestions = examMistakesList.map(m => {
+        return {
+          ...m.question,
+          shuffledOptions: shuffleArray(m.question.options)
+        };
+      });
+      userExamAnswers = {};
+      examMistakesList = [];
+      currentExamIndex = 0;
+
+      document.getElementById('exam-active-title').textContent = `Làm Lại Riêng ${currentExamQuestions.length} Câu Chưa Đúng`;
+      document.getElementById('exam-result-view').classList.add('hidden');
+      document.getElementById('exam-taking-view').classList.remove('hidden');
+
+      renderExamPalette();
+      renderExamQuestion();
+    }
+
+    function retestCurrentExam() {
+      startExam(activeExamType);
+    }
+
+    // --- 5. Casual Quiz Engine (For Free Practice) ---
+    let currentQuizPool = [];
+    let currentQuizIndex = 0;
+    let quizScore = 0;
+    let quizAnswered = false;
+    let wrongQuizAnswers = [];
+
+    function initQuiz(questionsList = null, isReview = false) {
+      if (questionsList && questionsList.length > 0) {
+        currentQuizPool = [...questionsList];
+      } else {
+        const shuffled = shuffleArray(ALL_CLOZE_QUESTIONS);
+        currentQuizPool = shuffled.slice(0, 15);
+      }
+
+      currentQuizIndex = 0;
+      quizScore = 0;
+      quizAnswered = false;
+      if (!isReview) wrongQuizAnswers = [];
+
+      document.getElementById('quiz-score').textContent = '0';
+      document.getElementById('quiz-total-done').textContent = '0';
+      document.getElementById('quiz-question-card').classList.remove('hidden');
+      document.getElementById('quiz-result-summary').classList.add('hidden');
+
+      renderQuizQuestion();
+    }
+
+    const ALL_CLOZE_QUESTIONS = [...EXAM_TENSES_20, ...EXAM_FUTURE_20];
+
+    function renderQuizQuestion() {
+      const q = currentQuizPool[currentQuizIndex];
+      if (!q) {
+        finishQuiz();
+        return;
+      }
+
+      quizAnswered = false;
+      document.getElementById('quiz-progress-text').textContent = (currentQuizIndex + 1) + ' / ' + currentQuizPool.length;
+      const pct = Math.round(((currentQuizIndex) / currentQuizPool.length) * 100);
+      document.getElementById('quiz-pct-text').textContent = pct + '%';
+      document.getElementById('quiz-progress-bar').style.width = pct + '%';
+
+      document.getElementById('q-category').textContent = q.category;
+      document.getElementById('q-clue-text').textContent = q.clue;
+
+      const sentenceContainer = document.getElementById('q-sentence');
+      const parts = q.sentence.split('______');
+      sentenceContainer.innerHTML = `
+        <span>${parts[0]}</span>
+        <span id="cloze-blank" class="cloze-blank-chip bg-white border-2 border-dashed border-sakura-300 text-sakura-700 font-mono text-base md:text-xl shadow-inner">
+          ______
+        </span>
+        <span>${parts[1] || ''}</span>
+      `;
+
+      const shuffledOptions = shuffleArray(q.options);
+      const optsBox = document.getElementById('q-options');
+      optsBox.innerHTML = '';
+
+      shuffledOptions.forEach((optText, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'w-full text-left p-4 rounded-2xl border-2 border-sakura-100 bg-white hover:bg-sakura-50 hover:border-sakura-300 font-semibold text-sm text-sumi transition flex items-center gap-3 active:scale-[0.99] shadow-xs';
+        const letter = String.fromCharCode(65 + idx);
+        const isThisCorrect = optText.trim().toLowerCase() === q.answer.trim().toLowerCase();
+
+        btn.innerHTML = `
+          <span class="w-8 h-8 rounded-xl bg-sakura-50 border border-sakura-200 flex items-center justify-center font-bold text-sakura-600 shrink-0 font-mono text-xs">${letter}</span>
+          <span class="flex-1 font-mono text-sm">${optText}</span>
+        `;
+
+        btn.onclick = () => selectQuizAnswer(optText, isThisCorrect, btn, shuffledOptions);
+        optsBox.appendChild(btn);
+      });
+
+      document.getElementById('q-explanation-box').classList.add('hidden');
+    }
+
+    function selectQuizAnswer(selectedText, isCorrect, clickedBtn, currentOptions) {
+      if (quizAnswered) return;
+      quizAnswered = true;
+
+      const q = currentQuizPool[currentQuizIndex];
+      const optsBox = document.getElementById('q-options');
+      const allBtns = optsBox.querySelectorAll('button');
+      const clozeBlank = document.getElementById('cloze-blank');
+
+      if (isCorrect) {
+        AudioEngine.play('correct');
+        quizScore++;
+
+        if (clozeBlank) {
+          clozeBlank.textContent = selectedText;
+          clozeBlank.className = 'cloze-blank-chip bg-emerald-100 border-2 border-emerald-500 text-emerald-800 font-mono text-base md:text-xl shadow-xs';
+        }
+
+        clickedBtn.classList.remove('bg-white', 'border-sakura-100');
+        clickedBtn.classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-900');
+        clickedBtn.querySelector('span').classList.add('bg-emerald-500', 'text-white', 'border-emerald-500');
+
+      } else {
+        AudioEngine.play('wrong');
+
+        wrongQuizAnswers.push({
+          question: q,
+          userPick: selectedText,
+          correctAnswer: q.answer,
+          explanation: q.explanation
+        });
+
+        if (clozeBlank) {
+          clozeBlank.innerHTML = `<span class="line-through text-rose-500 mr-1">${selectedText}</span> ➔ <span class="text-emerald-700 underline">${q.answer}</span>`;
+          clozeBlank.className = 'cloze-blank-chip bg-rose-50 border-2 border-rose-300 text-sumi font-mono text-sm md:text-base';
+        }
+
+        clickedBtn.classList.remove('bg-white', 'border-sakura-100');
+        clickedBtn.classList.add('bg-rose-50', 'border-rose-400', 'text-rose-900');
+        clickedBtn.querySelector('span').classList.add('bg-rose-500', 'text-white', 'border-rose-500');
+
+        currentOptions.forEach((opt, idx) => {
+          if (opt.trim().toLowerCase() === q.answer.trim().toLowerCase() && allBtns[idx]) {
+            allBtns[idx].classList.remove('bg-white', 'border-sakura-100');
+            allBtns[idx].classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-900');
+            allBtns[idx].querySelector('span').classList.add('bg-emerald-500', 'text-white', 'border-emerald-500');
+          }
+        });
+      }
+
+      document.getElementById('quiz-score').textContent = quizScore;
+      document.getElementById('quiz-total-done').textContent = currentQuizIndex + 1;
+
+      const expBox = document.getElementById('q-explanation-box');
+      const title = document.getElementById('q-status-title');
+      const desc = document.getElementById('q-explanation-text');
+
+      if (isCorrect) {
+        expBox.className = 'rounded-2xl p-4 border bg-emerald-50/90 border-emerald-300 text-emerald-900 space-y-2';
+        title.innerHTML = '<span>🎉 Trâm chọn chuẩn đét rồi! Tinh mắt quá chừng!</span>';
+      } else {
+        expBox.className = 'rounded-2xl p-4 border bg-rose-50/90 border-rose-200 text-rose-900 space-y-2';
+        title.innerHTML = '<span>🥺 Hổng sao nha Trâm ơi, câu này lừa một xíu thui!</span> <span class="text-xs font-normal block sm:inline">(Đáp án đúng là: <strong>' + q.answer + '</strong>)</span>';
+      }
+
+      desc.innerHTML = q.explanation;
+      expBox.classList.remove('hidden');
+    }
+
+    function nextQuizQuestion() {
+      AudioEngine.play('click');
+      currentQuizIndex++;
+      if (currentQuizIndex < currentQuizPool.length) {
+        renderQuizQuestion();
+      } else {
+        finishQuiz();
+      }
+    }
+
+    function finishQuiz() {
+      AudioEngine.play('correct');
+      triggerConfetti();
+
+      document.getElementById('quiz-question-card').classList.add('hidden');
+      const sum = document.getElementById('quiz-result-summary');
+      sum.classList.remove('hidden');
+
+      const total = currentQuizPool.length;
+      const pct = Math.round((quizScore / total) * 100);
+
+      document.getElementById('res-correct').textContent = quizScore;
+      document.getElementById('res-wrong').textContent = total - quizScore;
+      document.getElementById('res-pct').textContent = pct + '%';
+
+      let rankMsg = '';
+      if (pct === 100) rankMsg = '👑 Ôi đỉnh chóp luôn á Trâm ơi! 100% không sai câu nào luôn! 💖✨';
+      else if (pct >= 80) rankMsg = '🏆 Trâm làm siêu đỉnh luôn nè! Nhìn lại mấy câu bên dưới là nhớ liền! 💕';
+      else rankMsg = '☕ Hổng có sao hết nha Trâm! Xem mẹo rồi làm lại riêng mấy câu này là nhớ dai liền á! 💕';
+
+      document.getElementById('quiz-rank-msg').textContent = rankMsg;
+
+      const reviewBox = document.getElementById('wrong-review-container');
+      const reviewBtn = document.getElementById('btn-review-wrong-only');
+      reviewBox.innerHTML = '';
+
+      if (wrongQuizAnswers.length > 0) {
+        reviewBtn.classList.remove('hidden');
+        reviewBtn.innerHTML = `<span>🌸 Làm Lại Riêng ${wrongQuizAnswers.length} Câu Này Nhé</span> ↺`;
+
+        let html = `
+          <div class="border-t border-sakura-200 pt-5 text-left space-y-3">
+            <h4 class="font-serif font-bold text-lg text-sumi flex items-center gap-2">
+              <span>📝</span> <span>Góc Ôn Lại Các Câu Trâm Cần Lưu Ý (${wrongQuizAnswers.length} câu)</span>
+            </h4>
+            <div class="space-y-3 max-h-96 overflow-y-auto pr-1">
+        `;
+
+        wrongQuizAnswers.forEach((w, idx) => {
+          html += `
+            <div class="p-4 rounded-2xl bg-sakura-50/70 border border-sakura-200 space-y-2 text-xs">
+              <div class="flex items-center justify-between text-sumi/70 font-mono">
+                <span class="font-bold text-sakura-700 uppercase">Câu ${idx + 1} · ${w.question.category}</span>
+                <span class="text-rose-500 font-bold">Chưa đúng</span>
+              </div>
+              <div class="font-serif font-bold text-sm md:text-base text-sumi">
+                "${w.question.sentence.replace('______', '<span class=\"underline text-emerald-700 bg-white px-1.5 py-0.5 rounded font-mono font-bold\">' + w.correctAnswer + '</span>')}"
+              </div>
+              <div class="flex flex-wrap gap-2 pt-1 font-mono">
+                <span class="px-2.5 py-1 rounded-lg bg-rose-100 text-rose-800 border border-rose-200">❌ Trâm chọn: ${w.userPick}</span>
+                <span class="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold">✅ Đáp án chuẩn: ${w.correctAnswer}</span>
+              </div>
+              <div class="text-[11px] text-sumi bg-white p-2.5 rounded-xl border border-sakura-100 font-sans leading-relaxed">
+                ${w.explanation}
+              </div>
+            </div>
+          `;
+        });
+
+        html += `</div></div>`;
+        reviewBox.innerHTML = html;
+      } else {
+        reviewBtn.classList.add('hidden');
+        reviewBox.innerHTML = `
+          <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-medium">
+            🌸 <strong>Tuyệt vời vô cùng:</strong> Trâm không làm sai câu nào cả! Chúc mừng Trâm nha! 🎉
+          </div>
+        `;
+      }
+    }
+
+    function startWrongReviewMode() {
+      AudioEngine.play('click');
+      if (wrongQuizAnswers.length === 0) return;
+      const questionsToReview = wrongQuizAnswers.map(w => w.question);
+      initQuiz(questionsToReview, true);
+    }
+
+    function resetQuiz() {
+      AudioEngine.play('click');
+      initQuiz(null, false);
+    }
+
+    // --- 6. Tab Navigation Logic ---
+    function switchTab(tabId) {
+      AudioEngine.play('click');
+      const tabs = ['exam', 'quiz', 'flashcards', 'formula', 'cheatsheet'];
+      tabs.forEach(t => {
+        const sec = document.getElementById('section-' + t);
+        const btn = document.getElementById('tab-' + t);
+        if (t === tabId) {
+          if (sec) sec.classList.remove('hidden');
+          if (btn) {
+            btn.classList.add('bg-white', 'text-sakura-600', 'shadow-sm', 'border', 'border-sakura-200');
+            btn.classList.remove('text-sumi/80');
+          }
+        } else {
+          if (sec) sec.classList.add('hidden');
+          if (btn) {
+            btn.classList.remove('bg-white', 'text-sakura-600', 'shadow-sm', 'border', 'border-sakura-200');
+            btn.classList.add('text-sumi/80');
+          }
+        }
+      });
+      if (tabId === 'cheatsheet') renderCheatsheet();
+    }
+
+    // --- 7. Flashcards Engine ---
+    let activeCardList = [...GRAMMAR_DATA];
+    let currentCardIndex = 0;
+    let isFlipped = false;
+
+    function renderCard() {
+      const card = activeCardList[currentCardIndex];
+      if (!card) return;
+
+      const inner = document.getElementById('flashcard-inner');
+      inner.classList.remove('rotate-y-180');
+      isFlipped = false;
+
+      document.getElementById('fc-counter').textContent = (currentCardIndex + 1) + ' / ' + activeCardList.length;
+      document.getElementById('fc-tag').innerHTML = '<span>🌸</span> ' + (card.type === 'tenses' ? '13 Thì Cơ Bản' : 'Cấu Trúc Tương Lai Mở Rộng');
+      document.getElementById('fc-name').textContent = card.name;
+      document.getElementById('fc-viet-name').textContent = '(' + card.vietName + ')';
+      document.getElementById('fc-front-example').textContent = '"' + card.example + '"';
+
+      document.getElementById('fc-formula').textContent = card.formula;
+      document.getElementById('fc-usage').textContent = card.usage;
+      document.getElementById('fc-nuance').textContent = card.nuance || 'Cứ nhớ ví dụ là Trâm làm bài ngon ơ liền!';
+    }
+
+    function flipCard() {
+      AudioEngine.play('flip');
+      const inner = document.getElementById('flashcard-inner');
+      isFlipped = !isFlipped;
+      if (isFlipped) inner.classList.add('rotate-y-180');
+      else inner.classList.remove('rotate-y-180');
+    }
+
+    function nextCard() {
+      AudioEngine.play('click');
+      currentCardIndex = (currentCardIndex + 1) % activeCardList.length;
+      renderCard();
+    }
+
+    function prevCard() {
+      AudioEngine.play('click');
+      currentCardIndex = (currentCardIndex - 1 + activeCardList.length) % activeCardList.length;
+      renderCard();
+    }
+
+    function filterCards(type) {
+      AudioEngine.play('click');
+      ['all', 'tenses', 'future-extra'].forEach(t => {
+        const btn = document.getElementById('fc-filter-' + t);
+        if (t === type) {
+          btn.classList.add('bg-sakura-500', 'text-white', 'font-bold');
+          btn.classList.remove('bg-sakura-50', 'text-sumi');
+        } else {
+          btn.classList.remove('bg-sakura-500', 'text-white', 'font-bold');
+          btn.classList.add('bg-sakura-50', 'text-sumi');
+        }
+      });
+
+      if (type === 'all') activeCardList = [...GRAMMAR_DATA];
+      else activeCardList = GRAMMAR_DATA.filter(item => item.type === type);
+      currentCardIndex = 0;
+      renderCard();
+    }
+
+    function shuffleCards() {
+      AudioEngine.play('click');
+      activeCardList = shuffleArray(activeCardList);
+      currentCardIndex = 0;
+      renderCard();
+    }
+
+    // --- 8. Formula Recall Game Logic ---
+    let formulaIndex = 0;
+    let formulaData = [...GRAMMAR_DATA];
+
+    function renderFormulaChallenge() {
+      const item = formulaData[formulaIndex];
+      if (!item) return;
+
+      document.getElementById('formula-counter').textContent = (formulaIndex + 1) + ' / ' + formulaData.length;
+      document.getElementById('fr-target-name').textContent = item.name;
+      document.getElementById('fr-target-usage').textContent = '"' + item.usage + '"';
+      document.getElementById('fr-input').value = '';
+      document.getElementById('fr-feedback').classList.add('hidden');
+    }
+
+    function insertFormulaToken(token) {
+      AudioEngine.play('click');
+      const input = document.getElementById('fr-input');
+      input.value += token;
+      input.focus();
+    }
+
+    function clearFormulaInput() {
+      AudioEngine.play('click');
+      document.getElementById('fr-input').value = '';
+    }
+
+    function checkFormulaAnswer() {
+      const item = formulaData[formulaIndex];
+      const rawUser = document.getElementById('fr-input').value.trim();
+      if (!rawUser) return;
+
+      const clean = (s) => s.toLowerCase().replace(/\s+/g, '').replace(/\//g, '').replace(/\(/g, '').replace(/\)/g, '');
+      const userNorm = clean(rawUser);
+      const targetNorm = clean(item.formula);
+
+      const fb = document.getElementById('fr-feedback');
+      const fbTitle = document.getElementById('fr-feedback-title');
+      const fbAns = document.getElementById('fr-feedback-correct');
+
+      if (userNorm === targetNorm || (targetNorm.includes(userNorm) && userNorm.length > 5)) {
+        AudioEngine.play('correct');
+        fb.className = 'p-4 rounded-2xl border bg-emerald-50 border-emerald-300 text-emerald-900 text-sm font-medium space-y-2';
+        fbTitle.innerHTML = '<span>🎉 Quá giỏi Trâm ơi! Đúng chuẩn công thức rồi nè!</span>';
+      } else {
+        AudioEngine.play('wrong');
+        fb.className = 'p-4 rounded-2xl border bg-rose-50 border-rose-300 text-rose-900 text-sm font-medium space-y-2';
+        fbTitle.innerHTML = '<span>🥺 Chưa chính xác hoàn toàn rồi, Trâm xem đáp án bên dưới nha!</span>';
+      }
+
+      fbAns.innerHTML = 'Công thức chuẩn nè: <code class="bg-white px-2.5 py-1 rounded-lg border font-mono font-bold text-sakura-700">' + item.formula + '</code>';
+      fb.classList.remove('hidden');
+    }
+
+    function nextFormulaItem() {
+      AudioEngine.play('click');
+      formulaIndex = (formulaIndex + 1) % formulaData.length;
+      renderFormulaChallenge();
+    }
+
+    function showFormulaHint() {
+      AudioEngine.play('click');
+      const item = formulaData[formulaIndex];
+      alert('🌸 Gợi ý cho Ngọc Trâm nè:\nCông thức: ' + item.formula + '\n\nVí dụ: ' + item.example);
+    }
+
+    // --- 9. Cheatsheet Rendering ---
+    function renderCheatsheet(filterText = '') {
+      const tbody = document.getElementById('cheatsheet-tbody');
+      tbody.innerHTML = '';
+
+      const query = filterText.toLowerCase().trim();
+      const filtered = GRAMMAR_DATA.filter(item => {
+        return item.name.toLowerCase().includes(query) ||
+               item.vietName.toLowerCase().includes(query) ||
+               item.formula.toLowerCase().includes(query) ||
+               item.usage.toLowerCase().includes(query);
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="p-6 text-center text-sakura-600 font-bold italic">Không tìm thấy cấu trúc nào khớp với "' + filterText + '" đâu Trâm ơi!</td></tr>';
+        return;
+      }
+
+      filtered.forEach((item, idx) => {
+        const tr = document.createElement('tr');
+        tr.className = idx % 2 === 0 ? 'bg-white hover:bg-sakura-50/50 transition' : 'bg-sakura-50/40 hover:bg-sakura-50/50 transition';
+        tr.innerHTML = `
+          <td class="p-4">
+            <div class="font-bold font-serif text-sm text-sumi">${item.name}</div>
+            <div class="text-xs text-sakura-600 font-bold italic">(${item.vietName})</div>
+            <span class="inline-block mt-1 text-[10px] font-mono font-bold px-2 py-0.5 rounded-full ${item.type === 'tenses' ? 'bg-sakura-100 text-sakura-800' : 'bg-plum-100 text-plum-900'}">
+              ${item.type === 'tenses' ? '13 Thì' : 'Mở Rộng'}
+            </span>
+          </td>
+          <td class="p-4">
+            <code class="px-2.5 py-1 rounded-lg bg-sakura-100/90 text-sakura-900 font-mono text-xs font-bold border border-sakura-200 block sm:inline-block">
+              ${item.formula}
+            </code>
+          </td>
+          <td class="p-4">
+            <p class="text-xs leading-relaxed text-sumi font-semibold">${item.usage}</p>
+            ${item.nuance ? '<p class="mt-1 text-[11px] text-sakura-700 font-bold">💡 ' + item.nuance + '</p>' : ''}
+          </td>
+          <td class="p-4">
+            <div class="flex items-center gap-1.5">
+              <span class="font-serif italic text-xs text-sumi font-medium">"${item.example}"</span>
+              <button onclick="AudioEngine.speak('${item.example.replace(/'/g, "\\'")}')" class="p-1 rounded-full hover:bg-sakura-200 text-sakura-600 transition shrink-0" title="Bấm nghe phát âm nè">
+                🔊
+              </button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function searchCheatsheet(val) {
+      renderCheatsheet(val);
+    }
+
+    // --- 10. Confetti Effect ---
+    function triggerConfetti() {
+      const canvas = document.getElementById('confettiCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const pieces = [];
+      const colors = ['#F43F6E', '#FFA3BA', '#FFCCD9', '#FFD166', '#06D6A0', '#118AB2'];
+
+      for (let i = 0; i < 110; i++) {
+        pieces.push({
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          w: Math.random() * 8 + 4,
+          h: Math.random() * 8 + 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          vx: (Math.random() - 0.5) * 14,
+          vy: (Math.random() - 0.5) * 14 - 3,
+          gravity: 0.15,
+          rotation: Math.random() * 360,
+          vRot: (Math.random() - 0.5) * 10,
+          opacity: 1
+        });
+      }
+
+      let frame = 0;
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        pieces.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += p.gravity;
+          p.rotation += p.vRot;
+          p.opacity -= 0.008;
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rotation * Math.PI) / 180);
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = Math.max(0, p.opacity);
+          ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+          ctx.restore();
+        });
+
+        frame++;
+        if (frame < 120) requestAnimationFrame(render);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      render();
+    }
+
+    // --- 11. Sakura Falling Petals ---
+    let sakuraActive = true;
+    function initSakuraPetals() {
+      const canvas = document.getElementById('sakuraCanvas');
+      const ctx = canvas.getContext('2d');
+      let w = canvas.width = window.innerWidth;
+      let h = canvas.height = window.innerHeight;
+
+      window.addEventListener('resize', () => {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      });
+
+      const petals = [];
+      for (let i = 0; i < 28; i++) {
+        petals.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          size: Math.random() * 8 + 7,
+          vx: Math.random() * 1.5 - 0.2,
+          vy: Math.random() * 1.1 + 0.7,
+          flip: Math.random() * Math.PI,
+          flipSpeed: Math.random() * 0.025 + 0.01,
+          opacity: Math.random() * 0.45 + 0.35
+        });
+      }
+
+      function drawPetal(x, y, size, flip, opacity) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.scale(Math.sin(flip), 1);
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.bezierCurveTo(-size, -size * 0.6, -size, size * 0.6, 0, size);
+        ctx.bezierCurveTo(size, size * 0.6, size, -size * 0.6, 0, 0);
+        ctx.fillStyle = 'rgba(255, 179, 198, ' + opacity + ')';
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function loop() {
+        if (!sakuraActive) {
+          ctx.clearRect(0, 0, w, h);
+          return;
+        }
+        ctx.clearRect(0, 0, w, h);
+        petals.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.flip += p.flipSpeed;
+          if (p.y > h + 20) { p.y = -20; p.x = Math.random() * w; }
+          if (p.x > w + 20) { p.x = -20; }
+          drawPetal(p.x, p.y, p.size, p.flip, p.opacity);
+        });
+        requestAnimationFrame(loop);
+      }
+      loop();
+    }
+
+    function toggleSakura() {
+      sakuraActive = !sakuraActive;
+      const btn = document.getElementById('btn-toggle-sakura');
+      if (btn) btn.innerHTML = sakuraActive ? '🌸 <span>Hoa rơi: Bật</span>' : '🌸 <span>Hoa rơi: Tắt</span>';
+    }
+
+    // --- 12. App Kickoff ---
+    window.addEventListener('DOMContentLoaded', () => {
+      renderCard();
+      initQuiz(null, false);
+      renderFormulaChallenge();
+      initSakuraPetals();
+      // Default to Exam tab so Trâm can take tests right away!
+      switchTab('exam');
+    });
+  </script>
+</body>
+</html>
