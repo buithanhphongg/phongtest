@@ -504,7 +504,8 @@
         <div>
           <span class="text-xs font-bold uppercase tracking-wider text-sakura-600">Kết Quả Bài Kiểm Tra</span>
           <h3 class="text-2xl md:text-3xl font-serif font-bold text-sumi mt-1" id="exam-result-exam-name">Đề Kiểm Tra</h3>
-          <p id="exam-result-msg" class="text-sm font-bold text-sakura-700 mt-1">Trâm siêu giỏi nè!</p>
+          <div id="exam-verdict-container" class="mt-2"></div>
+          <p id="exam-result-msg" class="text-sm font-medium text-slate-600 mt-1">Trâm siêu giỏi nè!</p>
         </div>
 
         <!-- Big 10-Point Score Card -->
@@ -1160,6 +1161,29 @@
       else if (activeExamType === 'review') examName = 'Ôn Lại Câu Bị Nhầm';
 
       document.getElementById('exam-result-exam-name').textContent = examName;
+
+      const mistakesCount = examMistakesList.length;
+      let verdictTitle = '';
+      let verdictColor = '';
+
+      if (mistakesCount === 0) {
+        verdictTitle = 'ngoktramxinkgais1tg 👑✨';
+        verdictColor = 'text-pink-600 bg-pink-50 border-pink-200';
+      } else if (mistakesCount > 5) {
+        verdictTitle = 'ntramngokngek 🤦‍♀️';
+        verdictColor = 'text-rose-600 bg-rose-50 border-rose-200';
+      } else if (mistakesCount > 2) {
+        verdictTitle = 'ngoctramngoos 😅';
+        verdictColor = 'text-amber-600 bg-amber-50 border-amber-200';
+      } else {
+        verdictTitle = 'ngoctram cute xíu nữa là 10đ rồi 🌸';
+        verdictColor = 'text-sky-600 bg-sky-50 border-sky-200';
+      }
+
+      const verdictEl = document.getElementById('exam-verdict-container');
+      if (verdictEl) {
+        verdictEl.innerHTML = `<span class="inline-block px-4 py-1.5 rounded-full text-base font-bold font-mono border ${verdictColor} shadow-xs">${verdictTitle}</span>`;
+      }
 
       let msg = '';
       if (score10 >= 9.5) {

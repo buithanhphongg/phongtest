@@ -1591,6 +1591,106 @@ window.FILE_STUDY_HUB = {
         "answer": "shall be",
         "explanation": "🌸 Mẹo cho Trâm: Câu hỏi về thì tiếng Anh: chú ý trạng từ chỉ thời gian trong câu để xác định đúng thì nha Trâm!"
       }
+    ],
+    "cheatShort": [
+      {
+        "signal": "By + mốc tương lai (by tomorrow, by 2030)",
+        "formula": "S + will have + V3/ed",
+        "note": "Tương lai hoàn thành (xong trước mốc)"
+      },
+      {
+        "signal": "Since + mốc QK / For + khoảng TG",
+        "formula": "S + have/has + V3/ed",
+        "note": "Hiện tại hoàn thành (từ quá khứ đến nay)"
+      },
+      {
+        "signal": "Look! / Listen! / Right now / At present",
+        "formula": "S + am/is/are + V-ing",
+        "note": "Hiện tại tiếp diễn (đang diễn ra)"
+      },
+      {
+        "signal": "Yesterday / ago / last week / in 1995",
+        "formula": "S + V2/ed",
+        "note": "Quá khứ đơn (chấm dứt hoàn toàn)"
+      },
+      {
+        "signal": "Dark clouds / Bằng chứng thấy rõ",
+        "formula": "S + be going to + V",
+        "note": "Dự đoán có căn cứ thực tế"
+      },
+      {
+        "signal": "I think / probably / promise / Tức thì",
+        "formula": "S + will + V",
+        "note": "Quyết định ngay lúc nói / Lời hứa"
+      },
+      {
+        "signal": "At this time tomorrow / At 8 PM next Sunday",
+        "formula": "S + will be + V-ing",
+        "note": "Tương lai tiếp diễn (đang diễn ra ở mốc tương lai)"
+      },
+      {
+        "signal": "While S was V-ing, S Ved",
+        "formula": "Quá khứ tiếp diễn + QK đơn",
+        "note": "Hành động đang xảy ra thì bị cắt ngang"
+      }
+    ],
+    "listeningQuizzes": [
+      {
+        "id": "l_t1",
+        "audioText": "The earth goes round the sun.",
+        "lang": "en-US",
+        "question": "Nghe câu và chọn thì / từ được sử dụng:",
+        "options": [
+          "goes",
+          "went",
+          "is going",
+          "has gone"
+        ],
+        "answer": "goes",
+        "meaning": "Trái đất quay quanh mặt trời (Hiện tại đơn)."
+      },
+      {
+        "id": "l_t2",
+        "audioText": "Look at those dark clouds! It is going to rain.",
+        "lang": "en-US",
+        "question": "Nghe và điền cấu trúc tương lai:",
+        "options": [
+          "is going to rain",
+          "will rain",
+          "rains",
+          "is raining"
+        ],
+        "answer": "is going to rain",
+        "meaning": "Nhìn những đám mây đen kìa! Trời sắp mưa rồi (Dự đoán có bằng chứng)."
+      },
+      {
+        "id": "l_t3",
+        "audioText": "We have not seen Dorothy since last Saturday.",
+        "lang": "en-US",
+        "question": "Nghe và xác định động từ:",
+        "options": [
+          "haven't seen",
+          "didn't see",
+          "don't see",
+          "hadn't seen"
+        ],
+        "answer": "haven't seen",
+        "meaning": "Chúng tôi chưa gặp Dorothy kể từ thứ Bảy tuần trước."
+      },
+      {
+        "id": "l_t4",
+        "audioText": "I was having dinner when the phone rang.",
+        "lang": "en-US",
+        "question": "Nghe và xác định hành động đang diễn ra:",
+        "options": [
+          "was having dinner",
+          "had dinner",
+          "have dinner",
+          "am having dinner"
+        ],
+        "answer": "was having dinner",
+        "meaning": "Tôi đang ăn tối thì chuông điện thoại reo."
+      }
     ]
   },
   "file_sv_agreement": {
@@ -2082,6 +2182,111 @@ window.FILE_STUDY_HUB = {
         ],
         "answer": "are",
         "explanation": "🌸 Mẹo cho Trâm: Phân số đi với danh từ đếm được số nhiều ('the apples') -> động từ chia số nhiều 'are'."
+      }
+    ],
+    "cheatShort": [
+      {
+        "signal": "As well as / Along with / Together with",
+        "formula": "Chia theo S1 (đầu câu)",
+        "note": "Bỏ qua S2, chỉ nhìn S1 để chia"
+      },
+      {
+        "signal": "Either...or / Neither...nor / Not only...but also",
+        "formula": "Chia theo S2 (gần động từ nhất)",
+        "note": "Nhìn ngay danh từ sát động từ"
+      },
+      {
+        "signal": "The number of + Ns",
+        "formula": "Chia động từ SỐ ÍT (is / has)",
+        "note": "Chỉ một con số lượng"
+      },
+      {
+        "signal": "A number of + Ns",
+        "formula": "Chia động từ SỐ NHIỀU (are / have)",
+        "note": "= Many (nhiều người/vật)"
+      },
+      {
+        "signal": "Thời gian / Tiền bạc / Khoảng cách (Two hours, $10, 5 miles)",
+        "formula": "Luôn chia SỐ ÍT (is / was)",
+        "note": "Coi là một khối đại lượng duy nhất"
+      },
+      {
+        "signal": "Physics / Mathematics / Economics / News",
+        "formula": "Luôn chia SỐ ÍT (is)",
+        "note": "Tên môn học / Tin tức dù có 's'"
+      },
+      {
+        "signal": "The + Tính từ (The Vietnamese, The poor)",
+        "formula": "Luôn chia SỐ NHIỀU (are)",
+        "note": "Chỉ toàn thể một nhóm người"
+      },
+      {
+        "signal": "Police / Cattle / People",
+        "formula": "Luôn chia SỐ NHIỀU (are / have)",
+        "note": "Danh từ tập hợp luôn số nhiều"
+      },
+      {
+        "signal": "Each / Every / One of + Ns",
+        "formula": "Luôn chia SỐ ÍT (is / has / Vs)",
+        "note": "Mỗi một cá nhân đơn lẻ"
+      }
+    ],
+    "listeningQuizzes": [
+      {
+        "id": "l_sv1",
+        "audioText": "The Vietnamese people are very heroic.",
+        "lang": "en-US",
+        "question": "Nghe và xác định động từ to-be:",
+        "options": [
+          "are",
+          "is",
+          "was",
+          "were"
+        ],
+        "answer": "are",
+        "meaning": "Nhân dân Việt Nam rất anh hùng (People chia số nhiều)."
+      },
+      {
+        "id": "l_sv2",
+        "audioText": "Miss White as well as her parents is travelling.",
+        "lang": "en-US",
+        "question": "Nghe và chọn động từ to-be sau as well as:",
+        "options": [
+          "is",
+          "are",
+          "were",
+          "be"
+        ],
+        "answer": "is",
+        "meaning": "Cô White cũng như cha mẹ cô ấy đang đi du lịch (chia theo Miss White)."
+      },
+      {
+        "id": "l_sv3",
+        "audioText": "Two hours is not long enough.",
+        "lang": "en-US",
+        "question": "Nghe và xác định to-be đi với Two hours:",
+        "options": [
+          "is",
+          "are",
+          "were",
+          "have been"
+        ],
+        "answer": "is",
+        "meaning": "Hai tiếng đồng hồ là không đủ (Thời gian chia số ít)."
+      },
+      {
+        "id": "l_sv4",
+        "audioText": "Neither you nor I am to blame.",
+        "lang": "en-US",
+        "question": "Nghe và chọn to-be đúng:",
+        "options": [
+          "am",
+          "are",
+          "is",
+          "be"
+        ],
+        "answer": "am",
+        "meaning": "Cả bạn và tôi đều không có lỗi (chia theo I sát động từ)."
       }
     ]
   },
@@ -3351,6 +3556,106 @@ window.FILE_STUDY_HUB = {
         "answer": "are married",
         "explanation": "🌸 Mẹo cho Trâm: Có 'for three years now' (đã kết hôn được 3 năm rồi) -> phải chia Hiện Tại Hoàn Thành 'have been married' chứ không dùng 'are married'."
       }
+    ],
+    "cheatShort": [
+      {
+        "signal": "Enjoy, mind, avoid, consider, postpone, practice",
+        "formula": "+ V-ING",
+        "note": "Động từ bắt buộc đi với V-ing"
+      },
+      {
+        "signal": "Look forward to, can't help, feel like, be worth, spend time",
+        "formula": "+ V-ING",
+        "note": "Cụm thành ngữ luôn đi với V-ing"
+      },
+      {
+        "signal": "Want, decide, refuse, manage, promise, hope, would like",
+        "formula": "+ TO-V",
+        "note": "Động từ mong muốn/kế hoạch đi với To-V"
+      },
+      {
+        "signal": "Tell, advise, encourage, ask, allow sb",
+        "formula": "+ Tân ngữ + TO-V",
+        "note": "Khuyên bảo/cho phép ai làm gì"
+      },
+      {
+        "signal": "Make / Let sb",
+        "formula": "+ V (bare infinitive)",
+        "note": "Bị động: be made + TO-V"
+      },
+      {
+        "signal": "Remember / Forget / Regret + TO-V",
+        "formula": "Nhớ/quên việc PHẢI LÀM",
+        "note": "Hành động xảy ra trong tương lai"
+      },
+      {
+        "signal": "Remember / Forget / Regret + V-ING",
+        "formula": "Nhớ/quên kỷ niệm ĐÃ LÀM",
+        "note": "Hành động đã xảy ra trong quá khứ"
+      },
+      {
+        "signal": "Stop + TO-V vs Stop + V-ING",
+        "formula": "Dừng lại để làm vs Bỏ hẳn",
+        "note": "Stop to smoke (hút) vs Stop smoking (bỏ thuốc)"
+      }
+    ],
+    "listeningQuizzes": [
+      {
+        "id": "l_gi1",
+        "audioText": "I look forward to hearing from you soon.",
+        "lang": "en-US",
+        "question": "Nghe và xác định dạng động từ:",
+        "options": [
+          "hearing",
+          "hear",
+          "to hear",
+          "heard"
+        ],
+        "answer": "hearing",
+        "meaning": "Tôi rất mong sớm nhận được tin từ bạn (look forward to + V-ing)."
+      },
+      {
+        "id": "l_gi2",
+        "audioText": "Please remember to turn off the lights.",
+        "lang": "en-US",
+        "question": "Nghe và xác định hành động cần nhớ:",
+        "options": [
+          "to turn off",
+          "turning off",
+          "turn off",
+          "turned off"
+        ],
+        "answer": "to turn off",
+        "meaning": "Xin hãy nhớ tắt đèn nhé (nhớ phải làm gì)."
+      },
+      {
+        "id": "l_gi3",
+        "audioText": "She could not help laughing at the joke.",
+        "lang": "en-US",
+        "question": "Nghe và chọn cụm từ đi sau could not help:",
+        "options": [
+          "laughing",
+          "to laugh",
+          "laugh",
+          "laughed"
+        ],
+        "answer": "laughing",
+        "meaning": "Cô ấy không thể nhịn cười trước trò đùa đó."
+      },
+      {
+        "id": "l_gi4",
+        "audioText": "They decided to spend their holiday in Da Nang.",
+        "lang": "en-US",
+        "question": "Nghe và chọn dạng động từ sau decide:",
+        "options": [
+          "to spend",
+          "spending",
+          "spend",
+          "spent"
+        ],
+        "answer": "to spend",
+        "meaning": "Họ đã quyết định dành kỳ nghỉ ở Đà Nẵng."
+      }
     ]
   },
   "file_quantifiers": {
@@ -3835,6 +4140,106 @@ window.FILE_STUDY_HUB = {
         "answer": "either",
         "explanation": "🌸 Mẹo cho Trâm: Chiếc bàn thường có 2 bên, 'either side' = ngồi ở bên nào trong 2 bên cũng được nha Trâm!"
       }
+    ],
+    "cheatShort": [
+      {
+        "signal": "Many / Few / A few",
+        "formula": "+ N đếm được số nhiều",
+        "note": "Students, books, apples..."
+      },
+      {
+        "signal": "Much / Little / A little",
+        "formula": "+ N KHÔNG đếm được",
+        "note": "Water, money, information, advice..."
+      },
+      {
+        "signal": "A few / A little (Có 'a')",
+        "formula": "Mang nghĩa TÍCH CỰC (+)",
+        "note": "Có một vài / một ít, đủ dùng"
+      },
+      {
+        "signal": "Few / Little (Không có 'a')",
+        "formula": "Mang nghĩa TIÊU CỰC (-)",
+        "note": "Hầu như không có, thiếu thốn"
+      },
+      {
+        "signal": "Nhạc cụ: Play the guitar / piano",
+        "formula": "Luôn có mạo từ THE",
+        "note": "Sau động từ play chỉ nhạc cụ"
+      },
+      {
+        "signal": "Thể thao: Play football / badminton",
+        "formula": "KHÔNG có mạo từ (Ø)",
+        "note": "Sau play chỉ môn thể thao"
+      },
+      {
+        "signal": "Phương tiện: By bus / car / train",
+        "formula": "KHÔNG có mạo từ (Ø)",
+        "note": "Đi bằng phương tiện gì"
+      },
+      {
+        "signal": "Đại từ sở hữu: mine, yours, his, hers, ours, theirs",
+        "formula": "Đứng một mình (không có N)",
+        "note": "Thay thế cho Tính từ SH + N"
+      }
+    ],
+    "listeningQuizzes": [
+      {
+        "id": "l_q1",
+        "audioText": "There aren't many students in the room.",
+        "lang": "en-US",
+        "question": "Nghe và xác định lượng từ:",
+        "options": [
+          "many",
+          "much",
+          "few",
+          "little"
+        ],
+        "answer": "many",
+        "meaning": "Không có nhiều học sinh trong phòng (Students số nhiều phủ định)."
+      },
+      {
+        "id": "l_q2",
+        "audioText": "He knows little about this subject.",
+        "lang": "en-US",
+        "question": "Nghe và xác định lượng từ mang nghĩa hầu như không:",
+        "options": [
+          "little",
+          "a little",
+          "few",
+          "a few"
+        ],
+        "answer": "little",
+        "meaning": "Anh ấy hầu như không biết gì về chủ đề này."
+      },
+      {
+        "id": "l_q3",
+        "audioText": "She plays the piano very well.",
+        "lang": "en-US",
+        "question": "Nghe và xác định mạo từ đi với piano:",
+        "options": [
+          "the",
+          "a",
+          "an",
+          "Ø"
+        ],
+        "answer": "the",
+        "meaning": "Cô ấy chơi đàn piano rất giỏi (nhạc cụ có the)."
+      },
+      {
+        "id": "l_q4",
+        "audioText": "He travels to work by bus every day.",
+        "lang": "en-US",
+        "question": "Nghe và xác định mạo từ đi trước bus:",
+        "options": [
+          "Ø",
+          "the",
+          "a",
+          "an"
+        ],
+        "answer": "Ø",
+        "meaning": "Anh ấy đi làm bằng xe buýt mỗi ngày (by bus không mạo từ)."
+      }
     ]
   },
   "file_chinese_hsk2": {
@@ -4295,6 +4700,125 @@ window.FILE_STUDY_HUB = {
         ],
         "answer": "睡觉",
         "explanation": "🌸 Mẹo cho Trâm: 11 giờ đêm đi ngủ -> 睡觉 (shuìjiào)."
+      }
+    ],
+    "cheatShort": [
+      {
+        "signal": "Câu hỏi lựa chọn '... ?'",
+        "formula": "Dùng 还是 (háishì)",
+        "note": "你喝茶还是喝咖啡？"
+      },
+      {
+        "signal": "Câu khẳng định trần thuật '... .'",
+        "formula": "Dùng 或者 (huòzhě)",
+        "note": "喝茶或者喝咖啡都可以。"
+      },
+      {
+        "signal": "Đang làm gì (Tiếp diễn)",
+        "formula": "(正在 / 在) + V + 呢",
+        "note": "Phủ định dùng 没 + V (bỏ 呢)"
+      },
+      {
+        "signal": "Đi đâu làm gì (Câu liên động)",
+        "formula": "去 + Địa điểm + Động từ 2",
+        "note": "我去邮局寄包裹。"
+      },
+      {
+        "signal": "Đồ vừa rẻ vừa đẹp",
+        "formula": "又便宜又好看",
+        "note": "Cấu trúc 又...又... cùng hướng"
+      },
+      {
+        "signal": "Hơi chê (trước Tính từ)",
+        "formula": "有点儿 + Adj (有点儿贵/大)",
+        "note": "Mang ý phàn nàn không vừa ý"
+      },
+      {
+        "signal": "Nhờ giảm bớt (sau Tính từ)",
+        "formula": "Adj + 一点儿 (便宜一点儿)",
+        "note": "Biểu thị so sánh nhẹ nhàng"
+      },
+      {
+        "signal": "Giờ giấc quan trọng",
+        "formula": "一刻 = 15 phút, 半 = 30 phút",
+        "note": "差五分八点 = 8h kém 5 (7h55)"
+      },
+      {
+        "signal": "Thứ tự thời gian",
+        "formula": "LỚN trước BÉ sau & TRƯỚC V",
+        "note": "Năm -> Tháng -> Ngày -> Giờ -> Hành động"
+      }
+    ],
+    "listeningQuizzes": [
+      {
+        "id": "l_zh1",
+        "audioText": "你喝咖啡还是喝茶？",
+        "lang": "zh-CN",
+        "question": "Nghe câu tiếng Trung và chọn liên từ lựa chọn:",
+        "options": [
+          "还是",
+          "或者",
+          "而且",
+          "因为"
+        ],
+        "answer": "还是",
+        "meaning": "Bạn uống cà phê hay uống trà? (Câu hỏi lựa chọn dùng 还是)."
+      },
+      {
+        "id": "l_zh2",
+        "audioText": "他正在宿舍看书呢。",
+        "lang": "zh-CN",
+        "question": "Nghe và xác định trợ từ ngữ khí ở cuối câu tiếp diễn:",
+        "options": [
+          "呢",
+          "吗",
+          "吧",
+          "了"
+        ],
+        "answer": "呢",
+        "meaning": "Cậu ấy đang đọc sách ở ký túc xá (Đang tiếp diễn 正在...呢)."
+      },
+      {
+        "id": "l_zh3",
+        "audioText": "这件羽绒服又便宜又好看。",
+        "lang": "zh-CN",
+        "question": "Nghe và chọn cấu trúc vừa... vừa...:",
+        "options": [
+          "又...又...",
+          "一边...一边...",
+          "不但...而且...",
+          "虽然...但是..."
+        ],
+        "answer": "又...又...",
+        "meaning": "Chiếc áo phao này vừa rẻ vừa đẹp."
+      },
+      {
+        "id": "l_zh4",
+        "audioText": "明天早上七点一刻出发。",
+        "lang": "zh-CN",
+        "question": "Nghe và chọn đúng giờ xuất phát:",
+        "options": [
+          "7 giờ 15 phút",
+          "7 giờ 45 phút",
+          "7 giờ 30 phút",
+          "7 giờ 5 phút"
+        ],
+        "answer": "7 giờ 15 phút",
+        "meaning": "Sáng mai 7 giờ 15 xuất phát (七点一刻)."
+      },
+      {
+        "id": "l_zh5",
+        "audioText": "祝你生日快乐！",
+        "lang": "zh-CN",
+        "question": "Nghe câu chúc tiếng Trung:",
+        "options": [
+          "Chúc bạn sinh nhật vui vẻ",
+          "Chúc bạn năm mới vui vẻ",
+          "Chúc bạn ngày lễ vui vẻ",
+          "Chúc bạn mạnh khỏe"
+        ],
+        "answer": "Chúc bạn sinh nhật vui vẻ",
+        "meaning": "祝你生日快乐 (Zhù nǐ shēngrì kuàilè)!"
       }
     ]
   }
