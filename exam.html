@@ -98,6 +98,7 @@
         }
       },
       play(type) {
+        if (localStorage.getItem('tram_sound_fx_enabled') === '0') return;
         try {
           this.init();
           if (!this.ctx) return;

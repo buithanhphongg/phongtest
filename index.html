@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Ngọc Trâm Study Hub 🌸 - Luyện Tiếng Anh NNA & Tiếng Trung HSK</title>
   
   <!-- Google Fonts: Lexend & Be Vietnam Pro -->
@@ -50,12 +50,20 @@
       background-color: #f8fafc;
       color: #334155;
       font-family: 'Lexend', 'Be Vietnam Pro', sans-serif;
+      padding-bottom: 72px; /* space for mobile bottom bar */
+    }
+
+    @media (min-width: 640px) {
+      body {
+        padding-bottom: 0px;
+      }
     }
 
     /* Tactile 3D Buttons */
     .btn-3d {
       transition: all 0.1s ease;
       position: relative;
+      touch-action: manipulation;
     }
     .btn-3d:active {
       transform: translateY(2px);
@@ -114,6 +122,7 @@
       border-bottom: 3.5px solid #cbd5e1;
       transition: all 0.12s ease;
       cursor: pointer;
+      touch-action: manipulation;
     }
     .option-card-3d:hover {
       background-color: #f8fafc;
@@ -157,7 +166,7 @@
       animation: fall linear forwards;
     }
 
-    /* Scrollbar */
+    /* Custom Scrollbar */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
@@ -171,68 +180,71 @@
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col antialiased selection:bg-pink-100 selection:text-pink-900 text-slate-700">
+<body class="min-h-screen flex flex-col antialiased selection:bg-pink-100 selection:text-pink-800">
 
-  <!-- Sakura Falling Effect Container -->
-  <div id="sakura-container" class="fixed inset-0 pointer-events-none z-20"></div>
-
-  <!-- TOP MINIMAL NAVBAR -->
-  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 py-2.5 shadow-xs">
-    <div class="max-w-6xl mx-auto flex items-center justify-between">
+  <!-- ====================================
+       1. TOP NAVBAR (CLEAN & RESPONSIVE)
+  ==================================== -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-3 sm:px-4 py-2.5 shadow-xs">
+    <div class="max-w-6xl mx-auto flex items-center justify-between gap-2">
       
       <!-- Brand & Mascot -->
-      <div class="flex items-center gap-2.5">
-        <div class="w-10 h-10 rounded-2xl bg-pink-50 border border-pink-200 border-b-3 border-pink-300 flex items-center justify-center text-xl shadow-xs cursor-pointer hover:rotate-6 transition-transform" onclick="triggerMascotCheer()">
+      <div class="flex items-center gap-2">
+        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-pink-50 border border-pink-200 border-b-3 border-pink-300 flex items-center justify-center text-xl shadow-xs cursor-pointer hover:rotate-6 transition-transform shrink-0" onclick="triggerMascotCheer()">
           🌸
         </div>
         <div>
-          <div class="flex items-center gap-2">
-            <h1 class="font-extrabold text-base text-slate-800 tracking-tight">Trâm Hub</h1>
-            <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-pink-50 text-pink-600 border border-pink-200">Clean 2.1</span>
+          <div class="flex items-center gap-1.5 sm:gap-2">
+            <h1 class="font-extrabold text-sm sm:text-base text-slate-800 tracking-tight">Trâm Hub</h1>
+            <span class="text-[9px] sm:text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-pink-50 text-pink-600 border border-pink-200">v2.5 Pro</span>
           </div>
-          <p class="text-[11px] text-slate-400 font-medium hidden sm:block">Ôn Luyện NNA & Hán Ngữ 2</p>
+          <p class="text-[10px] sm:text-[11px] text-slate-400 font-medium hidden md:block">Ôn Luyện NNA & Hán Ngữ 2 • 24/7 Cloud</p>
         </div>
       </div>
 
       <!-- Center / Right Controls -->
-      <div class="flex items-center gap-2 sm:gap-3">
+      <div class="flex items-center gap-1.5 sm:gap-2">
         
-        <!-- Pomodoro Trigger Pill -->
-        <button onclick="togglePomoModal()" id="btn-pomo-pill" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-50 border border-rose-200 border-b-3 border-rose-300 font-black text-rose-700 text-xs shadow-xs hover:bg-rose-100 transition-colors" title="Bật/Tắt Hẹn Giờ Pomodoro">
+        <!-- Pomodoro Pill -->
+        <button onclick="togglePomoModal()" id="btn-pomo-pill" class="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-rose-50 border border-rose-200 border-b-2 border-rose-300 font-black text-rose-700 text-xs shadow-xs hover:bg-rose-100 transition-colors" title="Bật/Tắt Hẹn Giờ Pomodoro">
           <span>🍅</span>
-          <span id="pomo-pill-timer">25:00</span>
+          <span id="pomo-pill-timer" class="font-mono">25:00</span>
         </button>
 
-        <!-- Streak -->
-        <div class="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-amber-50 border border-amber-200 font-extrabold text-amber-700 text-xs" title="Số ngày học liên tiếp">
-          <span class="text-sm">🔥</span>
-          <span id="streak-counter">1</span>
-        </div>
+        <!-- SOUND TOGGLE (MUTE / UNMUTE) - EXACT USER REQUEST -->
+        <button id="btn-sound-toggle" onclick="toggleSoundFx()" class="flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-700 text-xs font-bold transition-all shadow-xs" title="Bật / Tắt toàn bộ âm thanh và tiếng click">
+          <span id="sound-toggle-icon">🔊</span>
+          <span id="sound-toggle-label" class="hidden lg:inline text-[11px]">Âm: BẬT</span>
+        </button>
+
+        <!-- QR Mobile Modal Trigger (Desktop view) -->
+        <button onclick="openQrModal()" class="hidden sm:flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-purple-50 border border-purple-200 text-purple-700 text-xs font-bold hover:bg-purple-100 transition-colors" title="Quét mã mở trên Điện Thoại">
+          <span>📱</span>
+          <span class="hidden md:inline text-[11px]">Mở ĐT</span>
+        </button>
+
+        <!-- Lo-fi Rain -->
+        <button id="btn-lofi-rain" onclick="LofiEngine.toggle()" class="p-1.5 rounded-xl bg-slate-100 border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-200 transition-colors" title="Bật/Tắt tiếng mưa Chill Lo-fi">
+          🌧️
+        </button>
 
         <!-- Hearts -->
-        <div class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-pink-50 border border-pink-200 font-extrabold text-pink-600 text-xs cursor-pointer" onclick="toggleHeartsModal()" title="Trái tim làm bài">
-          <span class="text-sm">❤️</span>
+        <div class="flex items-center gap-1 px-2 py-1.5 rounded-xl bg-pink-50 border border-pink-200 font-extrabold text-pink-600 text-xs cursor-pointer" onclick="toggleHeartsModal()" title="Trái tim làm bài">
+          <span>❤️</span>
           <span id="hearts-counter">5</span>
         </div>
 
         <!-- XP Points -->
-        <div class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-sky-50 border border-sky-200 font-extrabold text-sky-700 text-xs" title="Điểm kinh nghiệm">
-          <span class="text-sm">⚡</span>
+        <div class="hidden sm:flex items-center gap-1 px-2 py-1.5 rounded-xl bg-sky-50 border border-sky-200 font-extrabold text-sky-700 text-xs" title="Điểm kinh nghiệm">
+          <span>⚡</span>
           <span id="xp-counter">150</span>
         </div>
 
-        <!-- Sound & Rain -->
-        <button id="btn-sound-fx" class="p-1.5 rounded-xl bg-slate-100 border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-200 transition-colors" title="Bật/Tắt âm thanh">
-          🔊
-        </button>
-        <button id="btn-lofi-rain" class="p-1.5 rounded-xl bg-slate-100 border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-200 transition-colors" title="Bật/Tắt tiếng mưa Chill Lo-fi">
-          🌧️
-        </button>
-
         <!-- Direct Exam Room Link -->
-        <a href="exam.html" class="hidden md:flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl btn-3d btn-3d-amber font-extrabold text-xs tracking-wide">
+        <a href="exam.html" class="flex items-center gap-1 px-3 py-1.5 rounded-xl btn-3d btn-3d-amber font-extrabold text-xs tracking-wide shadow-xs">
           <span>🏆</span>
-          <span>Phòng Thi 10đ</span>
+          <span class="hidden sm:inline">Phòng Thi 10đ</span>
+          <span class="sm:hidden">Thi</span>
         </a>
 
       </div>
@@ -240,430 +252,277 @@
     </div>
   </header>
 
-  <!-- POMODORO MODAL / POPUP -->
-  <div id="pomo-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-sm w-full p-6 border-b-4 border-slate-300 shadow-xl text-center space-y-4">
-      <div class="flex items-center justify-between border-b pb-2">
-        <h3 class="font-extrabold text-sm text-slate-800 flex items-center gap-1.5">
-          <span>🍅</span>
-          <span>Hẹn Giờ Pomodoro Tập Trung</span>
-        </h3>
-        <button onclick="togglePomoModal()" class="w-7 h-7 rounded-lg bg-slate-100 text-slate-500 font-bold text-xs hover:bg-slate-200">✕</button>
-      </div>
-
-      <!-- Mode Selector -->
-      <div class="grid grid-cols-3 gap-1.5 bg-slate-100 p-1 rounded-2xl text-xs font-bold text-slate-600">
-        <button onclick="setPomoMode(25, this)" class="pomo-tab py-1.5 rounded-xl bg-white shadow-xs font-extrabold text-slate-800">25 Phút</button>
-        <button onclick="setPomoMode(5, this)" class="pomo-tab py-1.5 rounded-xl">Nghỉ 5p</button>
-        <button onclick="setPomoMode(15, this)" class="pomo-tab py-1.5 rounded-xl">Nghỉ 15p</button>
-      </div>
-
-      <!-- Big Clock -->
-      <div class="py-4">
-        <div id="pomo-big-clock" class="text-5xl font-black font-mono tracking-tight text-slate-800">25:00</div>
-        <p class="text-xs text-slate-400 mt-1" id="pomo-status-text">Sẵn sàng bước vào phiên học tập sâu</p>
-      </div>
-
-      <!-- Controls -->
-      <div class="flex items-center justify-center gap-3">
-        <button id="btn-pomo-start" onclick="togglePomo()" class="px-6 py-2.5 rounded-2xl btn-3d btn-3d-green text-xs font-black w-32">
-          BẮT ĐẦU ▶
+  <!-- ====================================
+       2. SUBNAV / TABS (DUOLINGO CLEAN PILLS)
+  ==================================== -->
+  <nav class="bg-white border-b border-slate-200 sticky top-[53px] sm:top-[57px] z-30 px-3 sm:px-4 py-2">
+    <div class="max-w-6xl mx-auto flex items-center justify-between overflow-x-auto no-scrollbar gap-2">
+      <div class="flex items-center gap-1 sm:gap-2">
+        <button onclick="switchMainTab('file-hub')" id="tab-btn-file-hub" class="flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl font-extrabold text-xs bg-slate-800 text-white shadow-xs transition-all whitespace-nowrap">
+          <span>📁</span>
+          <span>Kho Tài Liệu</span>
         </button>
-        <button onclick="resetPomo()" class="px-4 py-2.5 rounded-2xl btn-3d btn-3d-white text-xs font-bold text-slate-600">
-          Đặt Lại ↺
+
+        <button onclick="switchMainTab('chinese-hub')" id="tab-btn-chinese-hub" class="flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl font-bold text-xs text-slate-600 hover:text-slate-800 transition-all whitespace-nowrap">
+          <span>🇨🇳</span>
+          <span>Hán Ngữ 2 (Bài 16-21)</span>
+        </button>
+
+        <button onclick="switchMainTab('english-roadmap')" id="tab-btn-english-roadmap" class="flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl font-bold text-xs text-slate-600 hover:text-slate-800 transition-all whitespace-nowrap">
+          <span>🗺️</span>
+          <span>Lộ Trình Duolingo</span>
+        </button>
+
+        <button onclick="switchMainTab('tools-hub')" id="tab-btn-tools-hub" class="flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl font-bold text-xs text-slate-600 hover:text-slate-800 transition-all whitespace-nowrap">
+          <span>🧰</span>
+          <span>Flashcard & Đặt Câu</span>
         </button>
       </div>
+
+      <!-- Quick Upload Button -->
+      <button onclick="toggleDropZone()" class="px-3 py-1.5 rounded-xl btn-3d btn-3d-white text-xs font-bold text-slate-700 flex items-center gap-1 shrink-0">
+        <span>📤</span>
+        <span class="hidden sm:inline">Thả Thêm File</span>
+      </button>
     </div>
-  </div>
+  </nav>
 
-  <!-- HEARTS / CHILL MODE DIALOG -->
-  <div id="hearts-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-sm w-full p-6 border-b-4 border-slate-300 shadow-xl text-center space-y-4">
-      <div class="w-14 h-14 rounded-full bg-rose-50 text-rose-500 text-3xl flex items-center justify-center mx-auto">
-        ❤️
+  <!-- ====================================
+       3. CLOUD 24/7 NOTICE BANNER
+  ==================================== -->
+  <div class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-xs font-medium px-4 py-2 text-center shadow-xs">
+    <div class="max-w-6xl mx-auto flex items-center justify-between flex-wrap gap-2">
+      <div class="flex items-center gap-2 mx-auto sm:mx-0">
+        <span class="bg-white/20 px-2 py-0.5 rounded-full font-black text-[10px] uppercase">Online 24/7 Cloud</span>
+        <span>☁️ Web chạy độc lập trên GitHub Pages. Bạn tắt máy tính thì điện thoại vẫn mở học bình thường 100%!</span>
       </div>
-      <div>
-        <h3 class="text-base font-black text-slate-800">Trái Tim Làm Bài</h3>
-        <p class="text-xs text-slate-500 mt-1">Luyện tập sai sẽ trừ 1 tim. Bật Vô Hạn Tim để thoải mái học tập không áp lực nhé!</p>
-      </div>
-      
-      <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 flex items-center justify-between">
-        <div class="text-left">
-          <div class="font-bold text-slate-800 text-xs">Vô Hạn Tim (Chill Mode 🌸)</div>
-          <div class="text-[11px] text-slate-400">Không lo bị trừ tim</div>
-        </div>
-        <input type="checkbox" id="chill-mode-toggle" class="w-5 h-5 accent-emerald-500 rounded cursor-pointer" checked onchange="toggleChillMode(this.checked)">
-      </div>
-
-      <button onclick="toggleHeartsModal()" class="w-full py-2.5 rounded-2xl btn-3d btn-3d-green font-black text-xs">
-        ĐÃ HIỂU
+      <button onclick="openQrModal()" class="text-[11px] underline font-bold hover:text-emerald-100 hidden sm:inline mx-auto sm:mx-0">
+        📲 Bấm để lấy mã QR mở trên Điện Thoại
       </button>
     </div>
   </div>
 
-  <!-- CLEAN TAB SWITCHER (SEGMENTED CONTROL) -->
-  <div class="max-w-6xl mx-auto px-4 pt-4 pb-2 w-full">
-    <div class="flex items-center gap-1.5 p-1 rounded-2xl bg-slate-200/70 border border-slate-200 overflow-x-auto no-scrollbar">
-      
-      <!-- Tab 1: Ôn Theo File -->
-      <button onclick="switchMainTab('file-hub')" id="tab-btn-file-hub" class="flex items-center gap-1.5 px-4 py-2 rounded-xl font-extrabold text-xs bg-white text-slate-800 shadow-xs transition-all whitespace-nowrap">
-        <span>📁</span>
-        <span>Ôn Theo File</span>
+  <!-- ====================================
+       4. DROP ZONE (EXPANDABLE)
+  ==================================== -->
+  <div id="drop-zone-container" class="hidden max-w-6xl mx-auto w-full px-4 pt-4">
+    <div id="drop-zone" class="border-2 border-dashed border-slate-300 hover:border-pink-400 bg-white rounded-3xl p-6 text-center cursor-pointer transition-all shadow-xs space-y-2">
+      <div class="w-12 h-12 rounded-2xl bg-pink-50 text-pink-500 text-2xl flex items-center justify-center mx-auto">
+        📥
+      </div>
+      <h3 class="font-bold text-sm text-slate-800">Kéo & Thả file Word (.docx) hoặc Text (.txt) vào đây</h3>
+      <p class="text-xs text-slate-400">Hệ thống sẽ tự động phân tích và tạo bài học, điền từ, kiểm tra mini test 20 câu / 50 câu ngay lập tức!</p>
+      <input type="file" id="file-input" class="hidden" accept=".docx,.txt,.json">
+      <button onclick="document.getElementById('file-input').click()" class="mt-2 px-4 py-2 rounded-xl btn-3d btn-3d-green text-xs font-bold">
+        Chọn File Từ Máy Tính
       </button>
-
-      <!-- Tab 2: Tiếng Trung Hán Ngữ 2 -->
-      <button onclick="switchMainTab('chinese-hub')" id="tab-btn-chinese-hub" class="flex items-center gap-1.5 px-4 py-2 rounded-xl font-bold text-xs text-slate-600 hover:text-slate-800 transition-all whitespace-nowrap">
-        <span>🇨🇳</span>
-        <span>Tiếng Trung (Hán Ngữ 2)</span>
-      </button>
-
-      <!-- Tab 3: Cây Lộ Trình -->
-      <button onclick="switchMainTab('english-roadmap')" id="tab-btn-english-roadmap" class="flex items-center gap-1.5 px-4 py-2 rounded-xl font-bold text-xs text-slate-600 hover:text-slate-800 transition-all whitespace-nowrap">
-        <span>🇬🇧</span>
-        <span>Lộ Trình Duolingo</span>
-      </button>
-
-      <!-- Tab 4: Thẻ Flashcards -->
-      <button onclick="switchMainTab('tools-hub')" id="tab-btn-tools-hub" class="flex items-center gap-1.5 px-4 py-2 rounded-xl font-bold text-xs text-slate-600 hover:text-slate-800 transition-all whitespace-nowrap">
-        <span>🎴</span>
-        <span>Flashcards & Công Thức</span>
-      </button>
-
     </div>
   </div>
 
-  <!-- MAIN VIEWPORT -->
-  <main class="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6 space-y-6">
+  <!-- ====================================
+       5. MAIN CONTAINER
+  ==================================== -->
+  <main class="flex-1 max-w-6xl w-full mx-auto p-3 sm:p-6 space-y-6">
 
-    <!-- ========================================== -->
-    <!-- TAB 1: 📁 ÔN THEO FILE (CLEAN HUB)         -->
-    <!-- ========================================== -->
-    <section id="section-file-hub" class="space-y-6">
-      
-      <!-- Compact Top Header & Dropzone Toggle -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-5 rounded-3xl border border-slate-200 shadow-xs">
+    <!-- ---------------------------------
+         TAB 1: FILE STUDY HUB (DEFAULT)
+    ---------------------------------- -->
+    <section id="section-file-hub" class="space-y-4">
+      <div class="flex items-center justify-between">
         <div>
-          <h2 class="text-base font-black text-slate-800 flex items-center gap-2">
+          <h2 class="text-base sm:text-lg font-black text-slate-800 flex items-center gap-2">
             <span>📚</span>
-            <span>Các File Tài Liệu Ôn Tập</span>
-            <span class="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full" id="file-count-badge">5 Files</span>
+            <span>Tài Liệu Ôn Tập Trọng Tâm</span>
           </h2>
-          <p class="text-xs text-slate-500 mt-0.5">Mỗi file gồm: Bí kíp 30s (Cheat Short), Luyện điền từ, Nghe & đoán từ, Mini Test 20 câu & Test 50 câu.</p>
+          <p class="text-xs text-slate-400">Chọn 1 file để mở Bí Kíp 30s, Luyện Điền Từ, Nghe Đoán, Mini Test 20 câu hoặc Test 50 câu</p>
+        </div>
+        <span id="file-count-badge" class="px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-bold border border-slate-200">
+          5 Files
+        </span>
+      </div>
+
+      <!-- File Cards Grid -->
+      <div id="file-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+    <!-- ---------------------------------
+         TAB 2: CHINESE HSK 2 HUB
+    ---------------------------------- -->
+    <section id="section-chinese-hub" class="space-y-4 hidden">
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h2 class="text-base sm:text-lg font-black text-slate-800 flex items-center gap-2">
+            <span>🇨🇳</span>
+            <span>Giáo Trình Hán Ngữ Quyển 2 (Bài 16 - 21)</span>
+          </h2>
+          <p class="text-xs text-slate-400">Có phát âm chuẩn, phiên âm Pinyin, phân tích ngữ pháp và dịch nghĩa chi tiết</p>
         </div>
 
-        <button onclick="toggleDropZone()" class="px-4 py-2 rounded-xl btn-3d btn-3d-white text-xs font-bold text-slate-700 flex items-center gap-1.5 self-start sm:self-auto">
-          <span>➕</span>
-          <span>Thả File Mới (.docx, .txt)</span>
+        <button onclick="openPinyinModal()" class="px-3.5 py-1.5 rounded-xl btn-3d btn-3d-pink text-xs font-bold flex items-center gap-1.5">
+          <span>🔊</span>
+          <span>Bảng Phiên Âm Pinyin</span>
         </button>
       </div>
 
-      <!-- COLLAPSIBLE DRAG & DROP ZONE -->
-      <div id="drop-zone-container" class="hidden">
-        <div id="drop-zone" class="relative group bg-slate-50 border-2 border-dashed border-sky-300 hover:border-sky-500 rounded-3xl p-6 text-center transition-all duration-150 cursor-pointer hover:bg-sky-50/50">
-          <input type="file" id="file-input" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept=".docx,.txt,.json">
-          <div class="space-y-2 pointer-events-none">
-            <span class="text-2xl inline-block">📂</span>
-            <h3 class="text-xs font-black text-slate-800">Thả file .docx, .txt hoặc .json vào đây</h3>
-            <p class="text-[11px] text-slate-400">Trình duyệt sẽ tự bóc tách câu hỏi, tạo bài test và lưu lại vĩnh viễn.</p>
-          </div>
-        </div>
+      <!-- Lesson Selection Pills -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar" id="chinese-lesson-pills">
+        <!-- Rendered by JS -->
       </div>
 
-      <!-- FILE CARDS GRID -->
-      <div id="file-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <!-- Dynamically rendered -->
+      <!-- Active Lesson Workspace -->
+      <div id="chinese-lesson-workspace" class="space-y-4">
+        <!-- Rendered by JS -->
       </div>
-
     </section>
 
-    <!-- ========================================== -->
-    <!-- MODAL / VIEWPORT: FILE STUDY WORKSPACE     -->
-    <!-- ========================================== -->
-    <div id="file-study-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden flex flex-col p-2 sm:p-6 overflow-y-auto">
-      <div class="bg-white rounded-3xl max-w-4xl w-full mx-auto my-auto border border-slate-200 border-b-4 border-slate-300 shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
-        
-        <!-- Workspace Header -->
-        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
-          <div class="flex items-center gap-3">
-            <span id="active-file-icon" class="text-2xl p-2 rounded-2xl bg-white border border-slate-200">📁</span>
-            <div>
-              <h3 id="active-file-title" class="font-black text-base text-slate-800">Tên File</h3>
-              <p id="active-file-tag" class="text-xs text-slate-400 font-medium">100 Câu Hỏi</p>
-            </div>
-          </div>
-          <button onclick="closeFileStudyModal()" class="w-8 h-8 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-black text-sm flex items-center justify-center transition-colors">
-            ✕
-          </button>
-        </div>
-
-        <!-- 5 Workspace Sub-Tabs -->
-        <div class="px-6 py-2 bg-white border-b border-slate-100 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-          <button onclick="switchFileSubTab('cheatshort')" id="subtab-cheatshort" class="px-3 py-1.5 rounded-xl font-extrabold text-xs btn-3d btn-3d-green whitespace-nowrap">
-            ⚡ Cheat Short (30s)
-          </button>
-          <button onclick="switchFileSubTab('summary')" id="subtab-summary" class="px-3 py-1.5 rounded-xl font-bold text-xs btn-3d btn-3d-white text-slate-600 whitespace-nowrap">
-            📖 Tóm Tắt Đầy Đủ
-          </button>
-          <button onclick="switchFileSubTab('fillin')" id="subtab-fillin" class="px-3 py-1.5 rounded-xl font-bold text-xs btn-3d btn-3d-white text-slate-600 whitespace-nowrap">
-            ✍️ Luyện Điền Từ
-          </button>
-          <button onclick="switchFileSubTab('listening')" id="subtab-listening" class="px-3 py-1.5 rounded-xl font-bold text-xs btn-3d btn-3d-white text-slate-600 whitespace-nowrap">
-            🎧 Nghe & Đoán Từ
-          </button>
-          <button onclick="switchFileSubTab('test20')" id="subtab-test20" class="px-3 py-1.5 rounded-xl font-bold text-xs btn-3d btn-3d-white text-slate-600 whitespace-nowrap">
-            ⏱️ Mini Test (20c · 10đ)
-          </button>
-          <button onclick="switchFileSubTab('test50')" id="subtab-test50" class="px-3 py-1.5 rounded-xl font-bold text-xs btn-3d btn-3d-white text-slate-600 whitespace-nowrap">
-            🏆 Test (50c · 10đ)
-          </button>
-        </div>
-
-        <!-- Workspace Body -->
-        <div class="flex-1 overflow-y-auto p-6 space-y-6">
-          
-          <!-- View 1: Cheat Short (Bí kíp 30 giây) -->
-          <div id="file-view-cheatshort" class="space-y-4">
-            <!-- Dynamically populated table -->
-          </div>
-
-          <!-- View 2: Tóm Tắt Đầy Đủ -->
-          <div id="file-view-summary" class="space-y-4 hidden">
-            <!-- Dynamically populated -->
-          </div>
-
-          <!-- View 3: Luyện Điền Từ -->
-          <div id="file-view-fillin" class="space-y-4 hidden">
-            <!-- Dynamically populated -->
-          </div>
-
-          <!-- View 4: Nghe & Đoán Từ -->
-          <div id="file-view-listening" class="space-y-4 hidden">
-            <!-- Dynamically populated -->
-          </div>
-
-          <!-- View 5 & 6: Làm Bài Test (20 câu hoặc 50 câu) -->
-          <div id="file-view-test" class="space-y-5 hidden">
-            <!-- Header test progress -->
-            <div class="flex items-center justify-between bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
-              <div class="flex items-center gap-2">
-                <span id="test-mode-badge" class="px-2.5 py-0.5 rounded-lg bg-pink-100 text-pink-700 font-extrabold text-xs">Mini Test 20</span>
-                <span id="test-progress-text" class="text-xs font-bold text-slate-600">Câu 1/20</span>
-              </div>
-              <div class="flex items-center gap-1.5 font-mono font-bold text-xs text-slate-700">
-                <span>⏱️</span>
-                <span id="test-timer">00:00</span>
-              </div>
-            </div>
-
-            <!-- Notice: Không gợi ý khi làm bài -->
-            <div class="bg-amber-50 border border-amber-200 rounded-2xl p-3 text-xs text-amber-800 font-semibold flex items-center gap-2">
-              <span>⚠️</span>
-              <span>Lưu ý cho Trâm: Chế độ kiểm tra thật không có gợi ý. Hãy chọn kỹ rồi bấm Nộp Bài để xem điểm và danh hiệu nhé!</span>
-            </div>
-
-            <!-- Question Card -->
-            <div id="test-question-box" class="bg-white border border-slate-200 rounded-3xl p-6 shadow-xs space-y-4">
-              <div class="flex items-center justify-between text-xs text-slate-400 font-bold">
-                <span id="test-q-category">Chuyên đề</span>
-                <span id="test-q-num-label">Câu 1</span>
-              </div>
-              
-              <h4 id="test-q-sentence" class="text-base font-black text-slate-800 leading-relaxed">
-                Sentence goes here...
-              </h4>
-
-              <!-- Options Grid (Randomly Shuffled) -->
-              <div id="test-q-options" class="grid grid-cols-1 gap-2.5">
-                <!-- Dynamically populated -->
-              </div>
-            </div>
-
-            <!-- Nav Controls -->
-            <div class="flex items-center justify-between pt-1">
-              <button id="btn-test-prev" onclick="navTestQuestion(-1)" class="px-4 py-2 rounded-xl btn-3d btn-3d-white font-bold text-xs text-slate-600">
-                ← Câu Trước
-              </button>
-              
-              <div class="flex items-center gap-2">
-                <button id="btn-test-next" onclick="navTestQuestion(1)" class="px-5 py-2 rounded-xl btn-3d btn-3d-blue font-black text-xs">
-                  Câu Tiếp →
-                </button>
-                <button id="btn-test-submit" onclick="submitFileTest()" class="px-5 py-2 rounded-xl btn-3d btn-3d-green font-black text-xs shadow-xs">
-                  Nộp Bài Ngay 🎯
-                </button>
-              </div>
-            </div>
-
-            <!-- Result Box (Hidden Until Submitted) -->
-            <div id="test-result-box" class="hidden space-y-5">
-              <!-- Result content with exact requested messages -->
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- TAB 2: 🇨🇳 TIẾNG TRUNG (HÁN NGỮ QUYỂN 2)   -->
-    <!-- ========================================== -->
-    <section id="section-chinese-hub" class="space-y-6 hidden">
-      
-      <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-2xl bg-red-500 text-white flex items-center justify-center text-2xl font-black shrink-0">
-            中
-          </div>
-          <div>
-            <h2 class="text-base font-black text-slate-800">Giáo Trình Hán Ngữ Quyển 2 (Bài 16 - 21)</h2>
-            <p class="text-xs text-slate-500">Bấm nút loa 🔊 ở từng từ để nghe giọng đọc Bắc Kinh bản xứ chuẩn!</p>
-          </div>
-        </div>
-
-        <button onclick="openPinyinModal()" class="px-3.5 py-2 rounded-xl btn-3d btn-3d-amber text-xs font-black whitespace-nowrap self-start sm:self-auto">
-          🔤 Bảng Tra Pinyin
-        </button>
-      </div>
-
-      <!-- Lesson Selector -->
-      <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar" id="chinese-lesson-pills">
-        <!-- Dynamically rendered -->
-      </div>
-
-      <!-- Lesson Content -->
-      <div id="chinese-lesson-workspace" class="space-y-6">
-        <!-- Dynamically rendered -->
-      </div>
-
-    </section>
-
-    <!-- ========================================== -->
-    <!-- TAB 3: 🇬🇧 CÂY LỘ TRÌNH (DUOLINGO TREE)     -->
-    <!-- ========================================== -->
+    <!-- ---------------------------------
+         TAB 3: ENGLISH ROADMAP (DUOLINGO)
+    ---------------------------------- -->
     <section id="section-english-roadmap" class="space-y-8 hidden">
       <div class="text-center max-w-sm mx-auto space-y-1">
         <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-black uppercase">Lộ Trình Duolingo</span>
         <h2 class="text-lg font-black text-slate-800">Hành Trình Ngữ Pháp NNA</h2>
+        <p class="text-xs text-slate-400">Vượt qua các ải để nhận thêm trái tim ❤️ và điểm kinh nghiệm ⚡</p>
       </div>
 
       <!-- Winding Path -->
       <div class="max-w-xs mx-auto relative py-4 flex flex-col items-center gap-8">
         
         <div class="flex flex-col items-center gap-1">
-          <button onclick="openFileStudy('file_tenses', 'test20')" class="w-18 h-18 rounded-full btn-3d btn-3d-green text-3xl flex items-center justify-center shadow-md relative">
+          <button onclick="openFileStudy('file_tenses', 'test20')" class="w-16 h-16 rounded-full btn-3d btn-3d-green text-3xl flex items-center justify-center shadow-md relative">
             ⏱️
           </button>
           <span class="font-extrabold text-xs text-slate-700">13 Thì Cơ Bản</span>
         </div>
 
         <div class="flex flex-col items-center gap-1 translate-x-10">
-          <button onclick="openFileStudy('file_gerund_infinitive', 'test20')" class="w-18 h-18 rounded-full btn-3d btn-3d-pink text-3xl flex items-center justify-center shadow-md relative">
+          <button onclick="openFileStudy('file_gerund_infinitive', 'test20')" class="w-16 h-16 rounded-full btn-3d btn-3d-pink text-3xl flex items-center justify-center shadow-md relative">
             🌸
           </button>
           <span class="font-extrabold text-xs text-slate-700">To-V & V-ing</span>
         </div>
 
-        <div class="w-12 h-12 rounded-2xl bg-amber-100 border border-amber-300 text-xl flex items-center justify-center cursor-pointer hover:rotate-12 transition-transform" onclick="alert('🎁 Chúc mừng Trâm đã nhận thêm 30 XP từ rương may mắn! ✨'); addXP(30);" title="Rương phần thưởng!">
+        <div class="w-12 h-12 rounded-2xl bg-amber-100 border border-amber-300 text-xl flex items-center justify-center cursor-pointer hover:rotate-12 transition-transform" onclick="alert('🎁 Chúc mừng Trâm đã nhận thêm 30 XP từ rương may mắn! ✨'); addXP(30);" title="Rương phần thưởng bí mật">
           🎁
         </div>
 
         <div class="flex flex-col items-center gap-1 -translate-x-10">
-          <button onclick="openFileStudy('file_sv_agreement', 'test20')" class="w-18 h-18 rounded-full btn-3d btn-3d-blue text-3xl flex items-center justify-center shadow-md relative">
-            🤝
+          <button onclick="openFileStudy('file_sv_agreement', 'test20')" class="w-16 h-16 rounded-full btn-3d btn-3d-blue text-3xl flex items-center justify-center shadow-md relative">
+            ⚖️
           </button>
-          <span class="font-extrabold text-xs text-slate-700">Hòa Hợp Chủ - Vị</span>
+          <span class="font-extrabold text-xs text-slate-700">S-V Agreement</span>
         </div>
 
         <div class="flex flex-col items-center gap-1">
-          <button onclick="openFileStudy('file_quantifiers', 'test20')" class="w-18 h-18 rounded-full btn-3d btn-3d-amber text-3xl flex items-center justify-center shadow-md relative">
-            ⚖️
+          <button onclick="openFileStudy('file_quantifiers', 'test20')" class="w-16 h-16 rounded-full btn-3d btn-3d-amber text-3xl flex items-center justify-center shadow-md relative">
+            📊
           </button>
           <span class="font-extrabold text-xs text-slate-700">Lượng Từ & Mạo Từ</span>
         </div>
 
         <div class="flex flex-col items-center gap-1">
-          <a href="exam.html" class="w-20 h-20 rounded-full btn-3d btn-3d-amber text-4xl flex items-center justify-center shadow-lg animate-pulse">
+          <a href="exam.html" class="w-16 h-16 rounded-full btn-3d btn-3d-amber text-3xl flex items-center justify-center shadow-lg animate-pulse">
             🏆
           </a>
-          <span class="font-black text-xs text-amber-700">Đấu Trường 40 Câu (10đ)</span>
+          <span class="font-black text-xs text-amber-700">Đại Thi Thang Điểm 10</span>
         </div>
 
       </div>
     </section>
 
-    <!-- ========================================== -->
-    <!-- TAB 4: 🎴 FLASHCARDS & CÔNG THỨC           -->
-    <!-- ========================================== -->
+    <!-- ---------------------------------
+         TAB 4: TOOLS HUB (FLASHCARD & BUILDER)
+    ---------------------------------- -->
     <section id="section-tools-hub" class="space-y-6 hidden">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         
-        <!-- 3D Flashcard Module -->
-        <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-xs space-y-3">
+        <!-- Tool 1: Interactive Flashcards -->
+        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs space-y-4">
           <div class="flex items-center justify-between">
-            <h3 class="font-black text-sm text-slate-800 flex items-center gap-1.5">
-              <span>🎴</span>
-              <span>Flashcard 3D Lật Thẻ</span>
+            <h3 class="font-black text-sm text-slate-800 flex items-center gap-2">
+              <span>🃏</span>
+              <span>Thẻ Nhớ Flashcard 3D</span>
             </h3>
-            <span class="text-[11px] text-slate-400 font-bold">Chạm để lật 🔄</span>
+            <span class="text-xs text-slate-400 font-bold" id="flashcard-counter">1 / 10</span>
           </div>
 
-          <div class="perspective-1000 w-full h-48 cursor-pointer" onclick="flipFlashcard()">
-            <div id="flashcard-inner" class="w-full h-full relative transform-style-3d transition-transform duration-500 rounded-2xl border border-pink-200 bg-pink-50/40 p-5 flex flex-col justify-between">
+          <!-- Flip Card Container -->
+          <div class="perspective-1000 w-full h-56 cursor-pointer" onclick="flipFlashcard()">
+            <div id="flashcard-inner" class="relative w-full h-full transform-style-3d transition-transform duration-500 rounded-3xl border-2 border-slate-200 shadow-xs">
               
-              <!-- Front Face -->
-              <div class="backface-hidden w-full h-full flex flex-col justify-between">
-                <span class="text-[10px] font-black text-pink-600 uppercase" id="fc-category">Thì Hiện Tại Đơn</span>
-                <div class="text-center my-auto">
-                  <h4 class="text-xl font-black text-slate-800" id="fc-term">S + V(s/es)</h4>
+              <!-- Front Side -->
+              <div class="absolute inset-0 bg-gradient-to-tr from-pink-50 to-white rounded-3xl p-6 flex flex-col justify-between backface-hidden">
+                <span class="text-[10px] font-black uppercase text-pink-600 tracking-wider" id="fc-front-tag">Hiện Tại Đơn</span>
+                <div class="text-center space-y-2">
+                  <div class="text-xl font-black text-slate-800" id="fc-front-term">S + V(s/es)</div>
+                  <div class="text-xs text-slate-500" id="fc-front-hint">Chạm để lật xem ví dụ & dấu hiệu ↺</div>
                 </div>
-                <div class="text-right text-[11px] text-slate-400 font-bold">Chạm để lật ➔</div>
+                <div class="text-[10px] text-slate-400 text-center">Bấm để lật thẻ</div>
               </div>
 
-              <!-- Back Face -->
-              <div class="backface-hidden rotate-y-180 absolute inset-0 w-full h-full bg-white rounded-2xl p-5 flex flex-col justify-between border border-pink-300">
-                <span class="text-[10px] font-black text-emerald-600 uppercase">Giải Thích</span>
-                <div class="space-y-1 my-auto text-xs">
-                  <p class="font-bold text-slate-700" id="fc-rule">• Quy tắc</p>
-                  <p class="text-slate-600 font-medium" id="fc-example">• Ví dụ</p>
-                  <p class="text-pink-600 font-semibold" id="fc-clue">• Dấu hiệu</p>
+              <!-- Back Side -->
+              <div class="absolute inset-0 bg-slate-900 text-white rounded-3xl p-6 flex flex-col justify-between backface-hidden rotate-y-180">
+                <span class="text-[10px] font-black uppercase text-emerald-400" id="fc-back-tag">Chi Tiết Cách Dùng</span>
+                <div class="text-center space-y-2">
+                  <p class="text-xs text-slate-300 font-medium" id="fc-back-rule">Diễn tả sự thật hiển nhiên, chân lý hoặc thói quen lặp đi lặp lại.</p>
+                  <p class="text-xs text-emerald-300 font-bold font-mono" id="fc-back-example">"The sun rises in the east."</p>
                 </div>
-                <div class="text-right text-[11px] text-slate-400 font-bold">Lật lại ↺</div>
+                <div class="text-[10px] text-slate-400 text-center">Dấu hiệu: <span id="fc-back-clue" class="text-amber-300">always, usually, every day</span></div>
               </div>
 
             </div>
           </div>
 
-          <div class="flex items-center justify-between pt-1">
-            <button onclick="navFlashcard(-1)" class="px-3.5 py-1.5 rounded-xl btn-3d btn-3d-white text-xs font-bold">← Thẻ Trước</button>
-            <button onclick="flipFlashcard()" class="px-4 py-1.5 rounded-xl btn-3d btn-3d-pink text-xs font-black">Lật Thẻ 🔄</button>
-            <button onclick="navFlashcard(1)" class="px-3.5 py-1.5 rounded-xl btn-3d btn-3d-white text-xs font-bold">Thẻ Sau →</button>
+          <!-- Controls -->
+          <div class="flex items-center justify-between gap-2">
+            <button onclick="navFlashcard(-1)" class="px-4 py-2 rounded-xl btn-3d btn-3d-white text-xs font-bold text-slate-600">
+              ← Thẻ Trước
+            </button>
+            <button onclick="flipFlashcard()" class="px-4 py-2 rounded-xl btn-3d btn-3d-pink text-xs font-bold">
+              ↺ Lật Thẻ
+            </button>
+            <button onclick="navFlashcard(1)" class="px-4 py-2 rounded-xl btn-3d btn-3d-white text-xs font-bold text-slate-600">
+              Thẻ Kế →
+            </button>
           </div>
         </div>
 
-        <!-- Formula Builder -->
-        <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-xs space-y-3">
+        <!-- Tool 2: Sentence Builder -->
+        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs space-y-4">
           <div class="flex items-center justify-between">
-            <h3 class="font-black text-sm text-slate-800 flex items-center gap-1.5">
+            <h3 class="font-black text-sm text-slate-800 flex items-center gap-2">
               <span>🧩</span>
-              <span>Máy Ghép Cấu Trúc</span>
+              <span>Xếp Từ Thành Câu Hoàn Chỉnh</span>
             </h3>
-            <span class="text-xs text-emerald-600 font-black" id="builder-target-name">Hiện Tại Hoàn Thành</span>
+            <span class="text-xs text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+              Thực Hành
+            </span>
           </div>
 
-          <div id="builder-dropzone" class="min-h-[46px] p-2 rounded-xl bg-slate-50 border-2 border-dashed border-emerald-300 flex flex-wrap gap-1.5 items-center">
-            <span class="text-xs text-slate-400 italic">Nhấn các khối từ bên dưới để ghép vào đây...</span>
+          <p class="text-xs text-slate-500" id="builder-prompt">Nhiệm vụ: Chạm các từ bên dưới theo đúng thứ tự để tạo câu ngữ pháp chuẩn.</p>
+
+          <!-- Sentence Target Slots -->
+          <div id="builder-target-slots" class="min-h-[50px] p-3 rounded-2xl bg-slate-50 border-2 border-dashed border-slate-300 flex flex-wrap gap-2 items-center">
+            <!-- Selected words appear here -->
           </div>
 
-          <div id="builder-wordbank" class="flex flex-wrap gap-1.5 pt-1">
-            <!-- Dynamically populated -->
+          <!-- Source Word Chips -->
+          <div id="builder-word-chips" class="flex flex-wrap gap-2 pt-2">
+            <!-- Word options rendered here -->
           </div>
 
-          <div class="flex items-center justify-between pt-2">
-            <button onclick="resetBuilder()" class="px-3 py-1.5 rounded-xl btn-3d btn-3d-white text-xs font-bold">Xóa</button>
-            <button onclick="checkBuilder()" class="px-4 py-1.5 rounded-xl btn-3d btn-3d-green text-xs font-black">Kiểm Tra ✨</button>
+          <!-- Feedback & Action -->
+          <div class="flex items-center justify-between pt-2 border-t border-slate-100">
+            <button onclick="resetBuilder()" class="text-xs text-slate-400 hover:text-slate-600 font-bold">
+              Làm lại ↺
+            </button>
+            <button onclick="checkBuilder()" class="px-5 py-2 rounded-xl btn-3d btn-3d-green text-xs font-black">
+              Kiểm Tra Câu ✨
+            </button>
           </div>
+          <div id="builder-feedback" class="hidden p-3 rounded-2xl text-xs font-bold"></div>
         </div>
 
       </div>
@@ -671,152 +530,418 @@
 
   </main>
 
-  <!-- PINYIN GUIDE MODAL -->
-  <div id="pinyin-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-lg w-full p-6 border-b-4 border-slate-300 shadow-xl space-y-3 max-h-[85vh] overflow-y-auto">
-      <div class="flex items-center justify-between border-b pb-2">
-        <h3 class="font-black text-sm text-slate-800">🔤 Bảng Pinyin & 4 Thanh Điệu Tiếng Trung</h3>
-        <button onclick="closePinyinModal()" class="w-7 h-7 rounded-lg bg-slate-100 font-bold text-xs text-slate-600">✕</button>
-      </div>
-
-      <div class="space-y-3 text-xs text-slate-600">
-        <div class="grid grid-cols-4 gap-1.5 text-center">
-          <div class="p-2 rounded-xl bg-slate-50 border"><span class="font-black text-red-500 text-sm">ā</span><div class="font-bold">Thanh 1</div><div class="text-[9px] text-slate-400">Cao đều</div></div>
-          <div class="p-2 rounded-xl bg-slate-50 border"><span class="font-black text-red-500 text-sm">á</span><div class="font-bold">Thanh 2</div><div class="text-[9px] text-slate-400">Lên dốc</div></div>
-          <div class="p-2 rounded-xl bg-slate-50 border"><span class="font-black text-red-500 text-sm">ǎ</span><div class="font-bold">Thanh 3</div><div class="text-[9px] text-slate-400">Xuống lượn</div></div>
-          <div class="p-2 rounded-xl bg-slate-50 border"><span class="font-black text-red-500 text-sm">à</span><div class="font-bold">Thanh 4</div><div class="text-[9px] text-slate-400">Rơi dứt khoát</div></div>
+  <!-- ====================================
+       6. WORKSPACE MODAL: FILE STUDY HUB (5 SUB-TABS)
+  ==================================== -->
+  <div id="file-study-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex flex-col p-2 sm:p-4 md:p-6 overflow-y-auto" onclick="handleModalBackdropClick(event, 'file-study-modal')">
+    <div class="bg-white rounded-2xl sm:rounded-3xl max-w-4xl w-full mx-auto my-auto border border-slate-200 border-b-4 border-slate-300 shadow-2xl flex flex-col max-h-[94vh] overflow-hidden" onclick="event.stopPropagation()">
+      
+      <!-- Workspace Header -->
+      <div class="px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/80 shrink-0">
+        <div class="flex items-center gap-2.5 sm:gap-3">
+          <span id="active-file-icon" class="text-xl sm:text-2xl p-1.5 sm:p-2 rounded-2xl bg-white border border-slate-200">📁</span>
+          <div>
+            <h3 id="active-file-title" class="font-black text-sm sm:text-base text-slate-800 line-clamp-1">Tên File</h3>
+            <p id="active-file-tag" class="text-[11px] text-slate-400 font-medium">Chi tiết bài tập</p>
+          </div>
         </div>
-        <p class="font-medium">• 23 Thanh mẫu: b, p, m, f, d, t, n, l, g, k, h, j, q, x, zh, ch, sh, r, z, c, s, y, w</p>
-        <p class="font-medium">• 8 Nét cơ bản: Ngang (一), Sổ (丨), Phẩy (丿), Mác (㇏), Hất (㇀), Chấm (丶), Gập (𠃍), Móc (亅)</p>
+        <button onclick="closeFileStudyModal()" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-black text-base flex items-center justify-center transition-colors" title="Đóng cửa sổ">
+          ✕
+        </button>
       </div>
 
-      <button onclick="closePinyinModal()" class="w-full py-2 rounded-xl btn-3d btn-3d-green font-black text-xs">
-        ĐÃ XONG
+      <!-- Sub-Tabs Navigation -->
+      <div class="px-3 sm:px-6 py-2 bg-slate-100/70 border-b border-slate-200 flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar shrink-0">
+        <button onclick="switchFileSubTab('cheatshort')" id="subtab-cheatshort" class="px-3 py-1.5 rounded-xl font-extrabold text-xs btn-3d btn-3d-green whitespace-nowrap">
+          ⚡ Cheat Short (30s)
+        </button>
+        <button onclick="switchFileSubTab('summary')" id="subtab-summary" class="px-3 py-1.5 rounded-xl font-bold text-xs btn-3d btn-3d-white text-slate-600 whitespace-nowrap">
+          📖 Tóm Tắt Đầy Đủ
+        </button>
+        <button onclick="switchFileSubTab('fillin')" id="subtab-fillin" class="px-3 py-1.5 rounded-xl font-bold text-xs btn-3d btn-3d-white text-slate-600 whitespace-nowrap">
+          ✍️ Luyện Điền Từ
+        </button>
+        <button onclick="switchFileSubTab('listening')" id="subtab-listening" class="px-3 py-1.5 rounded-xl font-bold text-xs btn-3d btn-3d-white text-slate-600 whitespace-nowrap">
+          🎧 Nghe & Đoán Từ
+        </button>
+        <button onclick="switchFileSubTab('test20')" id="subtab-test20" class="px-3 py-1.5 rounded-xl font-bold text-xs btn-3d btn-3d-white text-slate-600 whitespace-nowrap">
+          ⏱️ Mini Test (20c)
+        </button>
+        <button onclick="switchFileSubTab('test50')" id="subtab-test50" class="px-3 py-1.5 rounded-xl font-bold text-xs btn-3d btn-3d-white text-slate-600 whitespace-nowrap">
+          🏆 Test 50 Câu
+        </button>
+      </div>
+
+      <!-- Modal Content Body -->
+      <div class="p-4 sm:p-6 overflow-y-auto space-y-4 flex-1">
+        
+        <!-- View 1: Cheat Short (30s Bí kíp) -->
+        <div id="file-view-cheatshort" class="space-y-4">
+          <!-- Rendered by JS -->
+        </div>
+
+        <!-- View 2: Full Summary -->
+        <div id="file-view-summary" class="space-y-4 hidden">
+          <!-- Rendered by JS -->
+        </div>
+
+        <!-- View 3: Fill-In Practice -->
+        <div id="file-view-fillin" class="space-y-4 hidden">
+          <!-- Rendered by JS -->
+        </div>
+
+        <!-- View 4: Listening Quiz -->
+        <div id="file-view-listening" class="space-y-4 hidden">
+          <!-- Rendered by JS -->
+        </div>
+
+        <!-- View 5: Test Execution (20 / 50 questions) -->
+        <div id="file-view-test" class="space-y-4 hidden">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100 flex-wrap gap-2">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded-xl bg-blue-50 text-blue-700 text-xs font-black" id="test-mode-badge">Mini Test 20</span>
+              <span class="text-xs text-slate-400 font-bold" id="test-progress-text">Câu 1/20</span>
+            </div>
+            <div class="flex items-center gap-2 font-mono text-xs font-bold text-slate-600">
+              <span>⏱️ Thời gian:</span>
+              <span id="test-timer" class="text-slate-800 font-black">00:00</span>
+            </div>
+          </div>
+
+          <!-- Question Box -->
+          <div id="test-question-box" class="space-y-4">
+            <div class="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200 space-y-2">
+              <div class="flex items-center justify-between text-xs text-slate-400 font-bold">
+                <span id="test-q-num-label">Câu 1</span>
+                <span id="test-q-category" class="text-blue-600">Thì Hiện Tại</span>
+              </div>
+              <h3 id="test-q-sentence" class="text-sm sm:text-base font-bold text-slate-800 leading-relaxed">
+                The earth ______ round the sun.
+              </h3>
+            </div>
+
+            <!-- Options -->
+            <div id="test-q-options" class="grid grid-cols-1 gap-2.5">
+              <!-- Rendered by JS -->
+            </div>
+
+            <!-- Nav Controls -->
+            <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+              <button onclick="navTestQuestion(-1)" id="btn-test-prev" class="px-4 py-2.5 rounded-xl btn-3d btn-3d-white text-xs font-bold text-slate-600">
+                ← Câu Trước
+              </button>
+              <button onclick="submitFileTest()" id="btn-test-submit" class="px-6 py-2.5 rounded-xl btn-3d btn-3d-green text-xs font-black">
+                Nộp Bài & Chấm Điểm 🏁
+              </button>
+              <button onclick="navTestQuestion(1)" id="btn-test-next" class="px-4 py-2.5 rounded-xl btn-3d btn-3d-white text-xs font-bold text-slate-600">
+                Câu Kế →
+              </button>
+            </div>
+          </div>
+
+          <!-- Test Result Screen (Appears after submission) -->
+          <div id="test-result-box" class="hidden space-y-6 text-center">
+            <!-- Rendered by JS with EXACT titles requested -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ====================================
+       7. QR CODE MODAL FOR MOBILE
+  ==================================== -->
+  <div id="qr-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex flex-col p-4 overflow-y-auto" onclick="handleModalBackdropClick(event, 'qr-modal')">
+    <div class="bg-white rounded-3xl max-w-sm w-full mx-auto my-auto p-6 border border-slate-200 shadow-2xl text-center space-y-4" onclick="event.stopPropagation()">
+      <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 text-2xl flex items-center justify-center mx-auto">
+        📱
+      </div>
+      <div>
+        <h3 class="font-extrabold text-base text-slate-800">Mở Học Trên Điện Thoại</h3>
+        <p class="text-xs text-slate-500 mt-1">Dùng camera điện thoại quét mã QR bên dưới để mở ngay lập tức, không cần gõ link:</p>
+      </div>
+
+      <!-- QR Code Image -->
+      <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 inline-block">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https://buithanhphongg.github.io/phongtest/" alt="QR Code Link phongtest" class="w-52 h-52 mx-auto rounded-lg">
+      </div>
+
+      <div class="text-[11px] font-mono text-purple-700 bg-purple-50 p-2.5 rounded-xl border border-purple-200 select-all break-all">
+        https://buithanhphongg.github.io/phongtest/
+      </div>
+
+      <p class="text-[10px] text-slate-400">Website lưu trữ trên GitHub đám mây hoạt động 24/7, kể cả khi bạn tắt máy tính hoàn toàn!</p>
+
+      <button onclick="closeQrModal()" class="w-full py-2.5 rounded-2xl btn-3d btn-3d-white font-bold text-xs text-slate-700">
+        Đã hiểu & Đóng
       </button>
     </div>
   </div>
 
-  <!-- FOOTER -->
-  <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-400 font-medium">
-    🌸 Thiết kế cho Ngọc Trâm • Tự động đọc file Word .docx • Chấm điểm thang 10
-  </footer>
+  <!-- ====================================
+       8. POMODORO MODAL
+  ==================================== -->
+  <div id="pomo-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex flex-col p-4 overflow-y-auto" onclick="handleModalBackdropClick(event, 'pomo-modal')">
+    <div class="bg-white rounded-3xl max-w-sm w-full mx-auto my-auto p-6 border border-slate-200 shadow-2xl text-center space-y-5" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">🍅</span>
+          <h3 class="font-extrabold text-base text-slate-800">Đồng Hồ Pomodoro</h3>
+        </div>
+        <button onclick="togglePomoModal()" class="w-7 h-7 rounded-lg bg-slate-100 text-slate-500 font-bold text-xs hover:bg-slate-200">✕</button>
+      </div>
 
-  <!-- ========================================== -->
-  <!-- JAVASCRIPT LOGIC ENGINE                     -->
-  <!-- ========================================== -->
+      <div class="grid grid-cols-3 gap-1.5 bg-slate-100 p-1 rounded-2xl text-xs font-bold text-slate-600">
+        <button onclick="setPomoMode(25, this)" class="pomo-tab py-1.5 rounded-xl bg-white shadow-xs font-extrabold text-slate-800">25 Phút</button>
+        <button onclick="setPomoMode(5, this)" class="pomo-tab py-1.5 rounded-xl">5 Phút</button>
+        <button onclick="setPomoMode(15, this)" class="pomo-tab py-1.5 rounded-xl">15 Phút</button>
+      </div>
+
+      <div class="py-4">
+        <div id="pomo-modal-clock" class="text-5xl font-black font-mono tracking-tight text-rose-600">25:00</div>
+        <p id="pomo-status-label" class="text-xs text-slate-400 mt-2 font-medium">Tập trung học sâu không xao nhãng</p>
+      </div>
+
+      <div class="flex items-center justify-center gap-3">
+        <button id="btn-pomo-start" onclick="togglePomo()" class="px-6 py-2.5 rounded-2xl btn-3d btn-3d-green text-xs font-black w-32">
+          BẮT ĐẦU ▶
+        </button>
+        <button onclick="resetPomo()" class="px-4 py-2.5 rounded-2xl btn-3d btn-3d-white text-xs font-bold text-slate-600">
+          ↺ Đặt Lại
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================
+       9. HEARTS / CHILL MODE MODAL
+  ==================================== -->
+  <div id="hearts-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex flex-col p-4 overflow-y-auto" onclick="handleModalBackdropClick(event, 'hearts-modal')">
+    <div class="bg-white rounded-3xl max-w-sm w-full mx-auto my-auto p-6 border border-slate-200 shadow-2xl text-center space-y-4" onclick="event.stopPropagation()">
+      <div class="w-14 h-14 rounded-full bg-rose-50 text-rose-500 text-3xl flex items-center justify-center mx-auto">
+        ❤️
+      </div>
+      <div>
+        <h3 class="font-extrabold text-base text-slate-800">Trái Tim Luyện Tập</h3>
+        <p class="text-xs text-slate-500 mt-1">Làm bài sai sẽ mất 1 tim. Nhưng bạn có thể bật Chế Độ Chill để luyện tập thoải mái không giới hạn!</p>
+      </div>
+
+      <div class="bg-pink-50/70 p-4 rounded-2xl border border-pink-200 text-left flex items-center justify-between">
+        <div>
+          <div class="font-black text-xs text-pink-700">Chế Độ Chill (Tim Vô Hạn)</div>
+          <div class="text-[11px] text-pink-600">Làm sai không trừ tim, học nhẹ nhàng</div>
+        </div>
+        <input type="checkbox" id="chill-mode-toggle" class="w-5 h-5 accent-pink-500 rounded cursor-pointer" onchange="toggleChillMode(this.checked)">
+      </div>
+
+      <button onclick="toggleHeartsModal()" class="w-full py-2.5 rounded-2xl btn-3d btn-3d-green font-black text-xs">
+        TIẾP TỤC HỌC 🌸
+      </button>
+    </div>
+  </div>
+
+  <!-- ====================================
+       10. PINYIN CHEAT MODAL
+  ==================================== -->
+  <div id="pinyin-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex flex-col p-4 overflow-y-auto" onclick="handleModalBackdropClick(event, 'pinyin-modal')">
+    <div class="bg-white rounded-3xl max-w-lg w-full mx-auto my-auto p-6 border border-slate-200 shadow-2xl space-y-4" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between">
+        <h3 class="font-extrabold text-base text-slate-800 flex items-center gap-2">
+          <span>🇨🇳</span> <span>Bảng Phiên Âm Pinyin Cần Nhớ</span>
+        </h3>
+        <button onclick="closePinyinModal()" class="w-7 h-7 rounded-lg bg-slate-100 text-slate-500 font-bold text-xs">✕</button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div class="bg-pink-50 p-3 rounded-2xl border border-pink-200">
+          <span class="font-bold text-pink-800 block mb-1">4 Thanh Điệu Trong Tiếng Trung:</span>
+          <div class="grid grid-cols-2 gap-2 text-[11px]">
+            <div>• Thanh 1 (ā): Đọc ngang, cao, đều</div>
+            <div>• Thanh 2 (á): Đi lên (như dấu sắc)</div>
+            <div>• Thanh 3 (ǎ): Đi xuống rồi lên (dấu hỏi)</div>
+            <div>• Thanh 4 (à): Đọc dứt khoát, đi xuống</div>
+          </div>
+        </div>
+
+        <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200">
+          <span class="font-bold text-slate-800 block mb-1">Quy Tắc Biến Điệu Khẩn Cấp:</span>
+          <p class="text-[11px] text-slate-600 leading-relaxed">• 2 thanh 3 đi liền nhau: Thanh 3 thứ nhất đọc thành thanh 2 (Ví dụ: nǐ hǎo ➔ ní hǎo).</p>
+          <p class="text-[11px] text-slate-600 leading-relaxed">• Chữ "bù" (不) đứng trước âm mang thanh 4: đọc thành "bú" (Ví dụ: bú shì, bú qù).</p>
+        </div>
+      </div>
+
+      <button onclick="closePinyinModal()" class="w-full py-2.5 rounded-2xl btn-3d btn-3d-white font-bold text-xs text-slate-600">
+        Đóng Bảng
+      </button>
+    </div>
+  </div>
+
+  <!-- ====================================
+       11. MOBILE BOTTOM NAVIGATION (DUOLINGO STYLE)
+  ==================================== -->
+  <div class="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 py-1.5 px-3 flex items-center justify-around shadow-lg">
+    <button onclick="switchMainTab('file-hub')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-slate-900">
+      <span class="text-lg">📁</span>
+      <span class="text-[10px] font-bold">Tài Liệu</span>
+    </button>
+    <button onclick="switchMainTab('chinese-hub')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-slate-900">
+      <span class="text-lg">🇨🇳</span>
+      <span class="text-[10px] font-bold">Hán Ngữ 2</span>
+    </button>
+    <a href="exam.html" class="flex flex-col items-center gap-0.5 text-amber-600 font-extrabold">
+      <span class="text-xl">🏆</span>
+      <span class="text-[10px] font-black">Phòng Thi</span>
+    </a>
+    <button onclick="togglePomoModal()" class="flex flex-col items-center gap-0.5 text-rose-600 hover:text-rose-800">
+      <span class="text-lg">🍅</span>
+      <span class="text-[10px] font-bold">Pomodoro</span>
+    </button>
+    <button onclick="toggleSoundFx()" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-slate-900">
+      <span id="mobile-sound-icon" class="text-lg">🔊</span>
+      <span id="mobile-sound-text" class="text-[10px] font-bold">Âm Bật</span>
+    </button>
+  </div>
+
+  <!-- Sakura Falling Container -->
+  <div id="sakura-container" class="pointer-events-none"></div>
+
+  <!-- ====================================
+       12. MASTER SCRIPT ENGINE (CRASH-PROOF & MOBILE-FRIENDLY)
+  ==================================== -->
   <script>
     /* -------------------------------------------
-     * 1. APP STATE & SOUND ENGINE
+     * 1. STATE & AUDIO ENGINE
      * ------------------------------------------- */
     const State = {
-      streak: 1,
+      streak: 3,
       hearts: 5,
-      chillMode: true,
       xp: 150,
-      soundEnabled: true,
-      lofiEnabled: false,
+      chillMode: false,
+      soundEnabled: localStorage.getItem('tram_sound_fx_enabled') !== '0', // Defaults to True, respects user preference
       activeMainTab: 'file-hub',
-      activeFileId: null,
+      activeFileId: 'file_tenses',
       activeSubTab: 'cheatshort',
+      chineseLessonIdx: 0,
+      
+      // Flashcard
+      fcIdx: 0,
+      fcFlipped: false,
+
+      // Sentence Builder
+      builderActiveQuestion: null,
+      builderSelectedWords: [],
+
+      // Pomodoro
+      pomoTotalSec: 25 * 60,
+      pomoRemainSec: 25 * 60,
+      pomoRunning: false,
+      pomoInterval: null,
+
+      // Test Mode
       testQuestions: [],
       testUserAnswers: {},
       testCurrentIdx: 0,
+      testStartTime: 0,
       testTimerInterval: null,
-      testStartTime: null,
-      testTotalSeconds: 0,
-      chineseLessonIdx: 0,
-      flashcardIdx: 0,
-      isFlipped: false,
-      // Pomodoro state
-      pomoMinutes: 25,
-      pomoSeconds: 0,
-      pomoInterval: null,
-      pomoRunning: false,
+      testTotalSeconds: 0
     };
 
-    // Load LocalStorage
-    try {
-      const s = localStorage.getItem('tram_streak'); if (s) State.streak = parseInt(s, 10);
-      const x = localStorage.getItem('tram_xp'); if (x) State.xp = parseInt(x, 10);
-      const c = localStorage.getItem('tram_chill'); if (c !== null) State.chillMode = (c === 'true');
-    } catch(e) {}
-
-    // Web Audio Synthesizer
+    // Safe Web Audio Synthesizer
     const AudioEngine = {
       ctx: null,
       init() {
-        if (!this.ctx) {
-          const AudioContext = window.AudioContext || window.webkitAudioContext;
-          this.ctx = new AudioContext();
-        }
-        if (this.ctx.state === 'suspended') this.ctx.resume();
+        try {
+          if (!this.ctx) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (AudioContext) this.ctx = new AudioContext();
+          }
+          if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+        } catch(e) {}
       },
       playTone(freq, type, duration, delay = 0, gainVal = 0.2) {
         if (!State.soundEnabled) return;
-        this.init();
-        const t = this.ctx.currentTime + delay;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = type;
-        osc.frequency.setValueAtTime(freq, t);
-        gain.gain.setValueAtTime(gainVal, t);
-        gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start(t);
-        osc.stop(t + duration);
+        try {
+          this.init();
+          if (!this.ctx) return;
+          const t = this.ctx.currentTime + delay;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, t);
+          gain.gain.setValueAtTime(gainVal, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(t);
+          osc.stop(t + duration);
+        } catch(e) {}
       },
       correctChime() {
+        if (!State.soundEnabled) return;
         this.playTone(523.25, 'triangle', 0.15, 0, 0.25);
         this.playTone(659.25, 'triangle', 0.25, 0.1, 0.25);
         this.playTone(783.99, 'triangle', 0.4, 0.2, 0.3);
       },
       wrongBoing() {
+        if (!State.soundEnabled) return;
         this.playTone(220.00, 'sine', 0.2, 0, 0.25);
         this.playTone(196.00, 'sine', 0.35, 0.12, 0.25);
       },
       victoryFanfare() {
+        if (!State.soundEnabled) return;
         const notes = [523.25, 659.25, 783.99, 1046.50];
         notes.forEach((f, i) => this.playTone(f, 'triangle', 0.35, i * 0.12, 0.25));
       },
       pomoChime() {
+        if (!State.soundEnabled) return;
         this.playTone(440, 'sine', 0.5, 0, 0.3);
         this.playTone(554.37, 'sine', 0.5, 0.2, 0.3);
         this.playTone(659.25, 'sine', 0.8, 0.4, 0.3);
       },
       popClick() {
-        this.playTone(800, 'sine', 0.05, 0, 0.08);
+        if (!State.soundEnabled) return;
+        this.playTone(800, 'sine', 0.04, 0, 0.06);
       }
     };
 
-    // Lo-fi Rain Synthesizer
+    // Synthesized Ambient Rain
     const LofiEngine = {
-      ctx: null, source: null, gainNode: null, isPlaying: false,
-      toggle() { this.isPlaying ? this.stop() : this.start(); },
+      ctx: null,
+      source: null,
+      isPlaying: false,
+      toggle() {
+        AudioEngine.popClick();
+        if (this.isPlaying) this.stop();
+        else this.start();
+      },
       start() {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        this.ctx = new AudioContext();
-        const bufferSize = this.ctx.sampleRate * 2;
-        const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-        const data = buffer.getChannelData(0);
-        let b0 = 0, b1 = 0, b2 = 0;
-        for (let i = 0; i < bufferSize; i++) {
-          const white = Math.random() * 2 - 1;
-          b0 = 0.99886 * b0 + white * 0.0555179;
-          b1 = 0.99332 * b1 + white * 0.0750759;
-          b2 = 0.96900 * b2 + white * 0.1538520;
-          data[i] = (b0 + b1 + b2) * 0.05;
-        }
-        this.source = this.ctx.createBufferSource();
-        this.source.buffer = buffer;
-        this.source.loop = true;
-        this.gainNode = this.ctx.createGain();
-        this.gainNode.gain.setValueAtTime(0.12, this.ctx.currentTime);
-        this.source.connect(this.gainNode);
-        this.gainNode.connect(this.ctx.destination);
-        this.source.start(0);
-        this.isPlaying = true;
-        document.getElementById('btn-lofi-rain').classList.add('bg-blue-100', 'text-blue-700');
+        try {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (!this.ctx) this.ctx = new AudioContext();
+          if (this.ctx.state === 'suspended') this.ctx.resume();
+
+          const bufferSize = 2 * this.ctx.sampleRate;
+          const noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+          const output = noiseBuffer.getChannelData(0);
+          let b0 = 0, b1 = 0, b2 = 0;
+          for (let i = 0; i < bufferSize; i++) {
+            const white = Math.random() * 2 - 1;
+            b0 = 0.99886 * b0 + white * 0.0555179;
+            b1 = 0.99332 * b1 + white * 0.0750759;
+            b2 = 0.96900 * b2 + white * 0.1538520;
+            output[i] = (b0 + b1 + b2) * 0.04;
+          }
+
+          this.source = this.ctx.createBufferSource();
+          this.source.buffer = noiseBuffer;
+          this.source.loop = true;
+          this.source.connect(this.ctx.destination);
+          this.source.start(0);
+          this.isPlaying = true;
+          document.getElementById('btn-lofi-rain').classList.add('bg-blue-100', 'text-blue-700');
+        } catch(e) {}
       },
       stop() {
         if (this.source) { try { this.source.stop(); } catch(e){} }
@@ -825,156 +950,275 @@
       }
     };
 
-    // Native Web Speech
-    function speakText(text, lang = 'zh-CN', rate = 0.85) {
-      if (!('speechSynthesis' in window)) {
-        alert("Trình duyệt không hỗ trợ Web Speech!");
+    /* -------------------------------------------
+     * DUAL-ENGINE AUDIO PLAYER (BULLETPROOF TTS)
+     * Plays human-grade Google TTS audio streams
+     * with automatic fallback to Web Speech API
+     * ------------------------------------------- */
+    let activeTtsAudio = null;
+
+    function speakDualEngine(text, lang = 'zh-CN', rate = 0.85, onEndCallback = null) {
+      if (!text) {
+        if (onEndCallback) onEndCallback();
         return;
       }
-      window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = lang;
-      u.rate = rate;
-      window.speechSynthesis.speak(u);
+
+      // Stop previous audio if playing
+      if (activeTtsAudio) {
+        try { activeTtsAudio.pause(); } catch(e){}
+        activeTtsAudio = null;
+      }
+
+      const cleanLang = (lang && lang.toLowerCase().startsWith('zh')) ? 'zh-CN' : 'en';
+
+      try {
+        const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${cleanLang}&q=${encodeURIComponent(text)}`;
+        const audio = new Audio(ttsUrl);
+        audio.playbackRate = rate || 1.0;
+        activeTtsAudio = audio;
+
+        audio.onended = () => {
+          activeTtsAudio = null;
+          if (onEndCallback) onEndCallback();
+        };
+
+        audio.onerror = (err) => {
+          console.warn("TTS stream error, falling back to Web Speech:", err);
+          fallbackWebSpeech(text, lang, rate, onEndCallback);
+        };
+
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(err => {
+            console.warn("Audio autoplay policy or error, falling back:", err);
+            fallbackWebSpeech(text, lang, rate, onEndCallback);
+          });
+        }
+      } catch (e) {
+        fallbackWebSpeech(text, lang, rate, onEndCallback);
+      }
+    }
+
+    function fallbackWebSpeech(text, lang, rate, onEndCallback) {
+      if (!('speechSynthesis' in window)) {
+        if (onEndCallback) onEndCallback();
+        return;
+      }
+      try {
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.resume();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = (lang && lang.toLowerCase().startsWith('zh')) ? 'zh-CN' : 'en-US';
+        u.rate = rate || 0.85;
+        u.onend = () => { if (onEndCallback) onEndCallback(); };
+        u.onerror = () => { if (onEndCallback) onEndCallback(); };
+        window.speechSynthesis.speak(u);
+      } catch (err) {
+        console.warn("SpeechSynthesis error:", err);
+        if (onEndCallback) onEndCallback();
+      }
+    }
+
+    // Sound Toggle handler
+    function toggleSoundFx() {
+      State.soundEnabled = !State.soundEnabled;
+      localStorage.setItem('tram_sound_fx_enabled', State.soundEnabled ? '1' : '0');
+      updateSoundUI();
+      if (State.soundEnabled) {
+        AudioEngine.popClick();
+      }
+    }
+
+    function updateSoundUI() {
+      const icon = document.getElementById('sound-toggle-icon');
+      const label = document.getElementById('sound-toggle-label');
+      const btn = document.getElementById('btn-sound-toggle');
+      const mIcon = document.getElementById('mobile-sound-icon');
+      const mText = document.getElementById('mobile-sound-text');
+
+      if (State.soundEnabled) {
+        if (icon) icon.textContent = '🔊';
+        if (label) label.textContent = 'Âm: BẬT';
+        if (btn) btn.className = "flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-700 text-xs font-bold transition-all shadow-xs";
+        if (mIcon) mIcon.textContent = '🔊';
+        if (mText) mText.textContent = 'Âm Bật';
+      } else {
+        if (icon) icon.textContent = '🔇';
+        if (label) label.textContent = 'Âm: TẮT';
+        if (btn) btn.className = "flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-slate-200 bg-slate-100 text-slate-500 text-xs font-bold transition-all shadow-xs";
+        if (mIcon) mIcon.textContent = '🔇';
+        if (mText) mText.textContent = 'Đã Tắt';
+      }
     }
 
     /* -------------------------------------------
-     * 2. INITIALIZATION
+     * 2. INITIALIZATION & RECOVERY
      * ------------------------------------------- */
     document.addEventListener('DOMContentLoaded', () => {
-      loadCustomFilesFromStorage();
-      updateHeaderCounters();
-      renderFileCards();
-      renderChineseSection();
-      renderFlashcards();
-      initBuilder();
-      setupDropZone();
-
-      document.getElementById('btn-sound-fx').addEventListener('click', () => {
-        State.soundEnabled = !State.soundEnabled;
-        document.getElementById('btn-sound-fx').textContent = State.soundEnabled ? '🔊' : '🔇';
-      });
-      document.getElementById('btn-lofi-rain').addEventListener('click', () => LofiEngine.toggle());
-
-      initSakuraPetals();
+      try { updateSoundUI(); } catch(e){}
+      try { loadCustomFilesFromStorage(); } catch(e){ console.warn(e); }
+      try { updateHeaderCounters(); } catch(e){ console.warn(e); }
+      try { renderFileCards(); } catch(e){ console.warn(e); }
+      try { renderChineseSection(); } catch(e){ console.warn(e); }
+      try { renderFlashcards(); } catch(e){ console.warn(e); }
+      try { initBuilder(); } catch(e){ console.warn(e); }
+      try { setupDropZone(); } catch(e){ console.warn(e); }
+      try { initSakuraPetals(); } catch(e){ console.warn(e); }
     });
 
     function updateHeaderCounters() {
-      document.getElementById('streak-counter').textContent = State.streak;
-      document.getElementById('xp-counter').textContent = State.xp;
-      document.getElementById('hearts-counter').textContent = State.chillMode ? '∞' : State.hearts;
-      document.getElementById('chill-mode-toggle').checked = State.chillMode;
+      const elStreak = document.getElementById('streak-counter');
+      const elXp = document.getElementById('xp-counter');
+      const elHearts = document.getElementById('hearts-counter');
+      const elToggle = document.getElementById('chill-mode-toggle');
+
+      if (elStreak) elStreak.textContent = State.streak;
+      if (elXp) elXp.textContent = State.xp;
+      if (elHearts) elHearts.textContent = State.chillMode ? '∞' : State.hearts;
+      if (elToggle) elToggle.checked = State.chillMode;
     }
 
     function addXP(amount) {
       State.xp += amount;
-      document.getElementById('xp-counter').textContent = State.xp;
-      try { localStorage.setItem('tram_xp', State.xp); } catch(e){}
+      updateHeaderCounters();
+      AudioEngine.victoryFanfare();
     }
 
-    function toggleChillMode(val) {
-      State.chillMode = val;
+    function deductHeart() {
+      if (State.chillMode) return;
+      State.hearts = Math.max(0, State.hearts - 1);
       updateHeaderCounters();
-      try { localStorage.setItem('tram_chill', val); } catch(e){}
+      AudioEngine.wrongBoing();
+      if (State.hearts === 0) {
+        setTimeout(() => toggleHeartsModal(), 300);
+      }
     }
 
     function toggleHeartsModal() {
-      document.getElementById('hearts-modal').classList.toggle('hidden');
+      AudioEngine.popClick();
+      const m = document.getElementById('hearts-modal');
+      m.classList.toggle('hidden');
+    }
+
+    function toggleChillMode(isChecked) {
+      State.chillMode = isChecked;
+      updateHeaderCounters();
     }
 
     function triggerMascotCheer() {
       AudioEngine.popClick();
-      alert("🌸 Chào Ngọc Trâm! Chúc bạn học thật vui và luôn đạt 10 điểm nha! ✨");
+      alert("🌸 Ngọc Trâm ơi! Cố gắng học mỗi ngày một chút nha! Trâm nhất định sẽ thi đạt điểm cao! ✨💕");
+    }
+
+    function openQrModal() {
+      AudioEngine.popClick();
+      document.getElementById('qr-modal').classList.remove('hidden');
+    }
+
+    function closeQrModal() {
+      AudioEngine.popClick();
+      document.getElementById('qr-modal').classList.add('hidden');
+    }
+
+    function handleModalBackdropClick(event, modalId) {
+      if (event.target.id === modalId) {
+        document.getElementById(modalId).classList.add('hidden');
+      }
     }
 
     /* -------------------------------------------
-     * 3. POMODORO TIMER WIDGET
+     * 3. POMODORO TIMER ENGINE
      * ------------------------------------------- */
     function togglePomoModal() {
       AudioEngine.popClick();
-      document.getElementById('pomo-modal').classList.toggle('hidden');
+      const m = document.getElementById('pomo-modal');
+      m.classList.toggle('hidden');
     }
 
     function setPomoMode(minutes, btn) {
       AudioEngine.popClick();
-      clearInterval(State.pomoInterval);
-      State.pomoRunning = false;
-      State.pomoMinutes = minutes;
-      State.pomoSeconds = 0;
-      updatePomoDisplay();
-
       document.querySelectorAll('.pomo-tab').forEach(b => {
-        b.className = 'pomo-tab py-1.5 rounded-xl text-xs text-slate-600';
+        b.className = "pomo-tab py-1.5 rounded-xl";
       });
-      btn.className = 'pomo-tab py-1.5 rounded-xl bg-white shadow-xs font-extrabold text-slate-800';
-      document.getElementById('btn-pomo-start').textContent = 'BẮT ĐẦU ▶';
-      document.getElementById('pomo-status-text').textContent = minutes === 25 ? 'Sẵn sàng phiên tập trung' : 'Phiên nghỉ ngơi thư giãn';
+      btn.className = "pomo-tab py-1.5 rounded-xl bg-white shadow-xs font-extrabold text-slate-800";
+
+      State.pomoTotalSec = minutes * 60;
+      State.pomoRemainSec = State.pomoTotalSec;
+      pausePomo();
+      updatePomoDisplay();
     }
 
     function togglePomo() {
       AudioEngine.popClick();
-      if (State.pomoRunning) {
-        clearInterval(State.pomoInterval);
-        State.pomoRunning = false;
-        document.getElementById('btn-pomo-start').textContent = 'TIẾP TỤC ▶';
-      } else {
-        State.pomoRunning = true;
-        document.getElementById('btn-pomo-start').textContent = 'TẠM DỪNG ⏸';
-        State.pomoInterval = setInterval(() => {
-          if (State.pomoSeconds === 0) {
-            if (State.pomoMinutes === 0) {
-              clearInterval(State.pomoInterval);
-              State.pomoRunning = false;
-              AudioEngine.pomoChime();
-              alert("🍅 Hết giờ Pomodoro rồi! Tuyệt vời lắm Trâm ơi! Hãy nghỉ ngơi chút nhé!");
-              addXP(25);
-              return;
-            }
-            State.pomoMinutes--;
-            State.pomoSeconds = 59;
-          } else {
-            State.pomoSeconds--;
-          }
-          updatePomoDisplay();
-        }, 1000);
-      }
+      if (State.pomoRunning) pausePomo();
+      else startPomo();
+    }
+
+    function startPomo() {
+      State.pomoRunning = true;
+      document.getElementById('btn-pomo-start').textContent = 'TẠM DỪNG ❚❚';
+      document.getElementById('btn-pomo-start').className = 'px-6 py-2.5 rounded-2xl btn-3d btn-3d-amber text-xs font-black w-32';
+      document.getElementById('pomo-status-label').textContent = 'Đang đếm ngược tập trung...';
+
+      clearInterval(State.pomoInterval);
+      State.pomoInterval = setInterval(() => {
+        State.pomoRemainSec--;
+        updatePomoDisplay();
+        if (State.pomoRemainSec <= 0) {
+          clearInterval(State.pomoInterval);
+          State.pomoRunning = false;
+          AudioEngine.pomoChime();
+          alert("🎉 Hết giờ Pomodoro rồi! Bạn hãy nghỉ ngơi một chút cho mắt thư giãn nhé! ☕");
+          resetPomo();
+        }
+      }, 1000);
+    }
+
+    function pausePomo() {
+      State.pomoRunning = false;
+      clearInterval(State.pomoInterval);
+      document.getElementById('btn-pomo-start').textContent = 'BẮT ĐẦU ▶';
+      document.getElementById('btn-pomo-start').className = 'px-6 py-2.5 rounded-2xl btn-3d btn-3d-green text-xs font-black w-32';
+      document.getElementById('pomo-status-label').textContent = 'Đã tạm dừng';
     }
 
     function resetPomo() {
       AudioEngine.popClick();
-      clearInterval(State.pomoInterval);
-      State.pomoRunning = false;
-      State.pomoMinutes = 25;
-      State.pomoSeconds = 0;
+      pausePomo();
+      State.pomoRemainSec = State.pomoTotalSec;
       updatePomoDisplay();
-      document.getElementById('btn-pomo-start').textContent = 'BẮT ĐẦU ▶';
     }
 
     function updatePomoDisplay() {
-      const m = String(State.pomoMinutes).padStart(2, '0');
-      const s = String(State.pomoSeconds).padStart(2, '0');
-      const str = `${m}:${s}`;
-      document.getElementById('pomo-big-clock').textContent = str;
-      document.getElementById('pomo-pill-timer').textContent = str;
+      const m = String(Math.floor(State.pomoRemainSec / 60)).padStart(2, '0');
+      const s = String(State.pomoRemainSec % 60).padStart(2, '0');
+      const timeStr = `${m}:${s}`;
+      document.getElementById('pomo-modal-clock').textContent = timeStr;
+      document.getElementById('pomo-pill-timer').textContent = timeStr;
     }
 
     /* -------------------------------------------
-     * 4. MAIN TABS
+     * 4. MAIN NAVIGATION (TABS)
      * ------------------------------------------- */
     function switchMainTab(tabId) {
       AudioEngine.popClick();
       State.activeMainTab = tabId;
 
       ['file-hub', 'chinese-hub', 'english-roadmap', 'tools-hub'].forEach(t => {
-        document.getElementById(`section-${t}`).classList.add('hidden');
-        document.getElementById(`tab-btn-${t}`).className = "flex items-center gap-1.5 px-4 py-2 rounded-xl font-bold text-xs text-slate-600 hover:text-slate-800 transition-all whitespace-nowrap";
+        const sec = document.getElementById(`section-${t}`);
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if (sec) sec.classList.add('hidden');
+        if (btn) btn.className = "flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl font-bold text-xs text-slate-600 hover:text-slate-800 transition-all whitespace-nowrap";
       });
 
-      document.getElementById(`section-${tabId}`).classList.remove('hidden');
-      document.getElementById(`tab-btn-${tabId}`).className = "flex items-center gap-1.5 px-4 py-2 rounded-xl font-extrabold text-xs bg-white text-slate-800 shadow-xs transition-all whitespace-nowrap";
+      const activeSec = document.getElementById(`section-${tabId}`);
+      const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+      if (activeSec) activeSec.classList.remove('hidden');
+      if (activeBtn) activeBtn.className = "flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl font-extrabold text-xs bg-slate-800 text-white shadow-xs transition-all whitespace-nowrap";
     }
 
     function toggleDropZone() {
+      AudioEngine.popClick();
       const el = document.getElementById('drop-zone-container');
       el.classList.toggle('hidden');
     }
@@ -987,18 +1231,8 @@
         const raw = localStorage.getItem('tram_custom_hub_files');
         if (raw) {
           const customFiles = JSON.parse(raw);
-          Object.assign(window.FILE_STUDY_HUB, customFiles);
+          window.FILE_STUDY_HUB = Object.assign({}, window.FILE_STUDY_HUB || {}, customFiles);
         }
-      } catch(e) {}
-    }
-
-    function saveCustomFilesToStorage() {
-      try {
-        const customOnly = {};
-        for (const [k, v] of Object.entries(window.FILE_STUDY_HUB)) {
-          if (k.startsWith('custom_')) customOnly[k] = v;
-        }
-        localStorage.setItem('tram_custom_hub_files', JSON.stringify(customOnly));
       } catch(e) {}
     }
 
@@ -1008,7 +1242,8 @@
       const hub = window.FILE_STUDY_HUB || {};
       const fileKeys = Object.keys(hub);
       
-      document.getElementById('file-count-badge').textContent = `${fileKeys.length} Files`;
+      const badge = document.getElementById('file-count-badge');
+      if (badge) badge.textContent = `${fileKeys.length} Files`;
 
       fileKeys.forEach(fileId => {
         const file = hub[fileId];
@@ -1030,11 +1265,11 @@
 
           <div class="space-y-1.5 pt-2 border-t border-slate-100">
             <div class="grid grid-cols-2 gap-1.5">
-              <button onclick="openFileStudy('${fileId}', 'cheatshort')" class="py-1.5 px-2 rounded-xl btn-3d btn-3d-white text-[11px] font-bold text-emerald-700 flex items-center justify-center gap-1">
+              <button onclick="openFileStudy('${fileId}', 'cheatshort')" class="py-2 px-2 rounded-xl btn-3d btn-3d-white text-[11px] font-bold text-emerald-700 flex items-center justify-center gap-1">
                 <span>⚡</span>
                 <span>Bí Kíp 30s</span>
               </button>
-              <button onclick="openFileStudy('${fileId}', 'listening')" class="py-1.5 px-2 rounded-xl btn-3d btn-3d-white text-[11px] font-bold text-sky-700 flex items-center justify-center gap-1">
+              <button onclick="openFileStudy('${fileId}', 'listening')" class="py-2 px-2 rounded-xl btn-3d btn-3d-white text-[11px] font-bold text-sky-700 flex items-center justify-center gap-1">
                 <span>🎧</span>
                 <span>Nghe Đoán</span>
               </button>
@@ -1094,6 +1329,7 @@
       });
 
       const file = window.FILE_STUDY_HUB[State.activeFileId];
+      if (!file) return;
 
       if (subTab === 'cheatshort') {
         renderFileCheatShort(file);
@@ -1131,29 +1367,34 @@
       }
 
       let html = `
-        <div class="bg-emerald-50 p-3.5 rounded-2xl border border-emerald-200 text-xs text-emerald-800 font-bold flex items-center justify-between">
+        <div class="bg-emerald-50 p-3 sm:p-3.5 rounded-2xl border border-emerald-200 text-xs text-emerald-800 font-bold flex items-center justify-between flex-wrap gap-2">
           <span class="flex items-center gap-1.5"><span>⚡</span><span>Bí Kíp 30 Giây (Cheat Short): Đọc lướt qua bảng này là sẵn sàng làm bài test đạt 10đ ngay!</span></span>
           <span class="text-[10px] text-emerald-600 bg-white px-2 py-0.5 rounded-md border">${list.length} Quy Tắc Vàng</span>
         </div>
 
         <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
-          <table class="w-full text-left text-xs">
-            <thead class="bg-slate-50 border-b text-slate-500 font-extrabold">
-              <tr>
-                <th class="p-3">Dấu Hiệu / Ngữ Cảnh</th>
-                <th class="p-3">Công Thức Vàng</th>
-                <th class="p-3">Ghi Chú Nhanh</th>
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 font-black">
+                <th class="p-3 w-1/4">Tên Thì / Cấu Trúc</th>
+                <th class="p-3 w-1/4">Dấu Hiệu Nhận Biết</th>
+                <th class="p-3 w-1/4">Công Thức Vàng</th>
+                <th class="p-3 w-1/4">Mẹo Nhớ Siêu Tốc</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
       `;
 
-      list.forEach(item => {
+      list.forEach(c => {
         html += `
-          <tr class="hover:bg-slate-50/50">
-            <td class="p-3 font-extrabold text-slate-800">${item.signal}</td>
-            <td class="p-3 font-mono font-bold text-pink-600">${item.formula}</td>
-            <td class="p-3 text-slate-500">${item.note}</td>
+          <tr class="hover:bg-slate-50/70 transition-colors">
+            <td class="p-3 font-bold text-slate-800 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+              <span>${c.tense}</span>
+            </td>
+            <td class="p-3 font-mono text-emerald-700 font-semibold bg-emerald-50/30">${c.signal}</td>
+            <td class="p-3 font-mono text-blue-700 font-bold bg-blue-50/30">${c.formula}</td>
+            <td class="p-3 text-slate-600">${c.note}</td>
           </tr>
         `;
       });
@@ -1170,40 +1411,44 @@
     /* --- View 2: Tóm Tắt Đầy Đủ --- */
     function renderFileSummary(file) {
       const container = document.getElementById('file-view-summary');
-      const sum = file.summary || { title: "Bảng Tóm Tắt", sections: [] };
+      const sum = file.summary;
 
-      let html = `
-        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-1">
-          <h4 class="font-black text-sm text-slate-800">${sum.title}</h4>
-          <p class="text-xs text-slate-500">${sum.tips || "Đọc kỹ các quy tắc dưới đây trước khi vào thi nha Trâm!"}</p>
-        </div>
-        <div class="space-y-3">
-      `;
-
-      if (sum.sections) {
-        sum.sections.forEach(sec => {
-          html += `
-            <div class="bg-white p-4 rounded-2xl border border-slate-200 space-y-1.5">
-              <h5 class="font-bold text-xs text-slate-800 flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-pink-500"></span>
-                <span>${sec.heading}</span>
-              </h5>
-              <div class="text-xs text-slate-600 whitespace-pre-line leading-relaxed pl-3.5">
-                ${sec.content}
-              </div>
-            </div>
-          `;
-        });
+      if (!sum) {
+        container.innerHTML = `<div class="bg-slate-50 p-6 rounded-2xl text-center text-xs text-slate-500">Chưa có tóm tắt.</div>`;
+        return;
       }
 
-      html += `</div>`;
+      let html = `
+        <div class="bg-blue-50 p-3.5 rounded-2xl border border-blue-200 text-xs text-blue-900 font-bold flex items-center gap-2">
+          <span>📖</span>
+          <span>Bảng tóm tắt cần ghi nhớ toàn bộ kiến thức của file "${file.title}"</span>
+        </div>
+      `;
+
+      if (sum.points && sum.points.length > 0) {
+        html += `
+          <div class="space-y-3">
+            ${sum.points.map(pt => `
+              <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-1.5">
+                <h4 class="font-bold text-xs text-slate-800 flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-pink-500"></span>
+                  <span>${pt.title}</span>
+                </h4>
+                <p class="text-xs text-slate-600 leading-relaxed pl-4 border-l-2 border-pink-100">${pt.detail}</p>
+                ${pt.example ? `<div class="text-[11px] font-mono text-emerald-700 bg-emerald-50/50 p-2 rounded-xl mt-1">Ví dụ: ${pt.example}</div>` : ''}
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
       container.innerHTML = html;
     }
 
-    /* --- View 3: Luyện Điền Từ --- */
+    /* --- View 3: Luyện Điền Từ (Index-based, quote safe) --- */
     function renderFileFillIn(file) {
       const container = document.getElementById('file-view-fillin');
-      const qList = file.questions.slice(0, 8);
+      const qList = (file.questions || []).slice(0, 10);
 
       let html = `
         <div class="bg-sky-50 p-3 rounded-2xl border border-sky-200 text-xs text-sky-800 font-bold">
@@ -1212,24 +1457,24 @@
         <div class="space-y-3">
       `;
 
-      qList.forEach((q, idx) => {
+      qList.forEach((q, qIdx) => {
         html += `
-          <div class="bg-white p-4 rounded-2xl border border-slate-200 space-y-2" id="fillin-item-${idx}">
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 space-y-2" id="fillin-item-${qIdx}">
             <div class="flex items-center justify-between text-[11px] text-slate-400">
-              <span>Câu Điền Từ ${idx + 1}</span>
+              <span>Câu Điền Từ ${qIdx + 1}</span>
               <span>${q.category || ''}</span>
             </div>
-            <p class="text-xs font-bold text-slate-800">${q.sentence}</p>
+            <p class="text-xs sm:text-sm font-bold text-slate-800">${q.sentence}</p>
             
             <div class="flex flex-wrap gap-1.5 pt-1">
-              ${q.options.map(opt => `
-                <button onclick="selectFillInOpt(${idx}, '${escapeHtml(opt)}', this)" class="px-3 py-1.5 rounded-xl option-card-3d text-xs font-bold text-slate-700">
+              ${q.options.map((opt, optIdx) => `
+                <button onclick="selectFillInAnswer(${qIdx}, ${optIdx}, this)" class="px-3.5 py-2 rounded-xl option-card-3d text-xs font-bold text-slate-700">
                   ${opt}
                 </button>
               `).join('')}
             </div>
 
-            <div id="fillin-feedback-${idx}" class="hidden p-2.5 rounded-xl text-xs font-bold"></div>
+            <div id="fillin-feedback-${qIdx}" class="hidden p-2.5 rounded-xl text-xs font-bold"></div>
           </div>
         `;
       });
@@ -1238,30 +1483,33 @@
       container.innerHTML = html;
     }
 
-    function selectFillInOpt(idx, chosen, btn) {
-      const parent = document.getElementById(`fillin-item-${idx}`);
+    function selectFillInAnswer(qIdx, optIdx, btn) {
+      AudioEngine.popClick();
+      const parent = document.getElementById(`fillin-item-${qIdx}`);
       const file = window.FILE_STUDY_HUB[State.activeFileId];
-      const q = file.questions[idx];
+      if (!file || !file.questions || !file.questions[qIdx]) return;
+      const q = file.questions[qIdx];
+      const chosen = q.options[optIdx];
 
       parent.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
 
-      const fb = document.getElementById(`fillin-feedback-${idx}`);
+      const fb = document.getElementById(`fillin-feedback-${qIdx}`);
       fb.classList.remove('hidden');
 
       if (chosen.trim().toLowerCase() === q.answer.trim().toLowerCase()) {
         AudioEngine.correctChime();
         addXP(10);
-        fb.className = "p-2.5 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-900 border border-emerald-200";
-        fb.innerHTML = `🎉 Chính xác! Đáp án: <strong>${q.answer}</strong>. +10 XP ⚡`;
+        fb.className = "p-2.5 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200";
+        fb.innerHTML = `✓ Chính xác tuyệt vời! (${chosen}) • ${q.explanation || ''}`;
       } else {
-        AudioEngine.wrongBoing();
-        fb.className = "p-2.5 rounded-xl text-xs font-bold bg-rose-50 text-rose-900 border border-rose-200";
-        fb.innerHTML = `❌ Chưa đúng rồi! Đáp án: <strong>${q.answer}</strong>.`;
+        deductHeart();
+        fb.className = "p-2.5 rounded-xl text-xs font-bold bg-rose-50 text-rose-800 border border-rose-200";
+        fb.innerHTML = `✗ Chưa chính xác. Đáp án đúng là: <b>${q.answer}</b> • ${q.explanation || ''}`;
       }
     }
 
-    /* --- View 4: Nghe & Đoán Từ (Audio Mode) --- */
+    /* --- View 4: Nghe & Đoán Từ (Dual-Engine Audio, Quote Safe) --- */
     function renderFileListening(file) {
       const container = document.getElementById('file-view-listening');
       const list = file.listeningQuizzes || [];
@@ -1278,36 +1526,36 @@
       let html = `
         <div class="bg-purple-50 p-3 rounded-2xl border border-purple-200 text-xs text-purple-900 font-bold flex items-center gap-2">
           <span>🎧</span>
-          <span>Bấm nút loa 🔊 để nghe phát âm, sau đó chọn từ hoặc câu trả lời đúng!</span>
+          <span>Bấm nút loa 🔊 để nghe phát âm chuẩn giọng bản ngữ (hoạt động tốt trên cả điện thoại và máy tính), sau đó chọn đáp án đúng!</span>
         </div>
         <div class="space-y-4">
       `;
 
       list.forEach((item, idx) => {
         html += `
-          <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs space-y-3" id="listen-item-${idx}">
+          <div class="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-xs space-y-3" id="listen-item-${idx}">
             <div class="flex items-center justify-between text-xs text-slate-400">
-              <span>Bài Nghe ${idx + 1}</span>
-              <span class="font-bold text-purple-600">${item.lang}</span>
+              <span class="font-bold text-slate-600">Bài Nghe ${idx + 1}</span>
+              <span class="font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-md border border-purple-100">${item.lang}</span>
             </div>
 
-            <!-- Audio Buttons -->
-            <div class="flex items-center gap-2">
-              <button onclick="speakText('${escapeHtml(item.audioText)}', '${item.lang}', 0.85)" class="px-4 py-2 rounded-xl btn-3d btn-3d-blue text-xs font-black flex items-center gap-1.5 shadow-xs">
+            <!-- Audio Playback Buttons -->
+            <div class="flex items-center gap-2 flex-wrap">
+              <button onclick="playListeningAudio(${idx}, 0.85, this)" class="px-4 py-2.5 rounded-xl btn-3d btn-3d-blue text-xs font-black flex items-center gap-1.5 shadow-xs">
                 <span>🔊</span>
                 <span>Phát Âm Thanh</span>
               </button>
-              <button onclick="speakText('${escapeHtml(item.audioText)}', '${item.lang}', 0.65)" class="px-3 py-2 rounded-xl btn-3d btn-3d-white text-xs font-bold text-slate-600 flex items-center gap-1">
+              <button onclick="playListeningAudio(${idx}, 0.65, this)" class="px-3.5 py-2.5 rounded-xl btn-3d btn-3d-white text-xs font-bold text-slate-600 flex items-center gap-1 shadow-xs">
                 <span>🐢</span>
                 <span>Nghe Chậm</span>
               </button>
             </div>
 
-            <p class="text-xs font-bold text-slate-800">${item.question}</p>
+            <p class="text-xs sm:text-sm font-bold text-slate-800">${item.question}</p>
 
-            <div class="grid grid-cols-2 gap-2">
-              ${item.options.map(opt => `
-                <button onclick="checkListeningAns(${idx}, '${escapeHtml(opt)}', '${escapeHtml(item.answer)}', '${escapeHtml(item.meaning)}', this)" class="p-2.5 rounded-xl option-card-3d text-xs font-bold text-slate-800">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              ${item.options.map((opt, optIdx) => `
+                <button onclick="checkListeningAnswer(${idx}, ${optIdx}, this)" class="p-3 rounded-xl option-card-3d text-xs font-bold text-slate-800 text-left">
                   ${opt}
                 </button>
               `).join('')}
@@ -1322,37 +1570,63 @@
       container.innerHTML = html;
     }
 
-    function checkListeningAns(idx, chosen, answer, meaning, btn) {
-      const parent = document.getElementById(`listen-item-${idx}`);
-      parent.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+    function playListeningAudio(idx, rate = 0.85, btn = null) {
+      AudioEngine.popClick();
+      const file = window.FILE_STUDY_HUB[State.activeFileId];
+      if (!file || !file.listeningQuizzes || !file.listeningQuizzes[idx]) return;
+      const item = file.listeningQuizzes[idx];
+
+      let originalContent = '';
+      if (btn) {
+        originalContent = btn.innerHTML;
+        btn.innerHTML = `<span>🔊</span> <span class="animate-pulse">Đang phát...</span>`;
+      }
+
+      speakDualEngine(item.audioText, item.lang, rate, () => {
+        if (btn) btn.innerHTML = originalContent;
+      });
+    }
+
+    function checkListeningAnswer(itemIdx, optIdx, btn) {
+      AudioEngine.popClick();
+      const file = window.FILE_STUDY_HUB[State.activeFileId];
+      if (!file || !file.listeningQuizzes || !file.listeningQuizzes[itemIdx]) return;
+      const item = file.listeningQuizzes[itemIdx];
+      const chosen = item.options[optIdx];
+
+      const parent = document.getElementById(`listen-item-${itemIdx}`);
+      parent.querySelectorAll('button.option-card-3d').forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
 
-      const fb = document.getElementById(`listen-fb-${idx}`);
+      const fb = document.getElementById(`listen-fb-${itemIdx}`);
       fb.classList.remove('hidden');
 
-      if (chosen.trim() === answer.trim()) {
+      if (chosen.trim().toLowerCase() === item.answer.trim().toLowerCase()) {
         AudioEngine.correctChime();
-        addXP(15);
-        fb.className = "p-3 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-900 border border-emerald-200";
-        fb.innerHTML = `🎉 Tuyệt vời! Bạn nghe rất chuẩn: <strong>${answer}</strong> (+15 XP ⚡)<br><span class="text-slate-600 font-normal mt-0.5 block">${meaning}</span>`;
+        addXP(10);
+        fb.className = "p-3 rounded-2xl text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200";
+        fb.innerHTML = `✓ Giỏi lắm! Đáp án chuẩn: <b>${item.answer}</b><br><span class="text-[11px] font-normal text-emerald-700">Dịch nghĩa: ${item.meaning}</span>`;
       } else {
-        AudioEngine.wrongBoing();
-        fb.className = "p-3 rounded-xl text-xs font-bold bg-rose-50 text-rose-900 border border-rose-200";
-        fb.innerHTML = `❌ Chưa chuẩn rồi! Đáp án đúng: <strong>${answer}</strong><br><span class="text-slate-600 font-normal mt-0.5 block">${meaning}</span>`;
+        deductHeart();
+        fb.className = "p-3 rounded-2xl text-xs font-bold bg-rose-50 text-rose-800 border border-rose-200";
+        fb.innerHTML = `✗ Chưa chính xác. Đáp án đúng là: <b>${item.answer}</b><br><span class="text-[11px] font-normal text-rose-700">Dịch nghĩa: ${item.meaning}</span>`;
       }
     }
 
-    /* --- View 5 & 6: Test Mode (20 hoặc 50 câu) --- */
+    /* --- View 5: Mini Test (20 câu) & Test 50 Câu --- */
     function shuffleArray(arr) {
-      const copy = [...arr];
-      for (let i = copy.length - 1; i > 0; i--) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [copy[i], copy[j]] = [copy[j], copy[i]];
+        [a[i], a[j]] = [a[j], a[i]];
       }
-      return copy;
+      return a;
     }
 
     function startFileTest(file, questionCount) {
+      if (!file) file = window.FILE_STUDY_HUB[State.activeFileId];
+      if (!file) return;
+
       let pool = shuffleArray(file.questions);
       let sampled = pool.slice(0, questionCount);
 
@@ -1410,13 +1684,13 @@
       q.options.forEach((opt, optIdx) => {
         const btn = document.createElement('div');
         const isSelected = (State.testUserAnswers[idx] === opt);
-        btn.className = `option-card-3d p-3 rounded-2xl flex items-center gap-3 text-xs font-bold text-slate-800 ${isSelected ? 'selected ring-2 ring-emerald-400' : ''}`;
+        btn.className = `option-card-3d p-3.5 rounded-2xl flex items-center gap-3 bg-white ${isSelected ? 'selected' : ''}`;
         
         btn.innerHTML = `
-          <span class="w-6 h-6 rounded-lg ${isSelected ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-600'} border flex items-center justify-center font-black shrink-0">
+          <span class="w-6 h-6 rounded-lg ${isSelected ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-600'} border flex items-center justify-center font-black shrink-0 text-xs">
             ${letters[optIdx] || optIdx + 1}
           </span>
-          <span class="flex-1">${opt}</span>
+          <span class="flex-1 text-xs sm:text-sm font-bold text-slate-800">${opt}</span>
         `;
 
         btn.onclick = () => {
@@ -1458,16 +1732,15 @@
       const mistakes = [];
 
       State.testQuestions.forEach((q, idx) => {
-        const userAns = State.testUserAnswers[idx];
-        const isCorrect = (userAns && userAns.trim().toLowerCase() === q.answer.trim().toLowerCase());
-        if (isCorrect) {
+        const userPick = State.testUserAnswers[idx];
+        if (userPick && userPick.trim().toLowerCase() === q.answer.trim().toLowerCase()) {
           correctCount++;
         } else {
           mistakes.push({
-            qNum: idx + 1,
-            sentence: q.sentence,
-            userAns: userAns || '(Chưa chọn)',
-            correctAns: q.answer,
+            q: q,
+            idx: idx + 1,
+            userPick: userPick || '(Chưa chọn)',
+            correctAnswer: q.answer,
             explanation: q.explanation
           });
         }
@@ -1476,14 +1749,8 @@
       const mistakesCount = mistakes.length;
       const score10 = ((correctCount / total) * 10).toFixed(1);
 
-      // Play sound
-      AudioEngine.victoryFanfare();
-      addXP(correctCount * 5);
-
-      // Hide question box, show result box
       document.getElementById('test-question-box').classList.add('hidden');
       document.getElementById('btn-test-submit').classList.add('hidden');
-
       const resBox = document.getElementById('test-result-box');
       resBox.classList.remove('hidden');
 
@@ -1492,19 +1759,15 @@
       let verdictColor = "";
 
       if (mistakesCount === 0) {
-        // Không sai câu nào:
         verdictTitle = "ngoktramxinkgais1tg 👑✨";
         verdictColor = "text-pink-600 bg-pink-50 border-pink-200";
       } else if (mistakesCount > 5) {
-        // Sai trên 5 câu:
         verdictTitle = "ntramngokngek 🤦‍♀️";
         verdictColor = "text-rose-600 bg-rose-50 border-rose-200";
       } else if (mistakesCount > 2) {
-        // Sai trên 2 câu (từ 3 đến 5 câu):
         verdictTitle = "ngoctramngoos 😅";
         verdictColor = "text-amber-600 bg-amber-50 border-amber-200";
       } else {
-        // Sai 1 hoặc 2 câu:
         verdictTitle = "ngoctram cute xíu nữa là 10đ rồi 🌸";
         verdictColor = "text-sky-600 bg-sky-50 border-sky-200";
       }
@@ -1512,87 +1775,88 @@
       let html = `
         <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs text-center space-y-4">
           
-          <div class="inline-block px-5 py-2 rounded-2xl border-2 font-black text-lg ${verdictColor} tracking-tight">
+          <div class="inline-block px-5 py-2 rounded-2xl border ${verdictColor} font-mono font-black text-lg sm:text-xl shadow-xs">
             ${verdictTitle}
           </div>
 
-          <div class="flex items-center justify-center gap-4">
-            <div class="bg-slate-50 px-5 py-3 rounded-2xl border border-slate-200">
-              <span class="text-[10px] text-slate-400 font-bold block uppercase">Thang Điểm 10</span>
-              <span class="text-3xl font-black text-slate-800">${score10}</span>
-              <span class="text-xs text-slate-400">/ 10.0</span>
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Điểm số (Thang 10)</span>
+            <div class="text-5xl font-black font-mono text-slate-800 my-1">${score10}</div>
+            <p class="text-xs font-bold text-slate-500">Đúng ${correctCount} / ${total} câu • Thời gian: ${document.getElementById('test-timer').textContent}</p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 max-w-xs mx-auto text-xs font-bold">
+            <div class="p-3 rounded-2xl bg-emerald-50 text-emerald-700 border border-emerald-200">
+              ✓ Đúng: ${correctCount} câu
             </div>
-            <div class="bg-slate-50 px-5 py-3 rounded-2xl border border-slate-200">
-              <span class="text-[10px] text-slate-400 font-bold block uppercase">Số Câu Đúng</span>
-              <span class="text-3xl font-black text-emerald-600">${correctCount}</span>
-              <span class="text-xs text-slate-400">/ ${total}</span>
+            <div class="p-3 rounded-2xl bg-rose-50 text-rose-700 border border-rose-200">
+              ✗ Sai: ${mistakesCount} câu
             </div>
           </div>
 
-          <p class="text-xs text-slate-400 font-medium">Thời gian hoàn thành: <strong>${document.getElementById('test-timer').textContent}</strong> • Thưởng +${correctCount * 5} XP ⚡</p>
-        </div>
-
-        <!-- MISTAKES BREAKDOWN (NỘP XONG MỚI HIỆN) -->
-        <div class="space-y-3">
-          <div class="flex items-center justify-between text-xs font-bold text-slate-700">
-            <span>Chi Tiết Lỗi Sai & Giải Thích (${mistakesCount} câu sai)</span>
-            <span class="text-slate-400">Xem kỹ để lần sau được 10đ nhé!</span>
-          </div>
-      `;
-
-      if (mistakesCount === 0) {
-        html += `
-          <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 text-center text-xs text-emerald-800 font-bold">
-            🎉 Quá xuất sắc! Trâm không làm sai câu nào cả! Chuẩn 10 điểm tuyệt đối!
-          </div>
-        `;
-      } else {
-        mistakes.forEach(m => {
-          html += `
-            <div class="bg-white rounded-2xl p-4 border border-slate-200 space-y-2 text-xs">
-              <div class="flex items-center justify-between font-bold">
-                <span class="text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md">Câu ${m.qNum}</span>
-                <span class="text-slate-400">Sai cần sửa</span>
-              </div>
-              <p class="font-bold text-slate-800">${m.sentence}</p>
-
-              <div class="grid grid-cols-2 gap-2">
-                <div class="p-2 rounded-xl bg-rose-50 border border-rose-100 text-rose-900">
-                  <span class="text-[10px] text-rose-500 block font-bold">Bạn Đã Chọn:</span>
-                  <span class="font-bold">${m.userAns}</span>
-                </div>
-                <div class="p-2 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-900">
-                  <span class="text-[10px] text-emerald-600 block font-bold">Đáp Án Đúng:</span>
-                  <span class="font-bold">${m.correctAns}</span>
-                </div>
-              </div>
-
-              <div class="bg-slate-50 p-2.5 rounded-xl text-slate-600 text-[11px] leading-relaxed">
-                <span class="font-bold text-pink-600">💡 Giải thích:</span> ${m.explanation}
-              </div>
-            </div>
-          `;
-        });
-      }
-
-      html += `
-          <div class="pt-2 text-center">
-            <button onclick="startFileTest(window.FILE_STUDY_HUB['${State.activeFileId}'], ${total})" class="px-6 py-2.5 rounded-2xl btn-3d btn-3d-blue font-black text-xs">
-              Làm Lại Đề Này (Random Đáp Án Mới) 🔄
+          <div class="pt-2 flex items-center justify-center gap-3">
+            <button onclick="startFileTest(null, ${total})" class="px-5 py-2.5 rounded-2xl btn-3d btn-3d-green text-xs font-black">
+              Làm Lại Đề Này ↺
+            </button>
+            <button onclick="closeFileStudyModal()" class="px-5 py-2.5 rounded-2xl btn-3d btn-3d-white text-xs font-bold text-slate-600">
+              Đóng Cửa Sổ
             </button>
           </div>
+
         </div>
       `;
 
+      // Detailed Mistakes Breakdown
+      if (mistakes.length > 0) {
+        html += `
+          <div class="text-left space-y-3 pt-4">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+              <h4 class="font-bold text-sm text-slate-800 flex items-center gap-2">
+                <span>📝</span>
+                <span>Bảng Giải Thích Chi Tiết ${mistakes.length} Câu Trâm Cần Lưu Ý</span>
+              </h4>
+              <span class="text-xs text-rose-600 font-bold bg-rose-50 px-2.5 py-0.5 rounded-md border border-rose-200">${mistakes.length} câu</span>
+            </div>
+
+            <div class="space-y-3 max-h-96 overflow-y-auto pr-1">
+              ${mistakes.map(m => `
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 space-y-2 text-xs shadow-xs">
+                  <div class="flex items-center justify-between text-slate-400 font-bold">
+                    <span>Câu số ${m.idx}</span>
+                    <span class="text-slate-600">${m.q.category}</span>
+                  </div>
+                  <p class="font-bold text-slate-800 text-sm">${m.q.sentence}</p>
+                  
+                  <div class="grid grid-cols-2 gap-2 text-[11px] font-mono">
+                    <div class="p-2 rounded-xl bg-rose-50 text-rose-700 border border-rose-200 font-bold">
+                      Trâm chọn: ${m.userPick}
+                    </div>
+                    <div class="p-2 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold">
+                      Đáp án đúng: ${m.correctAnswer}
+                    </div>
+                  </div>
+
+                  <div class="p-2.5 rounded-xl bg-slate-50 text-slate-700 text-[11px] leading-relaxed border border-slate-100">
+                    💡 <b>Giải thích:</b> ${m.explanation}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
       resBox.innerHTML = html;
+      AudioEngine.victoryFanfare();
     }
 
     /* -------------------------------------------
-     * 6. CHINESE (HSK 2)
+     * 6. CHINESE LESSONS (HSK 2)
      * ------------------------------------------- */
     function renderChineseSection() {
       const repo = window.CHINESE_REPOSITORY || { lessons: [] };
       const pillsContainer = document.getElementById('chinese-lesson-pills');
+      if (!pillsContainer) return;
       pillsContainer.innerHTML = '';
 
       repo.lessons.forEach((l, idx) => {
@@ -1612,7 +1876,9 @@
       if (!activeLesson) return;
 
       const ws = document.getElementById('chinese-lesson-workspace');
-      ws.innerHTML = `
+      if (!ws) return;
+
+      let html = `
         <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs space-y-2">
           <div class="flex items-center gap-2">
             <span class="text-2xl">${activeLesson.icon || '📖'}</span>
@@ -1639,7 +1905,7 @@
           </div>
         </div>
 
-        <!-- Vocab Cards -->
+        <!-- Vocab Cards with index-based audio -->
         <div class="space-y-2">
           <div class="flex items-center justify-between text-xs font-bold text-slate-700">
             <span>Từ Vựng Chuẩn Có Phát Âm 🔊</span>
@@ -1647,14 +1913,14 @@
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            ${activeLesson.vocab.map(v => `
+            ${activeLesson.vocab.map((v, vIdx) => `
               <div class="bg-white p-3.5 rounded-2xl border border-slate-200 hover:border-pink-300 transition-all space-y-1.5">
                 <div class="flex items-start justify-between">
                   <div>
                     <span class="text-xl font-black text-slate-800 font-mono">${v.hanzi}</span>
                     <span class="text-xs font-bold text-pink-600 block">${v.pinyin}</span>
                   </div>
-                  <button onclick="speakText('${v.hanzi}', 'zh-CN')" class="w-8 h-8 rounded-xl bg-pink-50 hover:bg-pink-100 text-pink-600 border border-pink-200 flex items-center justify-center font-bold text-xs transition-colors" title="Nghe phát âm">
+                  <button onclick="speakChineseVocab(${State.chineseLessonIdx}, ${vIdx}, this)" class="w-8 h-8 rounded-xl bg-pink-50 hover:bg-pink-100 text-pink-600 border border-pink-200 flex items-center justify-center font-bold text-xs transition-colors" title="Nghe phát âm">
                     🔊
                   </button>
                 </div>
@@ -1668,6 +1934,25 @@
           </div>
         </div>
       `;
+
+      ws.innerHTML = html;
+    }
+
+    function speakChineseVocab(lessonIdx, vocabIdx, btn = null) {
+      AudioEngine.popClick();
+      const repo = window.CHINESE_REPOSITORY || { lessons: [] };
+      const lesson = repo.lessons[lessonIdx];
+      if (!lesson || !lesson.vocab || !lesson.vocab[vocabIdx]) return;
+      const v = lesson.vocab[vocabIdx];
+
+      let original = '';
+      if (btn) {
+        original = btn.innerHTML;
+        btn.innerHTML = `<span class="animate-pulse">🔊</span>`;
+      }
+      speakDualEngine(v.hanzi, 'zh-CN', 0.85, () => {
+        if (btn) btn.innerHTML = original;
+      });
     }
 
     function openPinyinModal() {
@@ -1681,254 +1966,302 @@
     }
 
     /* -------------------------------------------
-     * 7. FLASHCARDS & BUILDER
+     * 7. FLASHCARDS & SENTENCE BUILDER
      * ------------------------------------------- */
     const flashcardsData = [
       { category: "Hiện Tại Đơn", term: "S + V(s/es)", rule: "Chân lý, sự thật hiển nhiên, thói quen.", example: "The sun rises in the east.", clue: "always, usually, every day..." },
       { category: "Hiện Tại Tiếp Diễn", term: "S + am/is/are + V-ing", rule: "Đang xảy ra tại thời điểm nói.", example: "I am studying now.", clue: "now, at the moment, Look!..." },
       { category: "Hiện Tại Hoàn Thành", term: "S + have/has + V3/ed", rule: "Bắt đầu quá khứ kéo dài đến hiện tại.", example: "I have lived here since 2020.", clue: "since, for, already, yet..." },
-      { category: "Quá Khứ Đơn", term: "S + V2/ed", rule: "Chấm dứt hoàn toàn trong quá khứ có mốc.", example: "Columbus discovered America in 1492.", clue: "yesterday, ago, last week..." },
-      { category: "Danh Động Từ", term: "+ V-ing", rule: "Sau enjoy, mind, avoid, look forward to...", example: "I look forward to seeing you.", clue: "feel like, can't help + V-ing" },
-      { category: "Động Từ Nguyên Mẫu", term: "+ To-V", rule: "Sau want, decide, refuse, manage, would like...", example: "She decided to study abroad.", clue: "promise, hope + To-V" }
+      { category: "Quá Khứ Đơn", term: "S + V2/ed", rule: "Chấm dứt hoàn toàn trong quá khứ.", example: "She went to Hanoi yesterday.", clue: "yesterday, ago, last week..." },
+      { category: "Tương Lai Gần", term: "S + be going to + V-inf", rule: "Kế hoạch định trước hoặc dự đoán có căn cứ.", example: "Look at the dark clouds! It is going to rain.", clue: "Look!, evidence, plan..." },
+      { category: "Động Từ To-V", term: "decide, hope, plan, promise + To-V", rule: "Hành động dự định hướng tới tương lai.", example: "She decided to study abroad.", clue: "decide, hope, want, agree..." },
+      { category: "Động Từ V-ing", term: "enjoy, avoid, suggest, finish + V-ing", rule: "Sở thích hoặc thói quen thường làm.", example: "He enjoys reading novels.", clue: "enjoy, mind, avoid, finish..." },
+      { category: "S-V Agreement", term: "Each, Every, Either + V số ít", rule: "Các đại từ bất định luôn đi với động từ số ít.", example: "Each of the students has a book.", clue: "each, every, neither, either..." },
+      { category: "Lượng Từ Countable", term: "Many, A few, Few + N đếm được", rule: "Dùng cho danh từ đếm được số nhiều.", example: "There are a few apples on the table.", clue: "many, a few, several..." },
+      { category: "Lượng Từ Uncountable", term: "Much, A little, Little + N không đếm", rule: "Dùng cho danh từ không đếm được.", example: "We have a little water left.", clue: "much, a little, little..." }
     ];
 
     function renderFlashcards() {
-      const fc = flashcardsData[State.flashcardIdx];
-      document.getElementById('fc-category').textContent = fc.category;
-      document.getElementById('fc-term').textContent = fc.term;
-      document.getElementById('fc-rule').textContent = "• " + fc.rule;
-      document.getElementById('fc-example').textContent = "• Ví dụ: " + fc.example;
-      document.getElementById('fc-clue').textContent = "• Dấu hiệu: " + fc.clue;
-      State.isFlipped = false;
-      document.getElementById('flashcard-inner').classList.remove('rotate-y-180');
+      const item = flashcardsData[State.fcIdx];
+      document.getElementById('flashcard-counter').textContent = `${State.fcIdx + 1} / ${flashcardsData.length}`;
+      document.getElementById('fc-front-tag').textContent = item.category;
+      document.getElementById('fc-front-term').textContent = item.term;
+      document.getElementById('fc-back-tag').textContent = item.category;
+      document.getElementById('fc-back-rule').textContent = item.rule;
+      document.getElementById('fc-back-example').textContent = `"${item.example}"`;
+      document.getElementById('fc-back-clue').textContent = item.clue;
+
+      State.fcFlipped = false;
+      document.getElementById('flashcard-inner').style.transform = 'rotateY(0deg)';
     }
 
     function flipFlashcard() {
       AudioEngine.popClick();
-      State.isFlipped = !State.isFlipped;
-      document.getElementById('flashcard-inner').classList.toggle('rotate-y-180', State.isFlipped);
+      State.fcFlipped = !State.fcFlipped;
+      document.getElementById('flashcard-inner').style.transform = State.fcFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
     }
 
     function navFlashcard(delta) {
       AudioEngine.popClick();
-      const n = flashcardsData.length;
-      State.flashcardIdx = (State.flashcardIdx + delta + n) % n;
+      State.fcIdx = (State.fcIdx + delta + flashcardsData.length) % flashcardsData.length;
       renderFlashcards();
     }
 
-    // Formula Builder
-    const builderTargets = [
-      { name: "Hiện Tại Hoàn Thành", formula: ["S", "+", "have/has", "+", "V3/ed"] },
-      { name: "Tương Lai Tiếp Diễn", formula: ["S", "+", "will be", "+", "V-ing"] }
+    /* --- Sentence Builder --- */
+    const builderData = [
+      { prompt: "Sắp xếp câu: 'Trái đất quay quanh mặt trời.'", words: ["The", "earth", "goes", "round", "the", "sun."], correct: "The earth goes round the sun." },
+      { prompt: "Sắp xếp câu: 'Nhìn đám mây đen kìa, trời sắp mưa rồi.'", words: ["Look", "at", "the", "clouds!", "It", "is", "going", "to", "rain."], correct: "Look at the clouds! It is going to rain." },
+      { prompt: "Sắp xếp câu: 'Cô ấy quyết định học tiếng Trung vào năm tới.'", words: ["She", "decided", "to", "learn", "Chinese", "next", "year."], correct: "She decided to learn Chinese next year." }
     ];
-    let builderCurrentTarget = 0;
-    let builderUserSlots = [];
+    let builderQIdx = 0;
 
     function initBuilder() {
-      builderUserSlots = [];
-      const t = builderTargets[builderCurrentTarget];
-      document.getElementById('builder-target-name').textContent = t.name;
+      const q = builderData[builderQIdx % builderData.length];
+      State.builderActiveQuestion = q;
+      State.builderSelectedWords = [];
+      document.getElementById('builder-prompt').textContent = `Nhiệm vụ: ${q.prompt}`;
 
-      const words = shuffleArray(["S", "+", "have/has", "will be", "am/is/are", "V3/ed", "V-ing", "V(bare)"]);
-      const wb = document.getElementById('builder-wordbank');
-      wb.innerHTML = '';
-      words.forEach(w => {
+      const chipsBox = document.getElementById('builder-word-chips');
+      chipsBox.innerHTML = '';
+      const shuffled = shuffleArray(q.words);
+
+      shuffled.forEach(w => {
         const btn = document.createElement('button');
-        btn.className = "px-2.5 py-1 rounded-xl btn-3d btn-3d-white text-xs font-bold text-slate-700";
+        btn.className = "px-3 py-1.5 rounded-xl btn-3d btn-3d-white text-xs font-bold text-slate-700";
         btn.textContent = w;
         btn.onclick = () => {
           AudioEngine.popClick();
-          builderUserSlots.push(w);
+          State.builderSelectedWords.push(w);
+          btn.classList.add('opacity-30', 'pointer-events-none');
           renderBuilderSlots();
         };
-        wb.appendChild(btn);
+        chipsBox.appendChild(btn);
       });
 
       renderBuilderSlots();
+      document.getElementById('builder-feedback').classList.add('hidden');
     }
 
     function renderBuilderSlots() {
-      const dz = document.getElementById('builder-dropzone');
-      if (builderUserSlots.length === 0) {
-        dz.innerHTML = `<span class="text-xs text-slate-400 italic">Nhấn các khối bên dưới để ghép vào đây...</span>`;
+      const slotBox = document.getElementById('builder-target-slots');
+      slotBox.innerHTML = '';
+      if (State.builderSelectedWords.length === 0) {
+        slotBox.innerHTML = `<span class="text-xs text-slate-400 italic">Chạm vào các từ bên dưới để ghép vào đây...</span>`;
         return;
       }
-      dz.innerHTML = builderUserSlots.map((w, idx) => `
-        <span onclick="removeBuilderSlot(${idx})" class="cursor-pointer px-2.5 py-1 rounded-xl bg-emerald-500 text-white font-bold text-xs shadow-xs" title="Gỡ">
-          ${w} ✕
-        </span>
-      `).join('');
+
+      State.builderSelectedWords.forEach((w, idx) => {
+        const chip = document.createElement('span');
+        chip.className = "px-2.5 py-1 rounded-xl bg-blue-500 text-white font-bold text-xs flex items-center gap-1 cursor-pointer hover:bg-blue-600 shadow-xs";
+        chip.innerHTML = `${w} <small class="text-blue-200">✕</small>`;
+        chip.onclick = () => removeBuilderSlot(idx);
+        slotBox.appendChild(chip);
+      });
     }
 
     function removeBuilderSlot(idx) {
       AudioEngine.popClick();
-      builderUserSlots.splice(idx, 1);
+      State.builderSelectedWords.splice(idx, 1);
+      initBuilderWithSelection();
+    }
+
+    function initBuilderWithSelection() {
+      const q = State.builderActiveQuestion;
+      const chipsBox = document.getElementById('builder-word-chips');
+      chipsBox.innerHTML = '';
+      const usedCounts = {};
+      State.builderSelectedWords.forEach(w => usedCounts[w] = (usedCounts[w] || 0) + 1);
+
+      q.words.forEach(w => {
+        const isUsed = (usedCounts[w] || 0) > 0;
+        if (isUsed) usedCounts[w]--;
+
+        const btn = document.createElement('button');
+        btn.className = `px-3 py-1.5 rounded-xl btn-3d btn-3d-white text-xs font-bold text-slate-700 ${isUsed ? 'opacity-30 pointer-events-none' : ''}`;
+        btn.textContent = w;
+        btn.onclick = () => {
+          AudioEngine.popClick();
+          State.builderSelectedWords.push(w);
+          renderBuilderSlots();
+          initBuilderWithSelection();
+        };
+        chipsBox.appendChild(btn);
+      });
+
       renderBuilderSlots();
     }
 
     function resetBuilder() {
       AudioEngine.popClick();
-      builderUserSlots = [];
-      renderBuilderSlots();
+      initBuilder();
     }
 
     function checkBuilder() {
-      const t = builderTargets[builderCurrentTarget];
-      if (t.formula.join(" ") === builderUserSlots.join(" ")) {
+      const sentence = State.builderSelectedWords.join(' ');
+      const fb = document.getElementById('builder-feedback');
+      fb.classList.remove('hidden');
+
+      if (sentence.trim() === State.builderActiveQuestion.correct.trim()) {
         AudioEngine.correctChime();
-        addXP(20);
-        alert(`🎉 Đúng rồi! Bạn đã ghép chuẩn công thức "${t.name}"! +20 XP ⚡`);
-        builderCurrentTarget = (builderCurrentTarget + 1) % builderTargets.length;
-        initBuilder();
+        addXP(15);
+        fb.className = "p-3 rounded-2xl text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200";
+        fb.innerHTML = `🎉 Tuyệt vời! Câu hoàn chỉnh chuẩn 100%: <b>${sentence}</b>`;
+        setTimeout(() => {
+          builderQIdx++;
+          initBuilder();
+        }, 2200);
       } else {
-        AudioEngine.wrongBoing();
-        alert(`❌ Chưa đúng rồi! Công thức chuẩn: ${t.formula.join(" ")}`);
+        deductHeart();
+        fb.className = "p-3 rounded-2xl text-xs font-bold bg-rose-50 text-rose-800 border border-rose-200";
+        fb.innerHTML = `✗ Chưa chuẩn ngữ pháp. Thử lại hoặc bấm "Làm lại ↺" nhé!`;
       }
     }
 
     /* -------------------------------------------
-     * 8. FILE DROP HANDLER
+     * 8. WORD (.DOCX) / FILE UPLOAD INTEGRATION
      * ------------------------------------------- */
     function setupDropZone() {
       const dropZone = document.getElementById('drop-zone');
       const fileInput = document.getElementById('file-input');
 
-      ['dragenter', 'dragover'].forEach(eName => {
-        dropZone.addEventListener(eName, (e) => {
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, e => {
           e.preventDefault();
-          dropZone.classList.add('border-sky-500', 'bg-sky-50');
+          e.stopPropagation();
         });
       });
 
-      ['dragleave', 'drop'].forEach(eName => {
-        dropZone.addEventListener(eName, (e) => {
-          e.preventDefault();
-          dropZone.classList.remove('border-sky-500', 'bg-sky-50');
-        });
+      dropZone.addEventListener('dragover', () => dropZone.classList.add('border-pink-500', 'bg-pink-50/50'));
+      dropZone.addEventListener('dragleave', () => dropZone.classList.remove('border-pink-500', 'bg-pink-50/50'));
+      dropZone.addEventListener('drop', e => {
+        dropZone.classList.remove('border-pink-500', 'bg-pink-50/50');
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        if (files.length > 0) handleUploadedFile(files[0]);
       });
 
-      dropZone.addEventListener('drop', (e) => {
-        if (e.dataTransfer.files.length > 0) handleUploadedFile(e.dataTransfer.files[0]);
-      });
-
-      fileInput.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) handleUploadedFile(e.target.files[0]);
+      fileInput.addEventListener('change', () => {
+        if (fileInput.files.length > 0) handleUploadedFile(fileInput.files[0]);
       });
     }
 
     function handleUploadedFile(file) {
+      AudioEngine.popClick();
+      const reader = new FileReader();
       const fileName = file.name;
-      const ext = fileName.split('.').pop().toLowerCase();
 
-      if (ext === 'docx') {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          if (window.mammoth) {
-            window.mammoth.extractRawText({ arrayBuffer: e.target.result })
-              .then(res => parseAndStoreCustomFile(fileName, res.value))
-              .catch(err => alert("Lỗi đọc Word: " + err.message));
-          } else {
-            alert("Đang tải thư viện, thử lại sau 2s nhé!");
-          }
+      if (fileName.endsWith('.docx')) {
+        reader.onload = e => {
+          mammoth.extractRawText({ arrayBuffer: e.target.result })
+            .then(result => processUploadedText(fileName, result.value))
+            .catch(err => alert("Không đọc được file docx: " + err.message));
         };
         reader.readAsArrayBuffer(file);
-      } else if (ext === 'txt') {
-        const reader = new FileReader();
-        reader.onload = function(e) { parseAndStoreCustomFile(fileName, e.target.result); };
-        reader.readAsText(file, 'utf-8');
       } else {
-        alert("Vui lòng tải file .docx, .txt hoặc .json!");
+        reader.onload = e => processUploadedText(fileName, e.target.result);
+        reader.readAsText(file);
       }
     }
 
-    function parseAndStoreCustomFile(fileName, rawText) {
-      const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
-      const parsedQ = [];
-      let curr = null;
+    function processUploadedText(fileName, text) {
+      const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+      const questions = [];
+      let curQ = null;
 
-      for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
-        const qMatch = line.match(/^(?:Câu\s*)?(\d+)[\.\)\:\-]\s*(.*)/i);
+      lines.forEach(l => {
+        const qMatch = l.match(/^(?:Câu\s*)?(\d+)[.:\)]\s*(.*)/i);
         if (qMatch) {
-          if (curr && curr.options.length >= 2) parsedQ.push(finalizeQ(curr));
-          curr = { id: `cq_${Date.now()}_${qMatch[1]}`, sentence: qMatch[2], options: [], answer: "", category: fileName.replace(/\.[^/.]+$/, "") };
-          continue;
-        }
-        if (curr) {
-          const parts = line.split(/(?=[A-D][\.\-\)])/);
-          if (parts.length > 1) {
-            parts.forEach(p => {
-              const c = p.replace(/^[A-D][\.\-\)]\s*/, '').trim();
-              if (c) curr.options.push(c);
+          if (curQ && curQ.options.length >= 2) questions.push(curQ);
+          curQ = {
+            id: 'up_' + Date.now() + '_' + qMatch[1],
+            sentence: qMatch[2] || l,
+            options: [],
+            answer: '',
+            explanation: 'Phân tích từ file vừa tải lên.'
+          };
+        } else if (curQ) {
+          const optMatches = l.match(/[A-D][.:\)]\s*([^A-D.:\)]+)/gi);
+          if (optMatches) {
+            optMatches.forEach(om => {
+              const cleaned = om.replace(/^[A-D][.:\)]\s*/i, '').trim();
+              if (cleaned) curQ.options.push(cleaned);
             });
-          } else if (/^[A-D][\.\-\)]\s*(.*)/.test(line)) {
-            curr.options.push(line.replace(/^[A-D][\.\-\)]\s*/, '').trim());
-          } else if (curr.options.length === 0) {
-            curr.sentence += " " + line;
           }
         }
-      }
+      });
 
-      if (curr && curr.options.length >= 2) parsedQ.push(finalizeQ(curr));
+      if (curQ && curQ.options.length >= 2) questions.push(curQ);
 
-      if (parsedQ.length === 0) {
-        alert("Không nhận diện được câu hỏi trắc nghiệm trong file này!");
-        return;
-      }
+      questions.forEach(q => {
+        if (!q.answer && q.options.length > 0) q.answer = q.options[0];
+      });
 
-      const fileId = "custom_" + Date.now();
-      window.FILE_STUDY_HUB[fileId] = {
-        id: fileId,
+      const cleanTitle = fileName.replace(/\.[^/.]+$/, "").replace(/_/g, " ");
+      const fileId = 'custom_' + Date.now();
+
+      const newFileObj = {
+        title: cleanTitle,
+        category: "Tài Liệu Tải Lên",
         fileName: fileName,
-        title: fileName.replace(/\.[^/.]+$/, "").replace(/[_-]/g, ' '),
-        category: "File Tải Lên",
-        icon: "📁",
-        tag: `${parsedQ.length} Câu`,
-        summary: { title: "Tóm Tắt Ghi Nhớ: " + fileName, sections: [] },
+        icon: "📄",
+        tag: `${questions.length || 20} Câu Tự Động`,
         cheatShort: [
-          { signal: "Câu hỏi từ file " + fileName, formula: "Xem kỹ đề bài", note: "Bóc tách tự động" }
+          { tense: cleanTitle, signal: "Từ file " + fileName, formula: "Quy tắc ngữ pháp riêng", note: "Ôn tập theo đề tự tải lên" }
         ],
-        questions: parsedQ
+        listeningQuizzes: questions.slice(0, 5).map((q, idx) => ({
+          id: `up_l_${idx}`,
+          audioText: q.sentence.replace(/_+/g, q.answer),
+          lang: "en-US",
+          question: "Nghe câu hoàn chỉnh:",
+          options: q.options,
+          answer: q.answer,
+          meaning: "Nội dung câu trong đề vừa tải lên."
+        })),
+        summary: {
+          points: [
+            { title: "Tệp: " + fileName, detail: `Đã tự động trích xuất ${questions.length} câu trắc nghiệm từ tệp của bạn.` }
+          ]
+        },
+        questions: questions.length > 0 ? questions : [
+          { id: "def_1", sentence: "Example sentence from " + fileName, options: ["Option A", "Option B", "Option C", "Option D"], answer: "Option A", explanation: "Mẫu câu mặc định" }
+        ]
       };
 
-      saveCustomFilesToStorage();
-      renderFileCards();
-      AudioEngine.correctChime();
-      addXP(50);
-      alert(`🎉 Đã thêm file "${fileName}" với ${parsedQ.length} câu hỏi! +50 XP ⚡`);
-    }
+      window.FILE_STUDY_HUB[fileId] = newFileObj;
 
-    function finalizeQ(q) {
-      while (q.options.length < 4) q.options.push("None of the above");
-      q.answer = q.options[0];
-      q.explanation = "Chú ý dấu hiệu ngữ pháp trong câu để xác định đáp án chính xác!";
-      return q;
+      try {
+        const raw = localStorage.getItem('tram_custom_hub_files') || '{}';
+        const parsed = JSON.parse(raw);
+        parsed[fileId] = newFileObj;
+        localStorage.setItem('tram_custom_hub_files', JSON.stringify(parsed));
+      } catch(e) {}
+
+      renderFileCards();
+      AudioEngine.victoryFanfare();
+      alert(`🎉 Đã xử lý thành công file "${fileName}" và thêm vào kho tài liệu ôn thi!`);
+      openFileStudy(fileId, 'cheatshort');
     }
 
     /* -------------------------------------------
-     * 9. SAKURA PETALS
+     * 9. DECORATIONS & SAKURA
      * ------------------------------------------- */
     function initSakuraPetals() {
       const container = document.getElementById('sakura-container');
-      const colors = ['#fbcfe8', '#f472b6', '#fda4af', '#fff1f2'];
+      if (!container) return;
       setInterval(() => {
-        if (document.hidden) return;
+        if (Math.random() > 0.4) return;
         const petal = document.createElement('div');
         petal.className = 'petal';
         petal.style.left = Math.random() * 100 + 'vw';
-        petal.style.width = (Math.random() * 7 + 7) + 'px';
-        petal.style.height = (Math.random() * 5 + 5) + 'px';
-        petal.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        const size = Math.random() * 8 + 8;
+        petal.style.width = size + 'px';
+        petal.style.height = (size * 1.3) + 'px';
+        petal.style.background = 'linear-gradient(135deg, #ffc0cb 0%, #ffb6c1 100%)';
         petal.style.borderRadius = '50% 0 50% 50%';
         petal.style.animationDuration = (Math.random() * 6 + 6) + 's';
         container.appendChild(petal);
         setTimeout(() => petal.remove(), 12000);
       }, 1200);
-    }
-
-    function escapeHtml(str) {
-      if (!str) return '';
-      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
   </script>
 </body>
